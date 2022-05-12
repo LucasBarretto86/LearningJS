@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  <title>Lodash examples</title>
+</head>
+<body>
+  <h1>Lodash examples</h1>
+  <hr>
+  
+    <div>
+      <h2>Debounce example</h2>
+      <input type="text" name="debounce" />
+    </div>
+    
+    <script>
+      function submit() {
+        console.log("Submitted!")
+      }
+
+      const input = document.querySelector("input[name='debounce']")
+      input.addEventListener('keyup', _.debounce(submit, 5000))
+    </script>
+</body>
+</html>

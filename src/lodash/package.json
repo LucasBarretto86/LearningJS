@@ -1,0 +1,11 @@
+{
+  "name": "lodash-learning",
+  "version": "1.0.0",
+  "description": "Just a learning small project",
+  "main": "index.js",
+  "author": "Lucas Barretto e Silva",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
