@@ -43,7 +43,6 @@ it's also possible to import specific methods within an package.json
   "lodash.set" "^4.3.2"
   }
 }
-
 ```
 
 ### Interesting utilities methods
@@ -56,12 +55,15 @@ Allows you to add new values to return new object with new assigned properties, 
 const user = {name: "Lucas", age: 34}
 const updatedUser = _.assign({ surname: "Casanova", age: 35 }, user)
 console.log(updatedUser)
-
-// Output
-// {surname: 'Casanova', name: 'Lucas', age: 34}
-
-// Note that id doesn't change a property that already has a value, it just adds the new property
 ```
+
+**Output:**
+
+```shell
+{surname: 'Casanova', name: 'Lucas', age: 34}
+```
+
+> Note that id doesn't change a property that already has a value, it just adds the new property
 
 #### `_.times()`
 
@@ -69,17 +71,24 @@ it just repeats and map the result of an instruction for `n` times
 
 ```js
 console.log(_.times(3, () => { return 2 * 2 }))
+```
 
-// Output
-// [4, 4, 4]
+**Output:**
 
-// Note that this is basically the same as:
+```shell
+ [4, 4, 4]
+```
 
+> Note that this is basically the same as:
+
+```js
 console.log([1, 2, 3].map(() => { return 2 * 2 }))
+```
 
-// Output
-// [4, 4, 4]
+**Output:**
 
+```shell
+ [4, 4, 4]
 ```
 
 #### `_.debounce()`
@@ -111,12 +120,17 @@ It's basically and enhancement for normal find from JS
 const users = [{name: "Lucas", age: 35}, {name: "Eloina", age:63}, {name: "Camila", age: 40}, {name: "Daniel", age: 37}]
 const result = _.find(users, {name: "Lucas"})
 console.log(result)
+```
 
-// Output
-// {name: "Lucas", age: 35}
+**Output:**
 
-// Note is basically same as:
+```shell
+{name: "Lucas", age: 35}
+```
 
+> Note is basically same as:
+
+```shell
 const result = users.find(e => {e.name === "Lucas"})
 ```
 
@@ -129,11 +143,18 @@ const users = [{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63
 const result = _.filter(users, {gender: "male"})
 console.log(result)
 
-// Output
-// [{name: "Lucas", age: 35, gender: "male"}, {name: "Daniel", age: 37, gender: "male"}]
+```
 
-// Note is basically same as:
+**Output:**
 
+```shell
+[{name: "Lucas", age: 35, gender: "male"}, {name: "Daniel", age: 37, gender: "male"}]
+
+```
+
+> Note is basically same as:
+
+```shell
 const result = users.filter(e => {e.gender === "male"})
 ```
 
@@ -143,8 +164,12 @@ const result = users.filter(e => {e.gender === "male"})
 const numbers = [1,2,3,4,5,6,7,8]
 console.log(_.first(numbers))
 
-// Output
-// 1
+```
+
+**Output:**
+
+```shell
+1
 ```
 
 #### `_.last()`
@@ -152,9 +177,12 @@ console.log(_.first(numbers))
 ```js
 const numbers = [1,2,3,4,5,6,7,8]
 console.log(_.last(numbers))
+```
 
-// Output
-// 8
+**Output:**
+
+```shell
+8
 ```
 
 #### `_.chunk()`
@@ -169,14 +197,16 @@ console.log(_.chunk(numbers, 2))
 // Object
 const users = [{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63, gender: "female"}, {name: "Camila", age: 40, gender: "female"}, {name: "Daniel", age: 37, gender: "male"}]
 console.log(_.chunk(users, 2))
+```
 
-// Output
-// Array
-// [[1, 2],[3, 4],[5, 6],[7, 8]]
+**Output:**
 
-// Object
-//[[{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63, gender: "female"}], 
-//[{name: "Camila", age: 40, gender: "female"}, {name: "Daniel", age: 37, gender: "male"}]]
+```shell
+Array
+[[1, 2],[3, 4],[5, 6],[7, 8]]
+
+[[{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63, gender: "female"}], 
+[{name: "Camila", age: 40, gender: "female"}, {name: "Daniel", age: 37, gender: "male"}]]
 ```
 
 #### `_.get()`
@@ -208,10 +238,14 @@ const devs = [
 let usingLanguages = devs.map(dev => { return dev.languages.using[2] })
 console.log(usingLanguages)
 
-// Output
-// let usingLanguages = devs.map(dev => { return dev.languages.using[2] })
+```
 
-// TypeError: Cannot read properties of undefined (reading '2')
+**Output:**
+
+```shell
+let usingLanguages = devs.map(dev => { return dev.languages.using[2] })
+
+TypeError: Cannot read properties of undefined (reading '2')
 ```
 
 Regular attempt to avoid it
@@ -226,8 +260,12 @@ try {
   console.log("Error", error.message)
 }
 
-// Output
-// Error Cannot read properties of undefined (reading '2')
+```
+
+**Output:**
+
+```shell
+Error Cannot read properties of undefined (reading '2')
 ```
 
 Using lodash `get()`
@@ -236,8 +274,12 @@ Using lodash `get()`
 usingLanguages = _.get(devs, 'languages.using[2]', 'Error due to data inconsistency')
 console.log(usingLanguages)
 
-// Output
-// Error due to data inconsistency
+```
+
+**Output:**
+
+```shell
+Error due to data inconsistency
 ```
 
 #### `_.set()`
@@ -271,9 +313,15 @@ try {
 } catch (error) {
   console.log("Error", error.message)
 }
-//Output
-// Note that it handles the exception but it doesn't set the objects
-// Error Cannot set properties of undefined (setting 'documentation')
+
+```
+
+> Note that it handles the exception but it doesn't set the objects
+
+**Output:**
+
+```shell
+Error Cannot set properties of undefined (setting 'documentation')
 ```
 
 Using lodash `set()` to do so
@@ -300,30 +348,34 @@ const devs = [
 devs.forEach(dev => { _.set(dev, "responsibility.documentation", ["Register", "Report"]) })
 console.log(devs)
 
-// Output
-// [
-//   {
-//     name: 'Lucas',
-//     age: 35,
-//     languages: {
-//       using: ["HTML", "CSS", "Javascript", "SQL", "Ruby"],
-//       learning: ["Java", "Python", "Lua"]
-//     },
-//     responsibility: { 
-//       documentation:  ["Register", "Report"] 
-//     }
-//   },
-//   {
-//     name: 'Geovanna',
-//     age: 17,
-//     languages: {
-//       learning: ["Javascript", "CSS"]
-//     },
-//     responsibility: { 
-//       documentation:  ["Register", "Report"] 
-//     }
-//   }
-// ]
+```
+
+**Output:**
+
+```shell
+ [
+   {
+     name: 'Lucas',
+     age: 35,
+     languages: {
+       using: ["HTML", "CSS", "Javascript", "SQL", "Ruby"],
+       learning: ["Java", "Python", "Lua"]
+     },
+     responsibility: { 
+       documentation:  ["Register", "Report"] 
+     }
+   },
+   {
+     name: 'Geovanna',
+     age: 17,
+     languages: {
+       learning: ["Javascript", "CSS"]
+     },
+     responsibility: { 
+       documentation:  ["Register", "Report"] 
+     }
+   }
+ ]
 ```
 
 ## Snippets
