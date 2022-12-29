@@ -13,6 +13,11 @@
     - [ESlint basic config](#eslint-basic-config)
       - [To add new rules](#to-add-new-rules)
     - [Run ESLint](#run-eslint)
+    - [Stimulus on Vanilla JS](#stimulus-on-vanilla-js)
+      - [Install Stimulus](#install-stimulus)
+      - [Config `build.js` file](#config-buildjs-file)
+      - [Config application js](#config-application-js)
+      - [Stimulus controller](#stimulus-controller)
   - [Lodash](#lodash)
     - [Configuring with a project](#configuring-with-a-project)
     - [Interesting utilities methods](#interesting-utilities-methods)
@@ -63,9 +68,9 @@ As the scrips to build you project might gets specific or more sophisticated it'
 import { build } from 'esbuild'
 
 build({
-  entryPoints: ['index.js'],
+  entryPoints: ['./src/index.js'],
   bundle: true,
-  outfile: 'index.js'
+  outfile: './public/out.js'
 }).catch(() => process.exit(1))
 
 ```
@@ -76,10 +81,12 @@ build({
 {
   ...
   "scripts": {
-    "build": "./build.js"
+    "build": "node ./build.js"
   },
 }
 ```
+
+> note that on the script we use `node` to allow ES6 modules to work properly.
 
 ## ESLint
 
@@ -177,6 +184,65 @@ to for fixes we simple add `--fix` flag
 
 ```shell
 yarn run eslint --fix
+```
+
+### Stimulus on Vanilla JS
+
+#### Install Stimulus
+
+```shell
+yarn add -D stimulus
+```
+
+To allow stimulus to work on esbuild we need to add also a plugin
+
+```shell
+yarn add -D esbuild-plugin-stimulus
+```
+
+#### Config `build.js` file
+
+```js
+// ./build.js
+
+import { build } from 'esbuild';
+import { stimulusPlugin } from 'esbuild-plugin-stimulus';
+
+build({
+  entryPoints: ['./src/index.js'],
+  plugins: [stimulusPlugin()],
+  bundle: true,
+  outfile: './public/out.js',
+}).catch(() => process.exit(1))
+```
+
+#### Config application js
+
+> In this example application js is `index.js`
+
+```js
+// ./src/libs/index.js
+
+import { Application } from 'stimulus'
+import DialogController from "./stimulus/controllers/dialog_controller"
+
+const app = Application.start()
+app.register('dialog', DialogController)
+```
+
+#### Stimulus controller
+
+```js
+// ./src/libs/stimulus/controllers
+
+import { Controller } from "stimulus"
+
+export default class extends Controller {
+
+  connect() {
+    console.log("connected")
+  }
+}
 ```
 
 ## Lodash
