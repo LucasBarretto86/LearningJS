@@ -13,11 +13,16 @@
     - [ESlint basic config](#eslint-basic-config)
       - [To add new rules](#to-add-new-rules)
     - [Run ESLint](#run-eslint)
-    - [Stimulus on Vanilla JS](#stimulus-on-vanilla-js)
-      - [Install Stimulus](#install-stimulus)
-      - [Config `build.js` file](#config-buildjs-file)
-      - [Config application js](#config-application-js)
-      - [Stimulus controller](#stimulus-controller)
+  - [Stimulus on Vanilla JS with ESBuild](#stimulus-on-vanilla-js-with-esbuild)
+    - [Install Stimulus](#install-stimulus)
+    - [Config `build.js` file](#config-buildjs-file)
+    - [Config application js](#config-application-js)
+    - [Stimulus controller](#stimulus-controller)
+  - [DART SASS](#dart-sass)
+    - [Install DART SASS](#install-dart-sass)
+    - [Configure SASS processor on ESBuild](#configure-sass-processor-on-esbuild)
+      - [Install ESBuild sass plugin](#install-esbuild-sass-plugin)
+      - [Setup sass plugin on `build.js`](#setup-sass-plugin-on-buildjs)
   - [Lodash](#lodash)
     - [Configuring with a project](#configuring-with-a-project)
     - [Interesting utilities methods](#interesting-utilities-methods)
@@ -186,9 +191,9 @@ to for fixes we simple add `--fix` flag
 yarn run eslint --fix
 ```
 
-### Stimulus on Vanilla JS
+## Stimulus on Vanilla JS with ESBuild
 
-#### Install Stimulus
+### Install Stimulus
 
 ```shell
 yarn add -D stimulus
@@ -200,7 +205,7 @@ To allow stimulus to work on esbuild we need to add also a plugin
 yarn add -D esbuild-plugin-stimulus
 ```
 
-#### Config `build.js` file
+### Config `build.js` file
 
 ```js
 // ./build.js
@@ -216,7 +221,7 @@ build({
 }).catch(() => process.exit(1))
 ```
 
-#### Config application js
+### Config application js
 
 > In this example application js is `index.js`
 
@@ -230,7 +235,7 @@ const app = Application.start()
 app.register('dialog', DialogController)
 ```
 
-#### Stimulus controller
+### Stimulus controller
 
 ```js
 // ./src/libs/stimulus/controllers
@@ -243,6 +248,50 @@ export default class extends Controller {
     console.log("connected")
   }
 }
+```
+
+## DART SASS
+
+### Install DART SASS
+
+```shell
+yarn add sass
+```
+
+### Configure SASS processor on ESBuild
+
+#### Install ESBuild sass plugin
+
+```shell
+yarn add -D esbuild-sass-plugin
+```
+
+#### Setup sass plugin on `build.js`
+
+```js
+// ./build.js
+
+import { build } from 'esbuild'
+// ...
+import { sassPlugin } from 'esbuild-sass-plugin'
+
+await build({
+  entryPoints: ['./src/libs/index.js'],
+  plugins: [
+    // ...,
+    sassPlugin()
+    ],
+  bundle: true,
+  outfile: './public/index.js',
+}).catch(() => process.exit(1))
+```
+
+> To make it works we also need to import the scss file on the `index.js` file, that will produce a scss file within the `outfile` folder
+
+```js
+// ./src/libs/index.js
+
+import "../assets/stylesheet/index.scss"
 ```
 
 ## Lodash
