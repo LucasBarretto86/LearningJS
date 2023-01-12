@@ -1,6 +1,12 @@
 # Learning Javascript
 
 - [Learning Javascript](#learning-javascript)
+  - [YARN](#yarn)
+    - [Install yarn](#install-yarn)
+    - [Add new dependency](#add-new-dependency)
+      - [add only in dev](#add-only-in-dev)
+    - [Reinstall all dependencies](#reinstall-all-dependencies)
+    - [Adding multiple dependencies version](#adding-multiple-dependencies-version)
   - [ESBuild](#esbuild)
     - [Install ESBuild](#install-esbuild)
     - [Implementing building script](#implementing-building-script)
@@ -38,6 +44,52 @@
       - [`_.set()`](#_set)
   - [Snippets](#snippets)
   - [References](#references)
+
+## YARN
+
+### Install yarn
+
+> To install yarn you need to have a nodejs installed since we gonna use `NPM` to install
+
+```shell
+npm install -g yarn
+```
+
+### Add new dependency
+
+```shell
+yarn add dependency_name
+```
+
+#### add only in dev
+
+```shell
+yarn add dependency_name -D
+```
+
+### Reinstall all dependencies
+
+```shell
+yarn install --check-files
+```
+
+### Adding multiple dependencies version
+
+new dependency syntax -> "`dependency-alias`": "npm:`dependency-name@version`"
+older dependency syntax -> "`dependency-name`": "`version`"
+
+```json
+// package.json
+{
+  "dependencies": {
+    "@analytics": "npm:analytics@^0.6.2",
+    "@analytics/google-analytics": "^0.5.2",
+    "@apollo/client/updated": "npm:apollo/client@^3.6.2",
+    "@apollo/client": "3.5.8"
+  }
+}
+
+```
 
 ## ESBuild
 
