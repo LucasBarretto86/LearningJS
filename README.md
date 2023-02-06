@@ -24,6 +24,9 @@
     - [Config `build.js` file](#config-buildjs-file)
     - [Config application js](#config-application-js)
     - [Stimulus controller](#stimulus-controller)
+    - [Stimulus Targets](#stimulus-targets)
+    - [Stimulus Actions](#stimulus-actions)
+    - [Stimulus Outlets](#stimulus-outlets)
   - [DART SASS](#dart-sass)
     - [Install DART SASS](#install-dart-sass)
     - [Configure SASS processor on ESBuild](#configure-sass-processor-on-esbuild)
@@ -136,7 +139,7 @@ build({
 // package.json
 
 {
-  ...
+  // ...
   "scripts": {
     "build": "node ./build.js"
   },
@@ -301,6 +304,12 @@ export default class extends Controller {
   }
 }
 ```
+
+### Stimulus Targets
+
+### Stimulus Actions
+
+### Stimulus Outlets
 
 ## DART SASS
 
