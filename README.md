@@ -166,7 +166,7 @@ eslint --init
 
 **Output:**
 
-```shell
+```mono
 You can also run this command directly using 'npm init @eslint/config'.
 npx: installed 40 in 8.683s
 ✔ How would you like to use ESLint? · problems
@@ -398,7 +398,7 @@ console.log(updatedUser)
 
 **Output:**
 
-```shell
+```mono
 {surname: 'Casanova', name: 'Lucas', age: 34}
 ```
 
@@ -414,7 +414,7 @@ console.log(_.times(3, () => { return 2 * 2 }))
 
 **Output:**
 
-```shell
+```mono
  [4, 4, 4]
 ```
 
@@ -426,7 +426,7 @@ console.log([1, 2, 3].map(() => { return 2 * 2 }))
 
 **Output:**
 
-```shell
+```mono
  [4, 4, 4]
 ```
 
@@ -463,7 +463,7 @@ console.log(result)
 
 **Output:**
 
-```shell
+```mono
 {name: "Lucas", age: 35}
 ```
 
@@ -486,7 +486,7 @@ console.log(result)
 
 **Output:**
 
-```shell
+```mono
 [{name: "Lucas", age: 35, gender: "male"}, {name: "Daniel", age: 37, gender: "male"}]
 
 ```
@@ -507,7 +507,7 @@ console.log(_.first(numbers))
 
 **Output:**
 
-```shell
+```mono
 1
 ```
 
@@ -520,7 +520,7 @@ console.log(_.last(numbers))
 
 **Output:**
 
-```shell
+```mono
 8
 ```
 
@@ -540,7 +540,7 @@ console.log(_.chunk(users, 2))
 
 **Output:**
 
-```shell
+```mono
 Array
 [[1, 2],[3, 4],[5, 6],[7, 8]]
 
@@ -581,7 +581,7 @@ console.log(usingLanguages)
 
 **Output:**
 
-```shell
+```mono
 let usingLanguages = devs.map(dev => { return dev.languages.using[2] })
 
 TypeError: Cannot read properties of undefined (reading '2')
@@ -603,7 +603,7 @@ try {
 
 **Output:**
 
-```shell
+```mono
 Error Cannot read properties of undefined (reading '2')
 ```
 
@@ -617,7 +617,7 @@ console.log(usingLanguages)
 
 **Output:**
 
-```shell
+```mono
 Error due to data inconsistency
 ```
 
@@ -659,7 +659,7 @@ try {
 
 **Output:**
 
-```shell
+```mono
 Error Cannot set properties of undefined (setting 'documentation')
 ```
 
@@ -691,7 +691,7 @@ console.log(devs)
 
 **Output:**
 
-```shell
+```mono
  [
    {
      name: 'Lucas',
