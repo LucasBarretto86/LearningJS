@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 06 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type=text/css href="css/Aula06.css" media="all">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula06.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 06</h1>
+    <h3>Seletores de Atributos</h3>
+
+    <p>Os seletores de atributo utilização [] para receber o paramentro, ou seja o atributo que será buscado, no entando,<br />
+        também é possível buscar conforme o conteudo do atributo:</p><br />
+    <p><b>[attr]</b> = Seleciona todos os elementos que possuam um determinado atributo independente do valor atribuido</p>
+    <p><b>[attr1][attr2]</b> = Seleciona todos os elementos que possuam os atributos especificados, atributos multiplos</p>    
+    <p><b>[attr=value]</b> = Seleciona todos os elementos que possuam um determinado atributo e valor atribuido</p>
+    <p><b>[attr|=value]</b> = Seleciona todos os elementos que contenha um atributo com prefixo desde que seguido por um hyfen (-)</p>
+    <p><b>[attr$=value]</b> = Seleciona todos os elementos que possuam um atributo terminado exatamente por um certo valor</p>
+    <p><b>[attr*=value]</b> = Seleciona todos os elementos que contenham um atributo com o valor especificado</p>
+    <p><b>[attr^=value]</b> = Seleciona todos os elementos aonde o valor do atributo se inicie pelo valor especificado</p>
+    <p><b>[attr!=value]</b> = Seleciona todos os elementos que não possuam um atributo como valor especificado</p><br />
+
+
+    <h4>Exemplos</h4>
+    <a href="">Link de exemplo 1</a><br />
+    <a name="uol" href="http://www.uol.com.br" target="_blank">Link de exemplo 2</a><br />
+    <a id="exemplo-js-1" href="js/scripts/Aula06.js" target="_blank">Link de exemplo 3</a><br />
+    <a id="google" href="http://www.google.com.br" target="_blank">Link de exemplo 4</a><br />
+    <a id="exemplo-1" href="#" target="_blank">Link de exemplo 5</a><br />
+    <a id="exemplo-2" href="#" target="_blank">Link de exemplo 6</a><br />
+    <a id="sufixo1" href="#" target="_blank">Link de exemplo 7</a><br />
+    <a id="js-2" href="js/scripts/Aula06.js" target="_blank">Link de exemplo 8</a><br />
+    <a id="scriptjs" href="js/scripts/Aula05.js" target="_blank">Link de exemplo 9</a><br />
+    <a id="2_google" href="http://www.google.com.br" target="_blank">Link de exemplo 10</a><br />
+    
+</body>
+
+</html>

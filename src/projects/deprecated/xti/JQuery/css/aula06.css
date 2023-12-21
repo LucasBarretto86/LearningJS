@@ -1,0 +1,16 @@
+*{
+    font-family: 'calibri';
+    margin: 0px;
+}
+
+body {
+    width: 60%;
+}
+
+h1, h3, h4 {
+    margin-top: 16px;
+}
+
+p, strong{
+    padding-left: 24px; 
+}

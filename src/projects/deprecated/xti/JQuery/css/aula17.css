@@ -1,0 +1,45 @@
+* {
+    font-family: 'calibri';
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 80%;
+}
+
+h1, h3, h4 {
+    margin-top: 16px;
+}
+
+p{
+    padding-left: 24px;
+    padding-top: 5px;
+}
+
+#exemplo {
+    border: 3px solid #58A;
+    width: 252px;
+    padding: 5px;
+}
+
+
+#block {
+    display: block;
+    margin-left: 40px;
+    border: 3px dashed #000;
+    background-color: #aaa;
+    width: 128px;
+    height: 128px;
+}
+
+#exemplo > div {
+    height: 132px;
+    padding: 20px;
+}
+
+button {
+    display: inline-block;
+    padding: 5px;
+    width: 100%;
+}

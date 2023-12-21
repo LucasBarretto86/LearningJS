@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 16 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type=text/css href="css/Aula16.css" media="all">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula16.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 16</h1>
+    <h3>Eventos Avançados</h3>
+
+    <p>.bind("evento",função) = Associa evento genérico a elementos criados direto no HTML.
+        <strong>(Deprecated 3.0)</strong>
+    </p>
+    <p>.unbind("evento",função) = Desassocia evento genérico a elementos criados direto no HTML.
+        <strong>(Deprecated 3.0)</strong>
+    </p>
+    <p>.delegate("elemento", "evento", função) = Delega a todos os filhos especificos do elemento em questão, receba um evento especifico e uma função especifica.
+        <strong>(Deprecated 3.0)</strong>
+    </p>
+    <p>.undelegate("evento",função) = Desassocia de filhos especificos do elemento em questão o que havia um evento especifico e sua função.
+        <strong>(Deprecated 3.0)</strong>
+    </p>
+    <p>.trigger("evento" ou "evento", [param1, param2] ou função()) = Função que dispara outro evento sem parametros ou com via array com os parametros e função com ou sem parametros.</p>
+    
+    <h4>Exemplo</h4>
+
+    <div id="exemplo">
+        <p></p>
+
+        <fieldset>
+            <legend>Formulário</legend>
+            <form>
+                <label>Text: </label>
+                <input type="text" id="texto" />
+                <br />
+                <label>Select: </label>
+                <select>
+                    <option value="BR">Brasil</option>
+                    <option value="FR">França</option>
+                    <option value="CH">China</option>
+                </select>
+                <br />
+
+                <label>Textarea: </label>
+                <textarea>Escreva aqui...
+                </textarea>
+                <input type="submit" id="enviar" value="Submit" />
+            </form>
+            <button>Button</button>
+        </fieldset>
+
+
+    </div>
+</body>
+
+</html>

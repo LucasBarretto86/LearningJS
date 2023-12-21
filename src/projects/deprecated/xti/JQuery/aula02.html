@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 02 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () { //Metodo .ready substituivel por $(function() { //código a ser executado});
+            $("a").click(function () {
+                $("#titulo").css("color", "#FF0000"); //modifica elementos css
+
+                // //Exemplo de funções atreladas a filosifia de selecionar para aula 02
+                // $("#titulo").text("Curso jQuery"); //modifica o innerHTML
+                // $("#titulo").hide(); //função que esconde o elemento
+                // $("#titulo").fadeToggle(); //Permite um efeito rapido de fade in e fade out
+
+                //Exemplo de funções da filosifia de encadear
+                $("#titulo").text("Curso jQuery").hide().fadeToggle(); //trata-se da possibilida de fazer diversas mudanças na seleção de um mesmo elemento.
+            });
+            //Exemplo de iteração implicita
+            $("a").css("color", "#0088FF"); //Observe que a função jQuery já interage com todos os elementos, sem precisarmos correr um looping para isso.    
+        });
+
+    </script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 02</h1>
+    <h3>Filosofia e Organização</h3>
+
+    <div>
+        <p id="titulo"> Hello World!</p>
+        <a href="#">Executar JavaScript</a>
+        <br />
+        <a href="#">Executar Exemplo de Iteração</a>
+        <br />
+        <a href="#">Executar Exemplo de Iteração</a>
+    </div>
+
+    <h3>Filosofia</h3>
+    <dl>
+        <dt>Selecionar
+            <dd>
+                Refere-se exatamente ao modelo de selecionar os elementos, atraves do seletor $() de modo a simplificar o processo.
+            </dd>
+            <br />
+        </dt>
+        <dt>Encadear
+            <dd>
+                Trata-se da possibilidade de atrelar diversas instruções em apenas uma linha de código, tenho em vista que cada função
+                <br /> dentro do jQuery retorna o proprio objeto.
+            </dd>
+            <br />
+        </dt>
+        <dt>Encapsular
+            <dd>
+                Refere-se ao modole de manipulação dos elementos da DOM API de modo simplificado, ou seja, encapsulado pelas
+                <br /> funcionalidades da jQuery.
+            </dd>
+            <br />
+        </dt>
+        <dt>Iterar Impliciamente
+            <dd>
+                Devido a possibilidade de iterar com elementos em array sem a necessidade de um for ou foreach.
+            </dd>
+            <br />
+        </dt>
+    </dl>
+
+</body>
+
+</html>

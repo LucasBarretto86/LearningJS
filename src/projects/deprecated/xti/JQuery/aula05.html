@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 05 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type=text/css href="css/Aula05.css" media="all">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula05.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 05</h1>
+    <h3>Seletores de Filtros Básicos e Seletores de Conteúdo</h3>
+
+    <h4>Seletores de Filtros Básicos, por ordem no index</h4>
+    <p>:first = Seleciona somente no primeiro elemento</p>
+    <p>:last = Seleciona somente no ultimo elemento</p>
+    <p>:not() = Não selecionara o item especificado como parametro</p>
+    <p>:even = Seleciona somente elementos de indice impar</p>
+    <p>:odd = Seleciona somente elementos de indice par</p>
+    <p>:eq() = Seleciona elemento de indice igual ao number informado como parametro</p>
+    <p>:gt() = Seleciona elementos de indice maiores que o numero informado como parametro</p>
+    <p>:lt() = Seleciona elementos de indice menores que o numero informado como parametro</p>
+
+    <h4>Seletores de conteúdo</h4>
+    <p>:contains() = Seleciona todos os elementos que contenha o texto informado no parametro</p>
+    <p>:has() = Seleciona todos os elementos que possuam outro elemento dentro de si de acordo com o parametro</p>
+    <p>:empty = Seleciona todos os elementos que não tem filhos, incluido textnodes</p>
+    <p>:parent = Seleciona todos os elementos que possuem filhos, incluido textnodes</p>
+
+    <h4>Exemplos</h4>
+
+    <table>
+        <caption>Para verificar a aplicação nos exemplos edite o arquivo JS respectivo a esta aula</caption>
+        <thead>
+            <!-- Muito importante usar thead, tbody e tfoot nas tabelas-->
+            <tr>
+                <th>Filme</th>
+                <th>Gênero</th>
+                <th>Duração</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr id="row_1">
+                <td>Filme 1</td>
+                <td>Drama</td>
+                <td>124'</td>
+            </tr>
+
+            <tr id="row_2">
+                <td><strong>Filme 2</strong></td>
+                <td></td>
+                <td>128'</td>
+            </tr>
+
+            <tr id="row_3">
+                <td>Filme 3</td>
+                <td>Documentário</td>
+                <td>110'</td>
+            </tr>
+
+            <tr id="row_4">
+                <td></td>
+                <td>Ficção Cientifica</td>
+                <td>210'</td>
+            </tr>
+
+            <tr id="row_5">
+                <td>Filme 4</td>
+                <td>Ficção Cientifica</td>
+                <td>210'</td>
+            </tr>
+
+            <tr id="row_6">
+                <td>Filme 5</td>
+                <td><strong>Aventura</strong></td>
+                <td>126'</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>

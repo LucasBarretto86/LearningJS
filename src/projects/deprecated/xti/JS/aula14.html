@@ -1,0 +1,69 @@
+<html>
+<!DOCTYPE html>
+<head>
+	<title>Javascript - Aula 14</title>
+	<link rel="stylesheet" type="text/css" href="css/Aula14.css" media="all" />
+	<script type="text/javascript" src="js/Aula14.js" charset="UTF-8"></script>
+	<meta type="charset" content="UTF-8" />
+	<meta type="author" content="Lucas Barretto e Silva" />
+	<meta type="viewport" content="width=width-distance, scale=1.0" />
+
+</head>
+
+<body>
+	<h1>Curso de JavaScript - Aula 14</h1>
+<h3>Regular Expression</h3><br />
+	<ul>
+		<li>Funções do Objeto RegExp
+			<ul>
+				<li>.test() - Testa com um boolean se a reglular expression foi localizada.</li>
+				<li>.exec() - Retorna a primeira ocorrência de conteúdo que atende a expressão regular.</li>
+
+			</ul>
+		</li><br />
+		
+		<li>Funções do Objeto String que estão atreladas as RegExp
+			<ul>
+				<li>.match() - Se informado uma regExp como param, o script buscará por ocorrencia da RegExp 
+							   na string que chamou o metodo, podendo ter modificadores.</li>
+				<li>.replace()</li>
+			</ul>
+		</li><br />
+		
+		<li>Modificadores
+			<ul>
+				<li>i - Suprime a restrição de letras maiúsculas e minúsculas da regexp.</li>
+				<li>g - Faz com que o script continue buscando por ocorrencias da regexp em uma 
+	string</li>
+				<li>m</li>
+			</ul>
+		</li><br />
+		<li>Metacaracters
+			<ul> 
+				<li>. - Busca a ocorrencia de qualquer caracter com exceção de novas linhas.</li>
+				<li>\w - Busca a ocorrencia de qualquer caracteres de a-Z não acentuadas, 0-9 e underline(_).</li>
+				<li>\W - Busca a ocorrencia de caracteres com acento e caracteres especiais exceto underline (_) e espaço.</li>
+				<li>\s - Busca a ocorrencia de espaços.</li>
+				<li>\d - Busca pela ocorrencia de digitos</li>
+				<li>^ - Buscar palavras ou caracteres que iniciem com o valor indicado dentro da RegExp e também é possível a utilização associada de outros metacaracters.</li>
+				<li>$ - Buscar palavras ou caracteres que terminem com o valor indicado dentro da RegExp e também é possível a utilização associada de outros metacaracters.</li>
+			</ul>
+		</li><br />
+		<li>Quantificadores
+			<ul>
+				<li>* - Verifica a ocorrencia de 0 ou mais</li>
+				<li>+ - Verifica a ocorrencia de 1 ou mais</li>
+				<li>? - Verifica a ocorrencia de 0 ou 1 vez</li>
+				<li>{} - Verificar a ocorrencia de de acordo com o numero de vez estibulado dentro das chaves.</li>
+			</ul>
+		</li><br />
+		<li>Agrupadores
+			<ul>
+				<li>[] - Permite a ocorrencia de palavras, numeros caracteres com multiplos valores sejam localizadas</li>
+			</ul>
+		</li>	
+	</ul>
+
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Calculo de IMC</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" media="all" />
+	<script type="text/javascript" src="js/logicaIMC.js"></script>
+	<meta charset="UTF-8" />
+	<meta name="author" content="Lucas Barretto e silva" />
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+
+</head>
+
+<body>
+	<header>
+		<figcaption>índice de Massa Corporal</figcaption>
+		<figure><img src="css/img/imc_logo2.png" alt="IMC Logo" /></figure>
+	</header>
+	<div id="content">
+		<menu>
+			<form id="formulario">
+				<fieldset>
+					<legend>IMC</legend>
+
+					<label>KG:</label>
+					<input type="text" name="kilos" /><br />
+
+					<label>CM:</label>
+					<input type="text" name="centimetros" /><br />
+
+					<label>IMC:
+					</label>
+					<input type="text" name="imc" disabled /><br />
+					<hr />
+					<label>Masc</label><input type="radio" name="sexo" value="masc" /><br />
+					<label>Fem</label><input type="radio" name="sexo" value="femi" /><br />
+
+
+					<a onclick="calcularIMC()">Cálcular</a>
+				</fieldset>
+
+			</form>
+		</menu>
+
+		<article>
+			<table id="masc">
+				<tr>
+					<th>IMC</th>
+					<th>Classificação</th>
+				</tr>
+
+				<tr id="mabaixo">
+					<td>20</td>
+					<td>Abaixo do peso</td>
+				</tr>
+
+				<tr id="mregular">
+					<td>20 à 25</td>
+					<td>Peso ideal</td>
+				</tr>
+
+				<tr id="macima">
+					<td>25 à 30</td>
+					<td>Acima do peso</td>
+				</tr>
+
+				<tr id="mexcesso">
+					<td>> 30</td>
+					<td>Excesso de Peso</td>
+				</tr>
+			</table>
+
+			<table id="femi">
+				<tr>
+					<th>IMC</th>
+					<th>Classificação</th>
+				</tr>
+
+				<tr id="fabaixo">
+					<td>
+						< 19</td>
+							<td>Abaixo do peso</td>
+				</tr>
+
+				<tr id="fregular">
+					<td>19 à 24</td>
+					<td>Peso ideal</td>
+				</tr>
+
+				<tr id="facima">
+					<td>24 à 29</td>
+					<td>Acima do peso</td>
+				</tr>
+
+				<tr id="fexcesso">
+					<td>> 29</td>
+					<td>Excesso de Peso</td>
+				</tr>
+
+			</table>
+		</article>
+	</div>
+
+	<footer>
+		<p>&reg Todos os Direitos Reservas 2017.</p>
+	</footer>
+</body>
+
+</html>

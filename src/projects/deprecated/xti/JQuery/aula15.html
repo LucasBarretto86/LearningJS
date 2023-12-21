@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 15 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type=text/css href="css/Aula15.css" media="all">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula15.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 15</h1>
+    <h3>Eventos de Teclado, Input e Fomulários</h3>
+
+    <h4>Eventos de Teclado</h4>
+    <p>.keyup() = Dispara quando uma tecla é solta.</p>
+    <p>.keyDown() = Dipera enquando uma tecla está pressionada.</p>
+    <p>.keypress() = Dispera quando uma tecla é pressionada e solta.</p>
+
+    <h4>Eventos de Input e Formulário</h4>
+    <p>.focus() = Dispara quando o elemento em questão está em foco.</p>
+    <p>.blur() = Dispara quando o elmento em questão perde o foco.</p>
+    <p>.change() = Evento disparado quando o elemento sofre alteração, usado para tag 'select'.</p>
+    <p>.submit() = Evento disparado a partir da submissão de um formulário, usado para validação de dados.</p>
+    <p>.select() = Evento disparado quando texto é seleionado</p>
+
+    <h4>Exemplo</h4>
+
+    <div id="exemplo">
+        <p></p>
+
+        <form>
+            <fieldset>
+                <legend>Formulário</legend>
+                <label>Text: </label>
+                <input type="text" /><br />
+                <label>Select: </label>
+                <select>
+                    <option value="BR">Brasil</option>
+                    <option value="FR">França</option>
+                    <option value="CH">China</option>
+                </select><br />
+
+                <label>Textarea: </label>
+                <textarea>Escreva aqui...
+                </textarea>
+                <input type="submit" id="enviar" value="submit"/>
+
+            </fieldset>
+
+        </form>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+*{
+    font-family: 'calibri';
+    margin: 0;
+    padding:  0;
+}
+
+body {
+    width: 60%;
+}
+
+h1, h3, h4 {
+    margin-top: 16px;
+}
+
+p, strong{
+    padding-left: 24px; 
+}
+
+
+#exemplo {
+    width: 256px;
+    padding: 5px;
+}
+
+#exemplo > p {
+    margin-top: 5px;
+    padding: 10px;
+    border: 3px dashed #000;
+    background-color: #ccc;
+
+}
+#exemplo > span {
+    margin-top: 5px;
+    display: block;
+    height: 30px;
+    text-align: center;
+    border: 3px solid #000;
+}
+
+#exemplo > span:hover {
+    color:#fff;
+    background-color: #000;
+}

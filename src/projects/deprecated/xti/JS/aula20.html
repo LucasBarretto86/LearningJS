@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 20 - DOM HTML</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/Aula20.css" />
+    <script src="js/Aula20.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <h1>Curso de JavaScript - Aula 20</h1>
+    <h3>DOM API HTML</h3>
+
+    <p>A API DOM HTML permite o desenvolvedor acessar as tags e as propriedades do HTML de forma mais simples, portanto, todas
+        as tags, atributos e controdalotes pode ser modificados, gerenciados e setados pela api, como veremos nesta aula</p>
+
+    <div>
+
+        <img src="css/img/seat_available.png" name="livre" alt="Assento livre"></img>
+        <img src="css/img/seat_unavailable.png" alt="Assento Indisponível"></img>
+        <img src="css/img/seat_selected.png" alt="Assento Selecionado"></img>
+
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th>Coluna 1</th>
+                <th>Coluna 2</th>
+            </tr>
+            <tr>
+                <td>valor 1</td>
+                <td>Valor 1.5</td>
+            </tr>
+            <tr>
+                <td>valor 2</td>
+                <td>Valor 2.5</td>
+            </tr>
+        </table>
+    </div>
+
+    <fieldset>
+
+        <legend>Opções</legend>
+        <label>Selecione: </label>
+        <select>
+            <option>Opção 1</option>
+            <option>Opção 2</option>
+            <option>Opção 3</option>
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <form method="post">
+            <label>Informe seu nome:</label>
+            <br />
+            <input id="nome" type="text" />
+            <br />
+            <label>Informe seu peso:</label>
+            <br />
+            <input id="peso" type="text" />
+            <br />
+        </form>
+    </fieldset>
+
+    <div id="buttons_set">
+        <a id="button_confirm" class="buttons">Adicionar</a>
+        <a id="button_cancel" class="buttons">Remover</a>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 04 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula04.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 04</h1>
+    <h3>Seletores de Hierarquia, Seletores compostos</h3>
+
+    <h4>Exemplos de seletores</h4>
+    <p>Os seletores funcionam básicamente conforme os seletores CSS</p>
+
+    <div>
+        <h4>$("parent > child")</h4>
+        <p>Seleciona todos os elementos filhos de um determinado elemento pai</p>
+        <br />
+
+        <h4>$("antecentende descendente")</h4>
+        <p>Seleciona um elemento descendente de um determinado antecentende</p>
+        <br />
+
+        <h4>$("prev + next")</h4>
+        <p>Seleciona todos os elementos próximos ao um elemento prévio</p>
+        <br />
+
+        <h4>$("prev ~ sibling")</h4>
+        <p>Seleciona todos os elementos irmãos depois do elemento prévio</p>
+        <br />
+    </div>
+
+    <div>
+        <ul>Exemplos
+            <li id="item_1">
+                Item 1
+            </li>
+            <li>
+                Item 2 <span></span>
+                <ul>
+                    <li>Item 2.1</li>
+                </ul>
+            </li>
+            <li>
+                Item 3
+            </li>
+        </ul>
+    </div>
+
+
+
+</body>
+
+</html>

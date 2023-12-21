@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 17 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/Aula17.css" media="all">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula17.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 17</h1>
+    <h3>Efeitos Gerais JQuery</h3>
+
+    <h4>Visibilidade</h4>
+    <p>.hide() = Faz com que o elemento em questão seja oculto.</p>
+    <p>.show() = Torna um elemento oculto em visivel.</p>
+    <p>.toggle() = Permite que o elemento fique oculto, caso este esteja visivel e vice-versa.</p>
+
+    <h4>Opacidade</h4>
+    <p>.fateOut() = Permite que o elemento em questão apareça em função do tempo.</p>
+    <p>.fateIn() = Permite que o elemento suma em função do tempo.</p>
+    <p>.fateTo() = Permite que o elemento faça um fadeIn limitado ao parametro.</p>
+    <p>.fateToggle = Permite que o elemento fadeOut, caso este esteja visivel e fadeIn caso contrário.</p>
+
+    <h4>Movimento</h4>
+    <p>.slideUp() = Permite o fechamento do elemento em questão em função do tempo.</p>
+    <p>.slideDown() = Permite a abertura do elemento em questão em função do tempo, porém restrito ao height original.</p>
+    <p>.slideToggle() = Intercala entre o abertura e fechamento do elemento.</p>
+
+    <h4>Parametros aplicáveis as funções</h4>
+    <p>normal, slow, fast, milliseconds</p>
+    <h4>Exemplo</h4>
+
+    <div id="exemplo">
+        <div>
+            <span id="block"></span>
+        </div>
+        <button id="btn-hide">Hide</button>
+        <button id="btn-show">Show</button>
+        <button id="btn-toggle">Toggle</button>
+        <button id="btn-fadeout">Fade Out</button>
+        <button id="btn-fadein">Fade In</button>
+        <button id="btn-fadeto">Fate To</button>
+        <button id="btn-fadetoggle">Fate Toggle</button>
+        <button id="btn-slideup">Slide UP</button>
+        <button id="btn-slidedown">Slide DOWN</button>
+        <button id="btn-slidetoggle">Slide Toggle</button>
+    </div>
+</body>
+
+</html>

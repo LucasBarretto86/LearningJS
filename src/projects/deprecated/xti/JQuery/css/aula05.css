@@ -1,0 +1,29 @@
+*{
+    font-family: 'calibri';
+    margin: 0px;
+}
+
+body {
+    width: 60%;
+}
+
+h1, h3, h4 {
+    margin-top: 16px;
+}
+
+p{
+    padding-left: 24px; 
+}
+
+table {
+    margin: 16px; 
+    width: 320px;
+    border-spacing: 0;
+}
+thead {
+    background-color: #000;
+    color: #fff;
+}
+table, th, tr, td {
+    border: 1px solid #000;
+}

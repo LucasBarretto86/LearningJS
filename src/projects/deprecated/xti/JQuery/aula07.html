@@ -1,0 +1,86 @@
+<!DOCTYPE xhtml>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 07 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type=text/css href="css/Aula07.css" media="all">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula07.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 07</h1>
+    <h3>Seletores de Formulários</h3>
+
+    <p>:input = Seleciona todos os elementosw input</p>
+    <p>:text = Seleciona todos os elementos de input com type text</p>
+    <p>:password  = Seleciona todos os elementos de input com type password</p>
+    <p>:radio = Seleciona todos os elementos de input com type radio</p>
+    <p>:checkbox = Seleciona todos os elementos de input com type checkbox</p>
+    <p>:file = Seleciona todos os elementos do type file</p>
+    <p>:submit = Seleciona todos os elementos do type submit</p>
+    <p>:button = Seleciona todos os elementos button</p>
+    <p>:reset = Seleciona todos os elementos do type reset</p>
+    <p>:image = Seleciona todos os elementos de image</p>
+    <p>:enabled = Seleciona todos os elementos de input que não esterjam disabled</p>
+    <p>:disabled = Seleciona todos os elementos que estejam disabled</p>
+    <p>:checked = Seleciona todos os elementos selecionados/checked</p>
+    <p>:selected = Seleciona todos os elementos marcados como selected, uma funcionalidade mais especifica do que o checked</p>
+    <p>:focus = Seleciona todos os elementos que estejam em foco</p>
+
+    <hr />
+    <h4>Exemplo</h4>
+
+    <fieldset>
+        <legend>Fomulário</legend>
+        <form method="POST">
+            <label>Text: </label>
+            <input type="text" id="text-1" />
+            <br />
+
+            <label>Password: </label>
+            <input type="password" id="pass-1" />
+            <br />
+
+            <label>Select: </label>
+            <select>
+                <option value="Valor 1" disabled>Valor 1</option>
+                <option value="Valor 2">Valor 2</option>
+                <option value="Valor 3" disabled>Valor 3</option>
+                <option value="Valor 4" hidden>Valor 4</option>
+                <option value="Valor 5">Valor 5</option>
+            </select>
+            <br/>
+
+            <label>Radio: </label>
+            <label><input type="radio" name="radio" value="option-1" />Opção 1</label> <!-- Interesante, um label usado como container de um input-->
+            <label><input type="radio" name="radio" value="option-1" />Opção 1</label>
+            <br/>
+
+            <label>Checkbox: </label>
+            <label><input type="checkbox" name="checkbox" value="1" />Valor 1</label>
+            <label><input type="checkbox" name="checkbox" value="2" />Valor 2</label>
+            <label><input type="checkbox" name="checkbox" value="3" />Valor 3</label>
+            <br />
+
+            <label>File Chooser:</label>
+            <br />
+            <input type="file" name="file" />
+            <input type="submit" name="file" value="Enviar" />
+            <br />
+            <label>Textarea:</label>
+            <br />
+            <Textarea resize="none">Escreva Aqui...</Textarea>
+            <br />
+
+            <button type="submit">Enviar</button>
+            <button type="reset">Reset</button>
+
+        </form>
+    </fieldset>
+</body>
+
+</html>

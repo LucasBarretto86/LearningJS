@@ -1,0 +1,54 @@
+<!DOCTYPE xhtml>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aula 13 de jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type=text/css href="css/Aula13.css" media="all">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/scripts/Aula13.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <h1>Curso de jQuery - Aula 13</h1>
+    <h3>Manipulação CSS</h3>
+
+    <h4>Edição, Manipulação</h4>
+    <p>.css() = Função que permite a atribuição de propriedades CSS como também retorna o valor do atributo. Para atribuir valor devera ser informado o nome da propriedade e o valor a atribuir, para retornar o valor somente o nome da propriedade deve ser informado.</p>
+    <p>.hasClass() = Função que retorna true ou false caso uma determinada case esteja presente no elemento.</p>
+    <p>.removeClass() = Função que remove uma classe que esteja atrelada ao elemento.</p>
+    <p>.addClass() = Função que permite a vinculação de uma classe ao elemento.</p>
+    
+    <h4>Dimensões</h4>
+    <p>.width() = Retorna a lagura do elemento.</p>
+    <p>.innerWidth() = Retorna a lagura do elemento + padding.</p>
+    <p>.outerWidth() = Retorna a lagura do elemento + padding + border.</p>
+    <p>.outerWidth(true) = Retorna a lagura do elemento + padding + border + margin.</p>
+    <p>.height() = Retorna a altura do elemento.</p>
+    <p>.innerHeight() = Retorna a altura do elemento + padding.</p>
+    <p>.outerHeight() = Retorna a altura do elemento + padding + border.</p>
+    <p>.outerHeight(true) = Retorna a altura do elemento + padding + border + margin.</p>
+
+    <h4>Posicionamento</h4>
+    <p>.position().top = Retorna o valor Y do canto superior do elemento.</p>
+    <p>.position().left = Retorna o valor X do canto esquerdo do elemento.</p>
+    <p>.offset().top = Retorna o valor Y da margem de impressão do canto superior do elemento.</p>
+    <p>.offset().left = Retorna o valor X da margem de impressão do canto esquerdo do elemento.</p>
+
+    
+    <h4>Exemplo</h4>
+
+    <div id="exemplo">
+        <div>
+            <h1>Titulo</h1>
+            <p>Exemplo de elemento</p>
+            <img class="image" src="img/SonSon.png" alt="sesenho" />
+        </div>
+        <span>Manipular CSS</span>
+
+    </div>
+</body>
+
+</html>

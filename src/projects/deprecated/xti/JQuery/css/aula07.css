@@ -1,0 +1,49 @@
+*{
+    font-family: 'calibri';
+}
+
+body {
+    width: 60%;
+}
+
+h1, h3, h4 {
+    margin-top: 16px;
+}
+
+p, strong{
+    padding-left: 24px; 
+}
+
+fieldset {
+    width: 360px;
+    padding: 0;
+    background-color: #bbb;
+}
+
+form {
+    padding: 10px;
+    overflow: hidden;
+
+}
+textarea {
+    resize: none;
+    width: 340px;
+    height: 64px;
+    display: block;
+}
+input, select, textarea {
+    margin-bottom: 10px;
+}
+
+
+label {
+    margin: 0;
+    margin-right: 10px;
+    display: block-inline;
+    width: 64px;
+}
+
+#text-1 {
+    position: relative;
+    left: 35px;
+}

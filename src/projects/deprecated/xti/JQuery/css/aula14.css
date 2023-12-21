@@ -1,0 +1,81 @@
+*{
+    font-family: 'calibri';
+    margin: 0;
+    padding:  0;
+}
+
+body {
+    width: 80%;
+}
+
+h1, h3, h4 {
+    margin-top: 16px;
+}
+
+p, strong{
+    padding-left: 24px; 
+}
+
+#exemplo p {
+    margin-bottom: 5px;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#exemplo {
+    border: 3px solid #58A;
+    width: 252px;
+    padding: 5px;    
+}
+#exemplo > div {
+    border: 3px solid #f00;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#exemplo > div > p {
+    margin-bottom: 5px;
+    padding: 10px;
+    border: 3px dashed #000;
+    background-color: #ccc;
+
+}
+
+#exemplo > div > h1 {
+    margin: 0;
+    margin-bottom: 5px;
+    padding:0;
+}
+
+#exemplo > p  {
+    margin-bottom: 5px;
+    padding: 10px;
+    border: 3px dashed #000;
+    background-color: #28c;
+
+}
+
+#exemplo > div > img  {
+    width: 100%;
+
+}
+span {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: block;
+    height: 30px;
+    text-align: center;
+    border: 3px solid #000;
+}
+
+.image {
+    text-align: center;
+    image-rendering: crisp-edges;
+    border: 3px solid #000;
+}
+
+.details {
+    border: 30px solid S#f00;
+}
