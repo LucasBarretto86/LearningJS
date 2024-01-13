@@ -1,0 +1,11 @@
+{
+  "name": "expressAppExample",
+  "version": "1.0.0",
+  "description": "A simple example on how to setup expressJS",
+  "main": "app.js",
+  "author": "Lucas Barretto e Silva",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,6 +1,9 @@
 # Learning Javascript
 
 - [Learning Javascript](#learning-javascript)
+  - [Core Knowledge](#core-knowledge)
+    - [HTTP](#http)
+      - [Status code](#status-code)
   - [YARN](#yarn)
     - [Install yarn](#install-yarn)
     - [Add new dependency](#add-new-dependency)
@@ -45,8 +48,43 @@
       - [`_.chunk()`](#_chunk)
       - [`_.get()`](#_get)
       - [`_.set()`](#_set)
+  - [ExpressJS](#expressjs)
+  - [GPT answers](#gpt-answers)
+    - [Node - Require vs Import](#node---require-vs-import)
   - [Snippets](#snippets)
+    - [Using ES6 modules in Node](#using-es6-modules-in-node)
   - [References](#references)
+
+## Core Knowledge
+
+### HTTP
+
+[Mozilla HTTP Guide](https://developer.mozilla.org/en-US/docs/Web/HTTP)
+
+#### Status code
+
+- Informational responses (100 – 199)
+- Successful responses (200 – 299)
+- Redirection messages (300 – 399)
+- Client error responses (400 – 499)
+- Server error responses (500 – 599)
+
+**Most common codes:**
+
+| Code | Description                 |
+| :--- | :-------------------------- |
+| 200  | OK/Success                  |
+| 201  | Created                     |
+| 204  | No content                  |
+| 301  | Redirect / Move Permanently |
+| 400  | Bad request                 |
+| 401  | Unauthorized                |
+| 403  | Forbidden                   |
+| 404  | Not Found                   |
+| 422  | Unprocessable Entity        |
+| 500  | Internal Server error       |
+| 503  | Service unavailable         |
+| 504  | Gateway Timeout             |
 
 ## YARN
 
@@ -91,7 +129,6 @@ older dependency syntax -> "`dependency-name`": "`version`"
     "@apollo/client": "3.5.8"
   }
 }
-
 ```
 
 ## ESBuild
@@ -101,7 +138,7 @@ older dependency syntax -> "`dependency-name`": "`version`"
 ```shell
 yarn add esbuild
 
-or 
+or
 
 npm install --save-exact esbuild
 ```
@@ -125,14 +162,13 @@ As the scrips to build you project might gets specific or more sophisticated it'
 ```js
 // build.js
 
-import { build } from 'esbuild'
+import { build } from "esbuild";
 
 build({
-  entryPoints: ['./src/index.js'],
+  entryPoints: ["./src/index.js"],
   bundle: true,
-  outfile: './public/out.js'
-}).catch(() => process.exit(1))
-
+  outfile: "./public/out.js",
+}).catch(() => process.exit(1));
 ```
 
 ```json
@@ -142,7 +178,7 @@ build({
   // ...
   "scripts": {
     "build": "node ./build.js"
-  },
+  }
 }
 ```
 
@@ -200,34 +236,33 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: 'standard',
+  extends: "standard",
   overrides: [],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
+    ecmaVersion: "latest",
+    sourceType: "module",
   },
   rules: {
-    'array-bracket-spacing': ['error', 'never'],
-    'brace-style': ['error', '1tbs'],
-    'comma-dangle': [
-      'error',
+    "array-bracket-spacing": ["error", "never"],
+    "brace-style": ["error", "1tbs"],
+    "comma-dangle": [
+      "error",
       {
-        arrays: 'multiline',
-        objects: 'multiline',
-        imports: 'multiline',
-        exports: 'multiline',
-        functions: 'ignore',
+        arrays: "multiline",
+        objects: "multiline",
+        imports: "multiline",
+        exports: "multiline",
+        functions: "ignore",
       },
     ],
-    'keyword-spacing': ['error'],
-    'linebreak-style': ['error', 'unix'],
-    'no-console': 'warn',
-    'object-curly-spacing': ['error', 'always'],
-    'semi': ['error', 'never'],
-    'space-in-parens': ['error', 'never'],
+    "keyword-spacing": ["error"],
+    "linebreak-style": ["error", "unix"],
+    "no-console": "warn",
+    "object-curly-spacing": ["error", "always"],
+    semi: ["error", "never"],
+    "space-in-parens": ["error", "never"],
   },
 };
-
 ```
 
 #### To add new rules
@@ -265,15 +300,15 @@ yarn add -D esbuild-plugin-stimulus
 ```js
 // ./build.js
 
-import { build } from 'esbuild';
-import { stimulusPlugin } from 'esbuild-plugin-stimulus';
+import { build } from "esbuild";
+import { stimulusPlugin } from "esbuild-plugin-stimulus";
 
 build({
-  entryPoints: ['./src/index.js'],
+  entryPoints: ["./src/index.js"],
   plugins: [stimulusPlugin()],
   bundle: true,
-  outfile: './public/out.js',
-}).catch(() => process.exit(1))
+  outfile: "./public/out.js",
+}).catch(() => process.exit(1));
 ```
 
 ### Config application js
@@ -283,11 +318,11 @@ build({
 ```js
 // ./src/libs/index.js
 
-import { Application } from 'stimulus'
-import DialogController from "./stimulus/controllers/dialog_controller"
+import { Application } from "stimulus";
+import DialogController from "./stimulus/controllers/dialog_controller";
 
-const app = Application.start()
-app.register('dialog', DialogController)
+const app = Application.start();
+app.register("dialog", DialogController);
 ```
 
 ### Stimulus controller
@@ -295,12 +330,11 @@ app.register('dialog', DialogController)
 ```js
 // ./src/libs/stimulus/controllers
 
-import { Controller } from "stimulus"
+import { Controller } from "stimulus";
 
 export default class extends Controller {
-
   connect() {
-    console.log("connected")
+    console.log("connected");
   }
 }
 ```
@@ -332,19 +366,19 @@ yarn add -D esbuild-sass-plugin
 ```js
 // ./build.js
 
-import { build } from 'esbuild'
+import { build } from "esbuild";
 // ...
-import { sassPlugin } from 'esbuild-sass-plugin'
+import { sassPlugin } from "esbuild-sass-plugin";
 
 await build({
-  entryPoints: ['./src/libs/index.js'],
+  entryPoints: ["./src/libs/index.js"],
   plugins: [
     // ...,
-    sassPlugin()
-    ],
+    sassPlugin(),
+  ],
   bundle: true,
-  outfile: './public/index.js',
-}).catch(() => process.exit(1))
+  outfile: "./public/index.js",
+}).catch(() => process.exit(1));
 ```
 
 > To make it works we also need to import the scss file on the `index.js` file, that will produce a scss file within the `outfile` folder
@@ -352,12 +386,12 @@ await build({
 ```js
 // ./src/libs/index.js
 
-import "../assets/stylesheet/index.scss"
+import "../assets/stylesheet/index.scss";
 ```
 
 ## Lodash
 
-Lodash is a library that enhance basic JS, giving it methods to handle data  in a ruby like style
+Lodash is a library that enhance basic JS, giving it methods to handle data in a ruby like style
 
 ### Configuring with a project
 
@@ -368,7 +402,10 @@ yarn add lodash
 or
 
 ```html
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+></script>
 ```
 
 it's also possible to import specific methods within an package.json
@@ -391,9 +428,9 @@ it's also possible to import specific methods within an package.json
 Allows you to add new values to return new object with new assigned properties, it doesn't change the original object
 
 ```js
-const user = {name: "Lucas", age: 34}
-const updatedUser = _.assign({ surname: "Casanova", age: 35 }, user)
-console.log(updatedUser)
+const user = { name: "Lucas", age: 34 };
+const updatedUser = _.assign({ surname: "Casanova", age: 35 }, user);
+console.log(updatedUser);
 ```
 
 **Output:**
@@ -409,7 +446,11 @@ console.log(updatedUser)
 it just repeats and map the result of an instruction for `n` times
 
 ```js
-console.log(_.times(3, () => { return 2 * 2 }))
+console.log(
+  _.times(3, () => {
+    return 2 * 2;
+  })
+);
 ```
 
 **Output:**
@@ -421,7 +462,11 @@ console.log(_.times(3, () => { return 2 * 2 }))
 > Note that this is basically the same as:
 
 ```js
-console.log([1, 2, 3].map(() => { return 2 * 2 }))
+console.log(
+  [1, 2, 3].map(() => {
+    return 2 * 2;
+  })
+);
 ```
 
 **Output:**
@@ -436,18 +481,18 @@ Basically it just a timeout that resets if an input is trigger before the timeou
 
 ```html
 <!-- index.html -->
-  <div>
-    <h2>Debounce example</h2>
-    <input type="text" name="debounce" />
-  </div>
+<div>
+  <h2>Debounce example</h2>
+  <input type="text" name="debounce" />
+</div>
 
-  <script>
-      function submit() {
-      console.log("Submitted!")
-    }
+<script>
+  function submit() {
+    console.log("Submitted!");
+  }
 
-    const input = document.querySelector("input[name='debounce']")
-    input.addEventListener('keyup', _.debounce(submit, 5000))
+  const input = document.querySelector("input[name='debounce']");
+  input.addEventListener("keyup", _.debounce(submit, 5000));
 </script>
 ```
 
@@ -456,9 +501,14 @@ Basically it just a timeout that resets if an input is trigger before the timeou
 It's basically and enhancement for normal find from JS
 
 ```js
-const users = [{name: "Lucas", age: 35}, {name: "Eloina", age:63}, {name: "Camila", age: 40}, {name: "Daniel", age: 37}]
-const result = _.find(users, {name: "Lucas"})
-console.log(result)
+const users = [
+  { name: "Lucas", age: 35 },
+  { name: "Eloina", age: 63 },
+  { name: "Camila", age: 40 },
+  { name: "Daniel", age: 37 },
+];
+const result = _.find(users, { name: "Lucas" });
+console.log(result);
 ```
 
 **Output:**
@@ -478,10 +528,14 @@ const result = users.find(e => {e.name === "Lucas"})
 It's basically and enhancement for normal filter from JS
 
 ```js
-const users = [{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63, gender: "female"}, {name: "Camila", age: 40, gender: "female"}, {name: "Daniel", age: 37, gender: "male"}]
-const result = _.filter(users, {gender: "male"})
-console.log(result)
-
+const users = [
+  { name: "Lucas", age: 35, gender: "male" },
+  { name: "Eloina", age: 63, gender: "female" },
+  { name: "Camila", age: 40, gender: "female" },
+  { name: "Daniel", age: 37, gender: "male" },
+];
+const result = _.filter(users, { gender: "male" });
+console.log(result);
 ```
 
 **Output:**
@@ -500,9 +554,8 @@ const result = users.filter(e => {e.gender === "male"})
 #### `_.first()`
 
 ```js
-const numbers = [1,2,3,4,5,6,7,8]
-console.log(_.first(numbers))
-
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+console.log(_.first(numbers));
 ```
 
 **Output:**
@@ -514,8 +567,8 @@ console.log(_.first(numbers))
 #### `_.last()`
 
 ```js
-const numbers = [1,2,3,4,5,6,7,8]
-console.log(_.last(numbers))
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+console.log(_.last(numbers));
 ```
 
 **Output:**
@@ -530,12 +583,17 @@ Break and array or an object into chunks
 
 ```js
 // Array
-const numbers = [1,2,3,4,5,6,7,8]
-console.log(_.chunk(numbers, 2))
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+console.log(_.chunk(numbers, 2));
 
 // Object
-const users = [{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63, gender: "female"}, {name: "Camila", age: 40, gender: "female"}, {name: "Daniel", age: 37, gender: "male"}]
-console.log(_.chunk(users, 2))
+const users = [
+  { name: "Lucas", age: 35, gender: "male" },
+  { name: "Eloina", age: 63, gender: "female" },
+  { name: "Camila", age: 40, gender: "female" },
+  { name: "Daniel", age: 37, gender: "male" },
+];
+console.log(_.chunk(users, 2));
 ```
 
 **Output:**
@@ -544,7 +602,7 @@ console.log(_.chunk(users, 2))
 Array
 [[1, 2],[3, 4],[5, 6],[7, 8]]
 
-[[{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63, gender: "female"}], 
+[[{name: "Lucas", age: 35, gender: "male"}, {name: "Eloina", age:63, gender: "female"}],
 [{name: "Camila", age: 40, gender: "female"}, {name: "Daniel", age: 37, gender: "male"}]]
 ```
 
@@ -561,22 +619,23 @@ const devs = [
     age: 35,
     languages: {
       using: ["HTML", "CSS", "Javascript", "SQL", "Ruby"],
-      learning: ["Java", "Python", "Lua"]
-    }
+      learning: ["Java", "Python", "Lua"],
+    },
   },
   {
     name: "Geovanna",
     age: 17,
     languages: {
-      learning: ["Javascript", "CSS"]
-    }
-  }
-]
+      learning: ["Javascript", "CSS"],
+    },
+  },
+];
 
-// Error due to the fact that dev2 doesn't have a property `using` therefore, there is no array and no index 2 
-let usingLanguages = devs.map(dev => { return dev.languages.using[2] })
-console.log(usingLanguages)
-
+// Error due to the fact that dev2 doesn't have a property `using` therefore, there is no array and no index 2
+let usingLanguages = devs.map((dev) => {
+  return dev.languages.using[2];
+});
+console.log(usingLanguages);
 ```
 
 **Output:**
@@ -590,15 +649,16 @@ TypeError: Cannot read properties of undefined (reading '2')
 Regular attempt to avoid it
 
 ```js
-let usingLanguages
+let usingLanguages;
 
 try {
-  usingLanguages = devs.map(dev => { return dev.languages.using[2] })
-  console.log(usingLanguages)
+  usingLanguages = devs.map((dev) => {
+    return dev.languages.using[2];
+  });
+  console.log(usingLanguages);
 } catch (error) {
-  console.log("Error", error.message)
+  console.log("Error", error.message);
 }
-
 ```
 
 **Output:**
@@ -610,9 +670,12 @@ Error Cannot read properties of undefined (reading '2')
 Using lodash `get()`
 
 ```js
-usingLanguages = _.get(devs, 'languages.using[2]', 'Error due to data inconsistency')
-console.log(usingLanguages)
-
+usingLanguages = _.get(
+  devs,
+  "languages.using[2]",
+  "Error due to data inconsistency"
+);
+console.log(usingLanguages);
 ```
 
 **Output:**
@@ -634,25 +697,26 @@ const devs = [
     age: 35,
     languages: {
       using: ["HTML", "CSS", "Javascript", "SQL", "Ruby"],
-      learning: ["Java", "Python", "Lua"]
-    }
+      learning: ["Java", "Python", "Lua"],
+    },
   },
   {
     name: "Geovanna",
     age: 17,
     languages: {
-      learning: ["Javascript", "CSS"]
-    }
-  }
-]
+      learning: ["Javascript", "CSS"],
+    },
+  },
+];
 
 try {
-  devs.forEach(dev => { dev.responsibility.documentation = ["Register", "Report"] })
-  console.log(devs[1].responsibility.documentation)
+  devs.forEach((dev) => {
+    dev.responsibility.documentation = ["Register", "Report"];
+  });
+  console.log(devs[1].responsibility.documentation);
 } catch (error) {
-  console.log("Error", error.message)
+  console.log("Error", error.message);
 }
-
 ```
 
 > Note that it handles the exception but it doesn't set the objects
@@ -672,21 +736,22 @@ const devs = [
     age: 35,
     languages: {
       using: ["HTML", "CSS", "Javascript", "SQL", "Ruby"],
-      learning: ["Java", "Python", "Lua"]
-    }
+      learning: ["Java", "Python", "Lua"],
+    },
   },
   {
     name: "Geovanna",
     age: 17,
     languages: {
-      learning: ["Javascript", "CSS"]
-    }
-  }
-]
+      learning: ["Javascript", "CSS"],
+    },
+  },
+];
 
-devs.forEach(dev => { _.set(dev, "responsibility.documentation", ["Register", "Report"]) })
-console.log(devs)
-
+devs.forEach((dev) => {
+  _.set(dev, "responsibility.documentation", ["Register", "Report"]);
+});
+console.log(devs);
 ```
 
 **Output:**
@@ -700,8 +765,8 @@ console.log(devs)
        using: ["HTML", "CSS", "Javascript", "SQL", "Ruby"],
        learning: ["Java", "Python", "Lua"]
      },
-     responsibility: { 
-       documentation:  ["Register", "Report"] 
+     responsibility: {
+       documentation:  ["Register", "Report"]
      }
    },
    {
@@ -710,16 +775,91 @@ console.log(devs)
      languages: {
        learning: ["Javascript", "CSS"]
      },
-     responsibility: { 
-       documentation:  ["Register", "Report"] 
+     responsibility: {
+       documentation:  ["Register", "Report"]
      }
    }
  ]
 ```
 
+## ExpressJS
+
+Go to [Learning ExpressJS](./LearningExpressJS//README.md)
+
+## GPT answers
+
+### Node - Require vs Import
+
+**Question:**
+
+> In node why would I use `import` statement instead of `require`, what's the benefits if theres any?
+
+**GPT:**
+
+> In Node.js, both `require` and `import` can be used for including modules, but they serve different purposes and have some differences. The `import` statement is part of ECMAScript modules (ESM), introduced in ECMAScript 6 (ES6), while `require` is part of the CommonJS module system, which has been historically used in Node.js.
+>
+> Here are some benefits of using `import` over `require`:
+>
+> 1. **Standardized Module System:** > `import` is part of the ECMAScript standard for modules, providing a more standardized and modern approach to module loading. It aligns with the language features introduced in ECMAScript 6 (ES6) and later versions.
+>
+> 2. **Static Analysis:**
+>    One significant advantage of `import` is that it allows for static analysis. Tools like tree shakers, bundlers, and linters can analyze the code more effectively, enabling better optimization and identifying unused exports.
+>
+> 3. **Named Exports and Imports:**
+>    With `import`, you can use named exports and imports, making it clearer which specific items from a module you are using. This can lead to more readable and self-documenting code.
+>
+>    ```js
+>    // Using require
+>    const fs = require("fs");
+>    const readFile = fs.readFile;
+>
+>    // Using import
+>    import { readFile } from "fs";
+>    ```
+>
+> 4. **Asynchronous Module Loading:** > `import` supports asynchronous module loading, allowing you to load modules dynamically using the `import()` function. This is not a feature available with `require`.
+>
+>    ```js
+>    // Asynchronous module loading with import
+>    const module = await import("./module.js");
+>    ```
+>
+> 5. **Default Exports:**
+>    While both `require` and `import` support default exports, the syntax for importing default exports is more explicit and consistent with named exports in the `import` statement.
+>
+>    ```js
+>    // Using require
+>    const myModule = require("./myModule");
+>
+>    // Using import
+>    import myModule from "./myModule";
+>    ```
+>
+> It's worth noting that, as of my last knowledge update in January 2022, Node.js has been making progress in supporting ECMAScript modules (ESM) alongside CommonJS. You can use either syntax in recent versions of Node.js, but the level of support may depend on your Node.js version and the specific features you are using. Always check the Node.js documentation and your project's requirements when deciding which module system to use.
+
 ## Snippets
+
+### Using ES6 modules in Node
+
+To be able to use `import`, `export` statements and other ES6 stuff in Node we just need to add on our `package.json`, the entry `"type": "module"`
+
+```json
+{
+  "name": "project name",
+  "version": "1.0.0",
+  "description": "A simple project description",
+  "main": "app.js", // App entry
+  "author": "Lucas Barretto e Silva",
+  "license": "MIT",
+  "type": "module", // Entry that allow Node to use ES6 features
+  "dependencies": {
+    ... // Whatever dependency your project has
+  }
+}
+```
 
 ## References
 
 [ESBuild Documentation](https://esbuild.github.io/getting-started/#install-esbuild)
 [ESLint](https://eslint.org/docs/latest/user-guide/getting-started)
+[Mozilla HTTP Guide](https://developer.mozilla.org/en-US/docs/Web/HTTP)
