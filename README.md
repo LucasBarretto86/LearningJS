@@ -52,6 +52,8 @@
   - [GPT answers](#gpt-answers)
     - [Node - Require vs Import](#node---require-vs-import)
   - [Snippets](#snippets)
+    - [Shutdown server gracefully](#shutdown-server-gracefully)
+      - [Close PORT forcefully](#close-port-forcefully)
     - [Using ES6 modules in Node](#using-es6-modules-in-node)
   - [References](#references)
 
@@ -63,11 +65,11 @@
 
 #### Status code
 
-- Informational responses (100 – 199)
-- Successful responses (200 – 299)
-- Redirection messages (300 – 399)
-- Client error responses (400 – 499)
-- Server error responses (500 – 599)
+- Informational responses (100 to 199)
+- Successful responses (200 to 299)
+- Redirection messages (300 to 399)
+- Client error responses (400 to 499)
+- Server error responses (500 to 599)
 
 **Most common codes:**
 
@@ -76,7 +78,7 @@
 | 200  | OK/Success                  |
 | 201  | Created                     |
 | 204  | No content                  |
-| 301  | Redirect / Move Permanently |
+| 301  | Redirect|
 | 400  | Bad request                 |
 | 401  | Unauthorized                |
 | 403  | Forbidden                   |
@@ -838,6 +840,37 @@ Go to [Learning ExpressJS](./LearningExpressJS//README.md)
 > It's worth noting that, as of my last knowledge update in January 2022, Node.js has been making progress in supporting ECMAScript modules (ESM) alongside CommonJS. You can use either syntax in recent versions of Node.js, but the level of support may depend on your Node.js version and the specific features you are using. Always check the Node.js documentation and your project's requirements when deciding which module system to use.
 
 ## Snippets
+
+### Shutdown server gracefully
+
+```js
+// app.js
+
+process.on('SIGTERM', () => {
+    console.log('Received SIGTERM signal. Closing server gracefully.');
+    // Perform cleanup tasks and close server connections.
+    server.close(() => {
+      console.log('Server closed gracefully.');
+      process.exit(0);
+    });
+  });
+  
+  process.on('SIGINT', () => {
+    console.log('Received SIGINT signal. Closing server gracefully.');
+    // Perform cleanup tasks and close server connections.
+    server.close(() => {
+      console.log('Server closed gracefully.');
+      process.exit(0);
+    });
+  })
+```
+
+#### Close PORT forcefully
+
+```sh
+
+kill -9 $(lsof -t -i:5500)
+```
 
 ### Using ES6 modules in Node
 
