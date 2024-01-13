@@ -1,0 +1,121 @@
+.nav {
+
+    &__item,
+    summary {
+        cursor: pointer;
+        font-weight: 600;
+
+        &:hover,
+        div:hover {
+            filter: unset;
+            color: var(--highlight-color);
+        }
+    }
+
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        width: auto;
+
+        li {
+            display: flex;
+            align-items: center;
+            position: relative;
+            min-height: 32px;
+            padding-left: 8px;
+
+            +li {
+                padding-top: 8px;
+            }
+        }
+    }
+
+    details {
+        position: relative;
+        width: 100%;
+
+        summary {
+            background-color: var(--secondary-color);
+            width: max-content;
+
+            div {
+                display: flex;
+                align-items: center;
+                height: 24px;
+                width: max-content;
+                padding-right: 16px;
+                transition: height 150ms easy-in;
+                font-weight: 600;
+            }
+        }
+
+        ul {
+            li+li {
+                border-top: 1px solid var(--tertiary-color);
+            }
+
+            a {
+                display: flex;
+                align-items: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                padding-top: 2px;
+            }
+        }
+
+
+        &:before {
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 24px;
+            width: 0%;
+            background-image: linear-gradient(var(--highlight-color), var(--highlight-color));
+            background-position: center;
+            background-size: auto 2px;
+            background-repeat: no-repeat;
+            z-index: -1;
+            transition-duration: 150ms;
+        }
+
+    }
+
+    details[open] {
+        summary {
+            div {
+                padding-right: 16px;
+                transition: width 150ms easy-in;
+                max-height: max-content;
+                color: var(--highlight-color);
+            }
+
+        }
+
+        ul {
+            margin-left: 16px;
+            margin-bottom: 8px;
+        }
+
+
+        &:before {
+            width: 100%;
+        }
+
+        a {
+            +a {
+                padding-top: 6px;
+            }
+        }
+
+    }
+}

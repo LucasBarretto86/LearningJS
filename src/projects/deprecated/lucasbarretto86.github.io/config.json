@@ -1,0 +1,38 @@
+{
+    "navigation": {
+        "collections": [
+            {
+                "header": "Projects",
+                "items": [
+                    {
+                        "name": "Resume",
+                        "url": "https://lucasbarretto86.github.io/my-resume",
+                        "request": "repo"
+                    },
+                    {
+                        "name": "Markdown Study",
+                        "url": "https://lucasbarretto86.github.io/markdown",
+                        "request": "repo"
+                    }
+                ]
+            },
+            {
+                "header": "Tests & Examples",
+                "items": [
+                    {
+                        "name": "Grid",
+                        "url": "grid",
+                        "request": "ajax"
+                    }
+                ]
+            }
+        ],
+        "links": [
+            {
+                "name": "Contatc Me",
+                "url": "mailto:lucasbarretto86.lucas@gmail.com?subject=Hi%20there%20Mr.%20LucasBarretto86!",
+                "request": "local"
+            }
+        ]
+    }
+}

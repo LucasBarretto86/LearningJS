@@ -1,0 +1,31 @@
+{
+  "name": "lucasbarretto86.github.io",
+  "version": "1.0.0",
+  "description": "Dome sweet dome!",
+  "author": "Lucas Barretto e Silva",
+  "source": [
+    "src/views/index.html",
+    "src/views/grid.html"
+  ],
+  "license": "ISC",
+  "scripts": {
+    "start": "parcel -p 5505 src/views/*.html --no-cache --open",
+    "build": "rm -rf ./dist && parcel build ./src/views/*.html --no-cache --public-url ./dist/",
+    "deploy": "rm index.html && yarn run build && cd dist && cp index.html ../index.html",
+    "kills": "kill -9 $(lsof -t -i:5505)"
+  },
+  "homepage": "https://lucasbarretto86.github.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasBarretto86/lucasbarretto86.github.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LucasBarretto86/lucasbarretto86.github.io/issues"
+  },
+  "devDependencies": {
+    "@parcel/transformer-image": "^2.0.1",
+    "@parcel/transformer-sass": "^2.0.1",
+    "lucasbarretto86.componentizer": "^1.0.5",
+    "parcel": "^2.0.0-beta.2"
+  }
+}
