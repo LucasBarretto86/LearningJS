@@ -22,7 +22,7 @@ app.get("/about", (req, res) => {
     res.sendFile('./src/views/about.html', { root: __dirname })
 })
 
-app.get("/about-me", (req, res) => {
+app.get("/about-us", (req, res) => {
     res.redirect('/about')
 })
 

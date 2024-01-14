@@ -1,10 +1,12 @@
 # Learning ExpressJS
 
 - [Learning ExpressJS](#learning-expressjs)
-  - [Basic Node Server example](#basic-node-server-example)
-  - [Installing ExpressJS](#installing-expressjs)
-  - [Creating an Express app](#creating-an-express-app)
-  - [Routing](#routing)
+  - [What is ExpressJS?](#what-is-expressjs)
+  - [Basic plain node Server](#basic-plain-node-server)
+  - [Getting starr with ExpressJS](#getting-starr-with-expressjs)
+    - [Installing ExpressJS](#installing-expressjs)
+    - [Creating first Express server](#creating-first-express-server)
+  - [Handling routes, requests and responses](#handling-routes-requests-and-responses)
     - [Rendering HTML](#rendering-html)
     - [Redirecting](#redirecting)
     - [Route errors](#route-errors)
@@ -13,18 +15,101 @@
     - [Setup EJS](#setup-ejs)
     - [Creating view file for EJS](#creating-view-file-for-ejs)
     - [Rendering a view](#rendering-a-view)
-    - [Utils](#utils)
+  - [Blog project](#blog-project)
+    - [Additional dependencies](#additional-dependencies)
+    - [Adding post create route and view](#adding-post-create-route-and-view)
+  - [Utils](#utils)
       - [Shutdown server gracefully](#shutdown-server-gracefully)
       - [Close PORT forcefully](#close-port-forcefully)
   - [References](#references)
 
-## Basic Node Server example
+---
 
-On the link below you can see a very basic server implementation using only Node, that will allow you to understand better how express works under the hood.
+## What is ExpressJS?
 
-[Basic Node Server](/specifics/LearningJS/src/projects/basicNodeServerExample/server.js)
+**GPT: What is ExpressJS?**
 
-## Installing ExpressJS
+> Express.js, commonly known as Express, is a minimal and flexible web application framework for Node.js. It provides a set of features for building web and mobile applications quickly and efficiently. Express is widely used in the Node.js community and is known for its simplicity, ease of use, and robust set of features
+>
+> **Key features**:
+>
+> 1. **Routing:** Simple and efficient route handling for various HTTP methods.
+> 2. **Middleware:** Modular functions to handle aspects of the request-response cycle.
+> 3. **Template Engines:** Support for various template engines like EJS, Pug, and Handlebars.
+> 4. **Static File Serving:** Built-in middleware for serving static files easily.
+> 5. **HTTP Utility Methods:** Simplifies working with HTTP requests and responses.
+> 6. **RESTful API Development:** Ideal for designing and implementing RESTful APIs.
+> 7. **Flexibility:** Minimalistic and unopinionated, allowing developers to structure applications as they prefer.
+> 8. **Widely Adopted:** Popular and widely used in the Node.js community.
+> 9. **Performance:** Lightweight and fast, suitable for building scalable applications.
+> 10. **Ecosystem:** Large and vibrant ecosystem with numerous third-party middleware and extensions.
+
+## Basic plain node Server
+
+Below you can see a very basic server implementation using only Node, that will allow you to understand better how express works under the hood.
+
+```js
+//./src/basicNodeServerExample/server.js
+
+const http = require("http");
+const fs = require("fs");
+
+const server = http.createServer((req, res) => {
+    // Request object
+    console.log(req.url, req.method);
+
+    // Response object
+    res.setHeader("Content-Type", "text/html");
+
+
+    // Simple router implementation
+    let path = "./views"
+
+    switch (req.url) {
+        case "/":
+            // Success example
+            statusCode = 200
+            path += "/index.html"
+            break;
+        case "/about":
+            // Success example
+            res.statusCode = 200
+            path += "/about.html"
+            break;
+        case "/about-me":
+            // Redirect example
+            res.statusCode = 301
+            res.setHeader("Location", "/about")
+            break;
+        default:
+            // Not existing endpoint example
+            res.statusCode = 404
+            path += "/404.html"
+            break;
+    }
+
+    // Simple view engine implementation
+    fs.readFile(path, (error, data) => {
+        try {
+            res.write(data)
+        } catch (e) {
+            console.log(e, error)
+        } finally {
+            res.end()
+        }
+    })
+});
+
+server.listen(5500, "localhost", () => {
+    console.log("Listening for requests on port 5500");
+});
+```
+
+> See an example project on: `./src/basicNodeServerExample/`
+
+## Getting starr with ExpressJS
+
+### Installing ExpressJS
 
 ```sh
 yarn add express
@@ -34,7 +119,7 @@ yarn add express
 npm install express
 ```
 
-## Creating an Express app
+### Creating first Express server
 
 Express doesn't require setup or anything, however you need to have a initial JS file that will instantiate the express on the project root folder, normally this file is called `app.js` or `server.js`, here is a simple example how to use express on this file:
 
@@ -49,19 +134,17 @@ const app = express()
 // Setup port to listen for requests
 // Returns an instance of the server, which would be used if use websocket
 const server = app.listen(PORT, () => {
-    console.log(`Listening port: ${PORT}`)
-    console.warn(`http://localhost:${PORT}`)
+    console.log(`Listening for requests on port ${PORT}`)
 })
 
-// Routes and endpoints handling
-app.get("/", (req, res) => {
-
+// Basic routes handling
+app.get('/', (req, res) => {
   // Same as .write and .end
-  res.send('<p>Express home page<p>')
+  res.send('Hello, Express!');
 })
 ```
 
-## Routing
+## Handling routes, requests and responses
 
 The dumbest way of be able to get multiple endpoints, would be ro repeat the statement `app.get`
 
@@ -123,7 +206,7 @@ To make a redirect using express we will use the function `redirect`:
 
 ...
 
-app.get("/about-me", (req, res) => {
+app.get("/about-us", (req, res) => {
 
   // sending a html file directly
   res.redirect('/about')
@@ -212,30 +295,26 @@ the difference is that express will parse the file and if we use `<%= %>` it wil
 
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ExpressJS example - contact</title>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExpressJS example - contact</title>
-</head>
+  <body>
+      <main>
+          <h1>Contact page example</h1>
+          <p>contact.ejs</p>
+          <p><%= content %></p>
+      </main>
 
-<body>
-    <main>
-        <h1>Contact page example</h1>
-        <p>contact.ejs</p>
-        <p>
-            <%= content %>
-        </p>
-    </main>
-
-    <nav>
-        <ul>
-            <li><a href="/index">Home</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
-    </nav>
-</body>
-
+      <nav>
+          <ul>
+              <li><a href="/index">Home</a></li>
+              <li><a href="/about">About</a></li>
+          </ul>
+      </nav>
+  </body>
 </html>
 ```
 
@@ -266,7 +345,31 @@ that our ejs view will use, so the output will  be like this:
 
 ![contact-ejs print](./src/expressAppExample/src/assets/images//contact-ejs.png)
 
-### Utils
+## Blog project
+
+In this new practical example we are going to create a simple implementation of a blog,
+to go along you can create new project or move along with the same we used on the topics above since the basis will be same
+
+I will choose to create a separate the [project](./src/expressBlogExample/app.js) and also add few more dependencies that are very
+often used in real life apps
+
+### Additional dependencies
+
+1. [Add `dotenv` to handle my ENVS](../README.md#dotenv)
+2. [Add `nodemon` to automatically update my server code as it gets modified](../README.md#nodemon)
+
+### Adding post create route and view
+
+On the file `app.js` let's add a new route to handle how we gonna create our blog posts
+
+```js
+// app.js
+
+
+
+```
+
+## Utils
 
 #### Shutdown server gracefully
 

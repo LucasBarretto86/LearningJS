@@ -10,6 +10,14 @@
       - [add only in dev](#add-only-in-dev)
     - [Reinstall all dependencies](#reinstall-all-dependencies)
     - [Adding multiple dependencies version](#adding-multiple-dependencies-version)
+  - [dotenv](#dotenv)
+    - [Installing dotenv](#installing-dotenv)
+    - [Create `.env` file](#create-env-file)
+    - [dotenv setup](#dotenv-setup)
+  - [nodemon](#nodemon)
+    - [Installing nodemon](#installing-nodemon)
+    - [Setup nodemon](#setup-nodemon)
+    - [Using nodemon](#using-nodemon)
   - [ESBuild](#esbuild)
     - [Install ESBuild](#install-esbuild)
     - [Implementing building script](#implementing-building-script)
@@ -132,6 +140,100 @@ older dependency syntax -> "`dependency-name`": "`version`"
   }
 }
 ```
+
+## dotenv
+
+`dotenv` is a dependency to allow us to load ambient environment variables  within our project
+as it get started, after installing this dependency we use `.env` file on the root folder of our project.
+
+### Installing dotenv
+
+```sh
+yarn add dotenv
+
+# OR
+
+npm install dotenv
+```
+
+### Create `.env` file
+
+create the file `.env` on the project root folder
+
+```tree
+.
+├── .env
+├── app.js
+├── package.json
+├── src/
+└── yarn.lock
+```
+
+The `.env` file will hold each like `KEY = VALUE`, like this:
+
+```mono
+<!-- .env -->
+
+PORT = 5500
+```
+
+### dotenv setup
+
+Add this few lines on the main js file of your project:
+
+```js
+// app.js
+
+require('dotenv').config();
+
+const PORT = process.env.PORT || 3000;
+
+// ...
+```
+
+> This code sets the PORT variable to the value defined in the .env file or defaults to 3000 if not specified.
+
+## nodemon
+
+**GPT: What is nodemon?**
+
+> nodemon is a development tool for Node.js applications that automatically restarts the server whenever code changes are detected. It simplifies the development process by eliminating the need to manually restart the server after each modification. With its command-line interface and integration with npm scripts, nodemon streamlines the development workflow and enhances the developer experience.
+
+### Installing nodemon
+
+```sh
+yarn add nodemon -D
+
+# OR
+
+npm install --save-dev nodemon
+```
+
+### Setup nodemon
+
+To setup nodemon we must add a new script entry into the  `package.json` of our project:
+
+```js
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+```
+
+> notice that `app.js` is the main file where our application starts
+
+### Using nodemon
+
+Basically we just need to run our start script
+
+```sh
+yarn run start
+
+# OR
+
+npm run start
+```
+
+After that we don't need to keep shutting down our application and restarting again every time we change `.js` files
 
 ## ESBuild
 

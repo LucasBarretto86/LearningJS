@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog example - index</title>
+
+    <style>
+        /* reset */
+        html {
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: inherit;
+        }
+
+        body {
+            display: grid;
+            grid-template-rows: minmax(0, max-content);
+            grid-template-columns: minmax(8rem, max-content) auto;
+            gap: 1rem;
+            height: 100vh;
+        }
+
+        header {
+            grid-column: 1 / -1;
+        }
+
+        nav {
+            padding: 1rem .5rem;
+        }
+
+        main {
+            padding: 1.25rem 1rem 2rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Blog example Home page</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/posts/new">Create new Post</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <p>
+            Welcome to the blog project, here will be listed all posts later on...
+        </p>
+    </main>
+</body>
+
+</html>
