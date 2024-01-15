@@ -17,10 +17,9 @@
     - [Rendering a view](#rendering-a-view)
   - [Blog project](#blog-project)
     - [Additional dependencies](#additional-dependencies)
-    - [Adding post create route and view](#adding-post-create-route-and-view)
-  - [Utils](#utils)
-      - [Shutdown server gracefully](#shutdown-server-gracefully)
-      - [Close PORT forcefully](#close-port-forcefully)
+    - [Adding blog routes and views](#adding-blog-routes-and-views)
+      - [Create blog index route and views](#create-blog-index-route-and-views)
+      - [Create posts route and views](#create-posts-route-and-views)
   - [References](#references)
 
 ---
@@ -144,6 +143,8 @@ app.get('/', (req, res) => {
 })
 ```
 
+> I also added two functions to handle server process as we close it, look at [Closing server gracefully](../README.md#shutdown-server-gracefully)
+
 ## Handling routes, requests and responses
 
 The dumbest way of be able to get multiple endpoints, would be ro repeat the statement `app.get`
@@ -233,7 +234,6 @@ Later we will see it done differently
 // rendering error page
 app.use((req, res) => {
     res.status(404).sendFile('./src/views/404.html', { root: __dirname })
-    
 })
 ```
 
@@ -258,39 +258,22 @@ Within the `app.js` we need to instantiate EJS and put  it to usage
 
 // Register view engine
 app.set('view engine', 'ejs')
+app.set('views', './src/views')
 
 // Routes and endpoints handling
 
-...
-
 ```
 
- By default ejs looks into the project view folder to grab the view files it needs.
- In case you use another folder name or you use some sort of inner folder, then we need to define the name or the path like this:
-
-```js
-// app.js
-
-// Creating express app
-
-...
-
-// Register view engine
-app.set('view engine', 'ejs')
-app.set('views', './src/folder-name/another-folder-name')
-
-// Routes and endpoints handling
-
-...
-
-```
+> Notice that in our case we added a second statement because our `views` folder isn't directly on the root folder, so we need to specify the relative path where our `views` folder is
 
 ### Creating view file for EJS
 
 To create EJS views, we will use 90% HTML syntax, however the file name will have the extension `ejs`,
-the difference is that express will parse the file and if we use `<%= %>` it will allow us to assign variable values:
+the difference is that express will parse the file and if we use `<% %>` it will allow us run javascript
+on the server side, which means we can make our view more dynamic, most parte of the we just want use it for variables
+or simple scripts that our server needs to handle specific aspects from our view,
 
-```ejs
+```html
 <!-- views/index.ejs -->
 
 <!DOCTYPE html>
@@ -318,7 +301,14 @@ the difference is that express will parse the file and if we use `<%= %>` it wil
 </html>
 ```
 
-> Notice that the only difference between HTML is really the usage of `<%= content %>`
+> Notice that the only difference between HTML is really the usage of embedded Javascript `<%= content %>`
+
+| Embed              | Description                                                                                                                                       |
+| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `<% code_here %>`  | Executes JavaScript code without rendering it on the final HTML. Use for control flow or logic.                                                   |
+| `<%= code_here %>` | Executes JavaScript code and renders its output on the final HTML. HTML-escapes the output to prevent XSS.                                        |
+| `<%- code_here %>` | Executes JavaScript code and renders its output on the final HTML. Does not HTML-escape the output. Use when you trust the source of the content. |
+| `<%# code_here %>` | Comments that won't render in the final HTML. Useful for adding comments within your EJS template.                                                |
 
 ### Rendering a view
 
@@ -358,49 +348,288 @@ often used in real life apps
 1. [Add `dotenv` to handle my ENVS](../README.md#dotenv)
 2. [Add `nodemon` to automatically update my server code as it gets modified](../README.md#nodemon)
 
-### Adding post create route and view
+### Adding blog routes and views
 
-On the file `app.js` let's add a new route to handle how we gonna create our blog posts
+#### Create blog index route and views
 
-```js
-// app.js
+**Adjust our get index route:**
 
-
-
-```
-
-## Utils
-
-#### Shutdown server gracefully
+First on the file `app.js` let's add a new route to handle how we gonna create our blog posts
 
 ```js
 // app.js
 
-process.on('SIGTERM', () => {
-    console.log('Received SIGTERM signal. Closing server gracefully.');
-    // Perform cleanup tasks and close server connections.
-    server.close(() => {
-      console.log('Server closed gracefully.');
-      process.exit(0);
-    });
-  });
-  
-  process.on('SIGINT', () => {
-    console.log('Received SIGINT signal. Closing server gracefully.');
-    // Perform cleanup tasks and close server connections.
-    server.close(() => {
-      console.log('Server closed gracefully.');
-      process.exit(0);
-    });
-  })
+app.get("/", (req, res) => {
+    const posts = [
+        {
+            id: 1,
+            title: "Lorem ipsum",
+            snippet: "Lorem ipsum dolor sit amet, consectetur",
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        },
+        {
+            id: 2,
+            title: "Lorem ipsum",
+            snippet: "Lorem ipsum dolor sit amet, consectetur",
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        },
+    ]
+
+    res.render('index', { posts: posts })
+})
+
 ```
 
-#### Close PORT forcefully
+> Notice that we created an object and then we send it as a local variable to our view
 
-```sh
+**Create `index.ejs` view:**
 
-kill -9 $(lsof -t -i:5500)
+Now let's create or adjust our index view that will render a list of posts we are going to create, so that will allows us
+to access each of those posts.
+
+```html
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Blog example - index</title>
+
+      <style>
+          /* reset */
+          html {
+              font-size: 16px;
+              box-sizing: border-box;
+          }
+
+          *,
+          *::after,
+          *::before {
+              margin: 0;
+              padding: 0;
+              box-sizing: inherit;
+          }
+
+          body {
+              display: grid;
+              grid-template-rows: minmax(0, max-content);
+              grid-template-columns: minmax(8rem, max-content) auto;
+              gap: 1rem;
+              height: 100vh;
+          }
+
+          header {
+              grid-column: 1 / -1;
+          }
+
+          nav {
+              padding: 1rem .5rem;
+          }
+
+          main {
+              padding: 1.25rem 1rem 2rem;
+          }
+
+          h2 {
+              margin-bottom: 1rem;
+          }
+
+          .posts {
+              display: flex;
+              flex-direction: column;
+          }
+
+          a.post {
+              display: flex;
+              column-gap: .5rem;
+              text-decoration: none;
+              color: gray;
+              padding: .5rem .25rem;
+          }
+
+          a.post:hover {
+              filter: brightness(0);
+          }
+
+          .post+.post {
+              border-top: 1px solid black;
+          }
+      </style>
+  </head>
+
+  <body>
+      <header>
+          <h1>Blog example Home page</h1>
+      </header>
+
+      <nav>
+          <ul>
+              <li><a href="/posts/new">Create new Post</a></li>
+          </ul>
+      </nav>
+
+      <main>
+          <h2>Blog posts</h2>
+          <div class="posts">
+              <%- 
+                  posts?.map((post)=> {
+                      return `<a href="#" class="post"><b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i></a>`
+                  }).join('')
+              %>
+          </div>
+      </main>
+  </body>
+</html>
 ```
+
+> Notice how interesting we use embedded javascript code with `<%-%>` to render the posts
+
+#### Create posts route and views
+
+**Create new route:**
+
+On `app.js` let's add the new route we need:
+
+```js
+// app.js
+
+...
+
+// Routes
+
+...
+
+app.get("/posts/new", (req, res) => {
+    res.render('posts/new')
+})
+```
+
+**Create `posts/new.ejs` view:**
+
+Now Let's create our view that will be used to submit creation of new blog posts, for that we are going to use our `index.ejs` as template,
+and we will create the file within the `views` folder, but creating a new folder called `posts` where we gonna put our `new.ejs` file:
+
+Our `posts/new.ejs` will have a form element that will trigger the post request for the create route for new posts route
+
+```html
+<!-- posts/new.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog example - post/new</title>
+
+    <style>
+        /* reset */
+        html {
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: inherit;
+        }
+
+        body {
+            display: grid;
+            grid-template-rows: minmax(0, max-content);
+            grid-template-columns: minmax(8rem, max-content) auto;
+            gap: 1rem;
+            height: 100vh;
+        }
+
+        header {
+            grid-column: 1 / -1;
+        }
+
+        nav {
+            padding: 1rem .5rem;
+        }
+
+        main {
+            padding: 1.25rem 1rem 2rem;
+        }
+
+        fieldset {
+            max-width: max-content;
+            border-radius: .5rem;
+            padding: 1rem .5rem 1.25rem;
+        }
+
+        fieldset>legend>h2 {
+            margin: 0 auto;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            row-gap: 1rem;
+            max-width: 20rem;
+        }
+
+        .form>.field {
+            display: flex;
+            flex-direction: column;
+            row-gap: .25rem;
+        }
+
+        form>.field>label {
+            font-weight: 600;
+        }
+
+        .form>.field>textarea {
+            padding: .25rem;
+            resize: none;
+            text-indent: -20ch;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Blog example Home page</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home Page</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <fieldset>
+            <legend>
+                <h2>Creating new blog post</h2>
+            </legend>
+
+            <form class="form" action="/posts/create" method="post">
+                <div class="field">
+                    <label for="post_title">Title:</label>
+                    <input type="text" name="post[title]" id="post_title" placeholder="Write title here...">
+                </div>
+
+                <div class="field">
+                    <label for="post_content">Post body:</label>
+                    <textarea name="post[body]" id="post_body" cols="30" rows="10" placeholder="Write body here...">
+                    </textarea>
+                </div>
+                <input type="submit" value="Create new posts">
+            </form>
+        </fieldset>
+    </main>
+</body>
+
+</html>
+```
+
+> Notice the form `action` property, that's the route that will handle the post creation itself, notice that we say on the `method` what kind of request it will be
 
 ## References
 

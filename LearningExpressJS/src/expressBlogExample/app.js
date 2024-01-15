@@ -11,16 +11,32 @@ const server = app.listen(PORT, () => { console.log(`Listening on http://localho
 //
 // View engine
 app.set('view engine', 'ejs')
-app.set('views', './src/views/')
+app.set('views', './src/views')
 
 //
 // Routes
 app.get("/", (req, res) => {
-    res.render('index')
+    const posts = [
+        {
+            id: 1,
+            title: "Lorem ipsum",
+            snippet: "Lorem ipsum dolor sit amet, consectetur",
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        },
+        {
+            id: 2,
+            title: "Lorem ipsum",
+            snippet: "Lorem ipsum dolor sit amet, consectetur",
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        },
+
+    ]
+
+    res.render('/index', { posts: posts })
 })
 
 app.get("/posts/new", (req, res) => {
-    res.render('posts/new')
+    res.render('/posts/new')
 })
 
 app.use((req, res) => {

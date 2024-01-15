@@ -41,6 +41,30 @@
             padding: 1.25rem 1rem 2rem;
         }
 
+        h2 {
+            margin-bottom: 1rem;
+        }
+
+        .posts {
+            display: flex;
+            flex-direction: column;
+        }
+
+        a.post {
+            display: flex;
+            column-gap: .5rem;
+            text-decoration: none;
+            color: gray;
+            padding: .5rem .25rem;
+        }
+
+        a.post:hover {
+            filter: brightness(0);
+        }
+
+        .post+.post {
+            border-top: 1px solid black;
+        }
     </style>
 </head>
 
@@ -56,9 +80,14 @@
     </nav>
 
     <main>
-        <p>
-            Welcome to the blog project, here will be listed all posts later on...
-        </p>
+        <h2>Blog posts</h2>
+        <div class="posts">
+            <%- 
+                posts?.map((post)=> {
+                    return `<a href="#" class="post"><b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i></a>`
+                }).join('')
+            %>
+        </div>
     </main>
 </body>
 
