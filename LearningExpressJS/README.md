@@ -387,100 +387,46 @@ app.get("/", (req, res) => {
 Now let's create or adjust our index view that will render a list of posts we are going to create, so that will allows us
 to access each of those posts.
 
-```html
+```ejs
 <!-- index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Blog example - index</title>
-
-      <style>
-          /* reset */
-          html {
-              font-size: 16px;
-              box-sizing: border-box;
-          }
-
-          *,
-          *::after,
-          *::before {
-              margin: 0;
-              padding: 0;
-              box-sizing: inherit;
-          }
-
-          body {
-              display: grid;
-              grid-template-rows: minmax(0, max-content);
-              grid-template-columns: minmax(8rem, max-content) auto;
-              gap: 1rem;
-              height: 100vh;
-          }
-
-          header {
-              grid-column: 1 / -1;
-          }
-
-          nav {
-              padding: 1rem .5rem;
-          }
-
-          main {
-              padding: 1.25rem 1rem 2rem;
-          }
-
-          h2 {
-              margin-bottom: 1rem;
-          }
-
-          .posts {
-              display: flex;
-              flex-direction: column;
-          }
-
-          a.post {
-              display: flex;
-              column-gap: .5rem;
-              text-decoration: none;
-              color: gray;
-              padding: .5rem .25rem;
-          }
-
-          a.post:hover {
-              filter: brightness(0);
-          }
-
-          .post+.post {
-              border-top: 1px solid black;
-          }
-      </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog example - index</title>
   </head>
 
   <body>
-      <header>
-          <h1>Blog example Home page</h1>
-      </header>
+    <header>
+      <h1>Blog example Home page</h1>
+    </header>
 
-      <nav>
-          <ul>
-              <li><a href="/posts/new">Create new Post</a></li>
-          </ul>
-      </nav>
+    <nav>
+      <div>
+        <ul>
+          <li>
+            <a href="/posts/new">Create new Post</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-      <main>
-          <h2>Blog posts</h2>
-          <div class="posts">
-              <%- 
-                  posts?.map((post)=> {
-                      return `<a href="#" class="post"><b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i></a>`
-                  }).join('')
-              %>
-          </div>
-      </main>
+    <main>
+      <h2>Blog posts</h2>
+
+      <div class="posts">
+        <%- posts?.map((post)=> { return (`
+        <div class="post">
+          <b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i>
+          <a href="#" class="post">See post</a>
+        </div>
+        `) }).join('') %>
+      </div>
+    </main>
   </body>
 </html>
+
 ```
 
 > Notice how interesting we use embedded javascript code with `<%-%>` to render the posts
@@ -512,121 +458,63 @@ and we will create the file within the `views` folder, but creating a new folder
 
 Our `posts/new.ejs` will have a form element that will trigger the post request for the create route for new posts route
 
-```html
+```ejs
 <!-- posts/new.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog example - post/new</title>
+  </head>
 
-    <style>
-        /* reset */
-        html {
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        *,
-        *::after,
-        *::before {
-            margin: 0;
-            padding: 0;
-            box-sizing: inherit;
-        }
-
-        body {
-            display: grid;
-            grid-template-rows: minmax(0, max-content);
-            grid-template-columns: minmax(8rem, max-content) auto;
-            gap: 1rem;
-            height: 100vh;
-        }
-
-        header {
-            grid-column: 1 / -1;
-        }
-
-        nav {
-            padding: 1rem .5rem;
-        }
-
-        main {
-            padding: 1.25rem 1rem 2rem;
-        }
-
-        fieldset {
-            max-width: max-content;
-            border-radius: .5rem;
-            padding: 1rem .5rem 1.25rem;
-        }
-
-        fieldset>legend>h2 {
-            margin: 0 auto;
-        }
-
-        .form {
-            display: flex;
-            flex-direction: column;
-            row-gap: 1rem;
-            max-width: 20rem;
-        }
-
-        .form>.field {
-            display: flex;
-            flex-direction: column;
-            row-gap: .25rem;
-        }
-
-        form>.field>label {
-            font-weight: 600;
-        }
-
-        .form>.field>textarea {
-            padding: .25rem;
-            resize: none;
-            text-indent: -20ch;
-        }
-    </style>
-</head>
-
-<body>
+  <body>
     <header>
-        <h1>Blog example Home page</h1>
+      <h1>Blog example Home page</h1>
     </header>
 
     <nav>
+      <div>
         <ul>
-            <li><a href="/">Home Page</a></li>
+          <li>
+            <a href="/">Home Page</a>
+          </li>
         </ul>
+      </div>
     </nav>
 
     <main>
-        <fieldset>
-            <legend>
-                <h2>Creating new blog post</h2>
-            </legend>
+      <h2>Creating new blog post</h2>
 
-            <form class="form" action="/posts/create" method="post">
-                <div class="field">
-                    <label for="post_title">Title:</label>
-                    <input type="text" name="post[title]" id="post_title" placeholder="Write title here...">
-                </div>
+      <form action="/posts/create" method="post">
+        <div>
+          <label for="post_title">Title:</label>
+          <input
+            type="text"
+            name="post[title]"
+            id="post_title"
+            placeholder="Write title here..."
+          />
+        </div>
 
-                <div class="field">
-                    <label for="post_content">Post body:</label>
-                    <textarea name="post[body]" id="post_body" cols="30" rows="10" placeholder="Write body here...">
-                    </textarea>
-                </div>
-                <input type="submit" value="Create new posts">
-            </form>
-        </fieldset>
+        <div>
+          <div>
+            <label for="post_content">Body:</label>
+          </div>
+
+          <textarea
+            name="post[body]"
+            id="post_body"
+            cols="30"
+            rows="10"
+          ></textarea>
+        </div>
+        <input type="submit" value="Create new posts" />
+      </form>
     </main>
-</body>
-
+  </body>
 </html>
+
 ```
 
 > Notice the form `action` property, that's the route that will handle the post creation itself, notice that we say on the `method` what kind of request it will be

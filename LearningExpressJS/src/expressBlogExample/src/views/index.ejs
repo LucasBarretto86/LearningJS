@@ -1,94 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog example - index</title>
+  </head>
 
-    <style>
-        /* reset */
-        html {
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        *,
-        *::after,
-        *::before {
-            margin: 0;
-            padding: 0;
-            box-sizing: inherit;
-        }
-
-        body {
-            display: grid;
-            grid-template-rows: minmax(0, max-content);
-            grid-template-columns: minmax(8rem, max-content) auto;
-            gap: 1rem;
-            height: 100vh;
-        }
-
-        header {
-            grid-column: 1 / -1;
-        }
-
-        nav {
-            padding: 1rem .5rem;
-        }
-
-        main {
-            padding: 1.25rem 1rem 2rem;
-        }
-
-        h2 {
-            margin-bottom: 1rem;
-        }
-
-        .posts {
-            display: flex;
-            flex-direction: column;
-        }
-
-        a.post {
-            display: flex;
-            column-gap: .5rem;
-            text-decoration: none;
-            color: gray;
-            padding: .5rem .25rem;
-        }
-
-        a.post:hover {
-            filter: brightness(0);
-        }
-
-        .post+.post {
-            border-top: 1px solid black;
-        }
-    </style>
-</head>
-
-<body>
+  <body>
     <header>
-        <h1>Blog example Home page</h1>
+      <h1>Blog example Home page</h1>
     </header>
 
     <nav>
+      <div>
         <ul>
-            <li><a href="/posts/new">Create new Post</a></li>
+          <li>
+            <a href="/posts/new">Create new Post</a>
+          </li>
         </ul>
+      </div>
     </nav>
 
     <main>
-        <h2>Blog posts</h2>
-        <div class="posts">
-            <%- 
-                posts?.map((post)=> {
-                    return `<a href="#" class="post"><b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i></a>`
-                }).join('')
-            %>
-        </div>
-    </main>
-</body>
+      <h2>Blog posts</h2>
 
+      <div class="posts">
+        <%- posts?.map((post)=> { return (`
+        <div class="post">
+          <b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i>
+          <a href="#" class="post">See post</a>
+        </div>
+        `) }).join('') %>
+      </div>
+    </main>
+  </body>
 </html>
