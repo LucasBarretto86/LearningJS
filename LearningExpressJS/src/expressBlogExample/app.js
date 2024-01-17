@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
     },
   ];
 
-  res.render("index", { posts: posts });
+  res.render("index", { posts });
 });
 
 app.get("/posts/new", (req, res) => {

@@ -15,11 +15,9 @@
     - [Setup EJS](#setup-ejs)
     - [Creating view file for EJS](#creating-view-file-for-ejs)
     - [Rendering a view](#rendering-a-view)
-  - [Blog project](#blog-project)
-    - [Additional dependencies](#additional-dependencies)
-    - [Adding blog routes and views](#adding-blog-routes-and-views)
-      - [Create blog index route and views](#create-blog-index-route-and-views)
-      - [Create posts route and views](#create-posts-route-and-views)
+    - [Partials](#partials)
+  - [Snippet](#snippet)
+    - [EJS partial with "rails-ish" layout/view concept](#ejs-partial-with-rails-ish-layoutview-concept)
   - [References](#references)
 
 ---
@@ -333,191 +331,146 @@ that our ejs view will use, so the output will  be like this:
 
 **Output:**
 
-![contact-ejs print](./src/expressAppExample/src/assets/images//contact-ejs.png)
+![contact-ejs print](./src/expressAppExample/src/assets/images/contact-ejs.png)
 
-## Blog project
+### Partials
 
-In this new practical example we are going to create a simple implementation of a blog,
-to go along you can create new project or move along with the same we used on the topics above since the basis will be same
+Since EJS are used to create multiple views it generate too much repeating code, to avoid that exist partials, that is small portions of code that can be included within a main EJS file so we don't have to keep rewriting code too much:
 
-I will choose to create a separate the [project](./src/expressBlogExample/app.js) and also add few more dependencies that are very
-often used in real life apps
+For instance, view you look or views, you will notice that it is constantly repeating the `head` and the `nav` elements, so without the usage of partial we would have to keep copying and pasting this code a lot, so we can make it become a partial, like this:
 
-### Additional dependencies
+**Create partials folder:**
 
-1. [Add `dotenv` to handle my ENVS](../README.md#dotenv)
-2. [Add `nodemon` to automatically update my server code as it gets modified](../README.md#nodemon)
+First lets create `/partials` folder
 
-### Adding blog routes and views
+```tree
+.
+└── views
+    ├── 404.html
+    ├── about.html
+    ├── contact.ejs
+    ├── index.html
+    └── partials
+```
 
-#### Create blog index route and views
+**Create partials and move code from `contact.ejs`:**
 
-**Adjust our get index route:**
+Within this folder let's create two `ejs` views, on for the `head` and the other for our `nav`
 
-First on the file `app.js` let's add a new route to handle how we gonna create our blog posts
+```tree
+└── views
+    ├── 404.html
+    ├── about.html
+    ├── contact.ejs
+    ├── index.html
+    └── partials
+       └── partials
+           ├── head.ejs
+           └── nav.ejs
+```
 
-```js
-// app.js
+Now lets move the head from the `contact.ejs` view to the partial `head.ejs`
 
-app.get("/", (req, res) => {
-    const posts = [
-        {
-            id: 1,
-            title: "Lorem ipsum",
-            snippet: "Lorem ipsum dolor sit amet, consectetur",
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        },
-        {
-            id: 2,
-            title: "Lorem ipsum",
-            snippet: "Lorem ipsum dolor sit amet, consectetur",
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        },
-    ]
+```html
+<!-- partials/head.ejs -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpressJS example - <%= endpoint %></title>
+</head>
+```
 
-    res.render('index', { posts: posts })
-})
+> Notice that i added a embed to render the variable `endpoint` to make our head more dynamic
+
+```html
+<!-- partials/nav.ejs -->
+<nav>
+    <ul>
+        <li><a href="/index">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+</nav>
+```
+
+> Notice that there's a extra link for contact here
+
+**Call and partials on `contact.ejs`:**
+
+To include a partial we are going to used escaped javascript using `<%- %>` that will run and render the partial using the function `include`, like this:
+
+```html
+<!-- contact.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head.ejs', {endpoint: 'contact' }) %>
+
+  <body>
+    <main>
+      <h1>Contact page example</h1>
+      <p>contact.ejs</p>
+      <p><%= content %></p>
+    </main>
+
+    <%- include('./partials/nav.ejs') %>
+  </body>
+</html>
+```
+
+**Output:**
+
+![contact-ejs with partials print](./src/expressAppExample/src/assets/images//contact-ejs-with-partials.png)
+
+## Snippet
+
+### EJS partial with "rails-ish" layout/view concept
+
+EJS doesn't have yield like rails uses, so we can create something create something to kinda mimic that:
+
+This would be the layout
+
+```html
+<!-- layout.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %></title>
+</head>
+<body>
+    <header>
+        <!-- Common header content goes here -->
+    </header>
+
+    <main>
+        <!-- The content placeholder -->
+        <%- content() %>
+    </main>
+
+    <footer>
+        <!-- Common footer content goes here -->
+    </footer>
+</body>
+</html>
 
 ```
 
-> Notice that we created an object and then we send it as a local variable to our view
+And that's how we could use it:
 
-**Create `index.ejs` view:**
-
-Now let's create or adjust our index view that will render a list of posts we are going to create, so that will allows us
-to access each of those posts.
-
-```ejs
+```html
 <!-- index.ejs -->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog example - index</title>
-  </head>
-
-  <body>
-    <header>
-      <h1>Blog example Home page</h1>
-    </header>
-
-    <nav>
-      <div>
-        <ul>
-          <li>
-            <a href="/posts/new">Create new Post</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <main>
-      <h2>Blog posts</h2>
-
-      <div class="posts">
-        <%- posts?.map((post)=> { return (`
-        <div class="post">
-          <b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i>
-          <a href="#" class="post">See post</a>
-        </div>
-        `) }).join('') %>
-      </div>
-    </main>
-  </body>
-</html>
-
-```
-
-> Notice how interesting we use embedded javascript code with `<%-%>` to render the posts
-
-#### Create posts route and views
-
-**Create new route:**
-
-On `app.js` let's add the new route we need:
-
-```js
-// app.js
-
-...
-
-// Routes
-
-...
-
-app.get("/posts/new", (req, res) => {
-    res.render('posts/new')
-})
-```
-
-**Create `posts/new.ejs` view:**
-
-Now Let's create our view that will be used to submit creation of new blog posts, for that we are going to use our `index.ejs` as template,
-and we will create the file within the `views` folder, but creating a new folder called `posts` where we gonna put our `new.ejs` file:
-
-Our `posts/new.ejs` will have a form element that will trigger the post request for the create route for new posts route
-
-```ejs
-<!-- posts/new.ejs -->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog example - post/new</title>
-  </head>
-
-  <body>
-    <header>
-      <h1>Blog example Home page</h1>
-    </header>
-
-    <nav>
-      <div>
-        <ul>
-          <li>
-            <a href="/">Home Page</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <main>
-      <h2>Creating new blog post</h2>
-
-      <form action="/posts/create" method="post">
+<%- include('layout.ejs', {
+    pageTitle: 'Home',
+    content: () => { %>
         <div>
-          <label for="post_title">Title:</label>
-          <input
-            type="text"
-            name="post[title]"
-            id="post_title"
-            placeholder="Write title here..."
-          />
+            <h1>This is specific content!</h1>
+            <!-- Specific content goes here -->
         </div>
-
-        <div>
-          <div>
-            <label for="post_content">Body:</label>
-          </div>
-
-          <textarea
-            name="post[body]"
-            id="post_body"
-            cols="30"
-            rows="10"
-          ></textarea>
-        </div>
-        <input type="submit" value="Create new posts" />
-      </form>
-    </main>
-  </body>
-</html>
-
+    <% }
+}) %>
 ```
-
-> Notice the form `action` property, that's the route that will handle the post creation itself, notice that we say on the `method` what kind of request it will be
 
 ## References
 

@@ -1,54 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog example - post/new</title>
-  </head>
+  <!-- HTML HEAD -->
+  <%- include('../partials/head.ejs') %>
 
   <body>
-    <header>
-      <h1>Blog example Home page</h1>
-    </header>
+    <!-- HEADER -->
+    <%- include('../partials/header.ejs') %>
 
-    <nav>
-      <div>
-        <ul>
-          <li>
-            <a href="/">Home Page</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <!-- NAV -->
+    <%- include('../partials/nav.ejs') %>
 
+    <!-- CONTENT -->
     <main>
       <h2>Creating new blog post</h2>
 
-      <form action="/posts/create" method="post">
-        <div>
-          <label for="post_title">Title:</label>
-          <input
-            type="text"
-            name="post[title]"
-            id="post_title"
-            placeholder="Write title here..."
-          />
-        </div>
-
-        <div>
-          <div>
-            <label for="post_content">Body:</label>
-          </div>
-
-          <textarea
-            name="post[body]"
-            id="post_body"
-            cols="30"
-            rows="10"
-          ></textarea>
-        </div>
-        <input type="submit" value="Create new posts" />
-      </form>
+      <%- include('./new/form.ejs') %>
     </main>
+
+    <!-- FOOTER -->
+    <%- include('../partials/footer.ejs') %>
   </body>
 </html>

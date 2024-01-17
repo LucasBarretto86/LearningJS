@@ -1,37 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog example - index</title>
-  </head>
+  <!-- HTML HEAD -->
+  <%- include('./partials/head.ejs') %>
 
   <body>
-    <header>
-      <h1>Blog example Home page</h1>
-    </header>
+    <!-- HEADER -->
+    <%- include('./partials/header.ejs') %>
 
-    <nav>
-      <div>
-        <ul>
-          <li>
-            <a href="/posts/new">Create new Post</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <!-- NAV -->
+    <%- include('./partials/nav.ejs') %>
 
+    <!-- CONTENT -->
     <main>
-      <h2>Blog posts</h2>
-
-      <div class="posts">
-        <%- posts?.map((post)=> { return (`
-        <div class="post">
-          <b>#${post.id} - ${post.title}:</b><i>${post.snippet}...</i>
-          <a href="#" class="post">See post</a>
-        </div>
-        `) }).join('') %>
-      </div>
+      <% posts?.forEach(post => { %> <%- include("./index/post.ejs",
+      {...post})%> <% }) %>
     </main>
+
+    <!-- FOOTER -->
+    <%- include('./partials/footer.ejs') %>
   </body>
 </html>

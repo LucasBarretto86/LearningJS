@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- HTML HEAD -->
+  <%- include('./partials/head.ejs') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog example - 404 - Not Found</title>
-</head>
+  <body>
+    <!-- HEADER -->
+    <%- include('./partials/header.ejs') %>
 
-<body>
-    <h1>404 - Ooops!</h1>
-    <p>This page doesn't exists</p>
-</body>
+    <!-- NAV -->
+    <%- include('./partials/nav.ejs') %>
 
+    <!-- CONTENT -->
+    <main>
+      <div>
+        <h1>404 - Ooops!</h1>
+        <p>This page doesn't exists</p>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('./partials/footer.ejs') %>
+  </body>
 </html>
