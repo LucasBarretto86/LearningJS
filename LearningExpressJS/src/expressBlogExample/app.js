@@ -10,6 +10,15 @@ const server = app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
 
+app.use((req, res, next) => {
+  res.locals.baseURL = req.baseUrl;
+  next();
+});
+
+//
+// Public static folder
+app.use(express.static("public"));
+
 //
 // View engine
 app.set("view engine", "ejs");
@@ -42,23 +51,4 @@ app.get("/posts/new", (req, res) => {
 
 app.use((req, res) => {
   res.status(404).render("404");
-});
-
-// Server gracefully shutdown
-process.on("SIGTERM", () => {
-  console.log("Received SIGTERM signal. Closing server gracefully.");
-  // Perform cleanup tasks and close server connections.
-  server.close(() => {
-    console.log("Server closed gracefully.");
-    process.exit(0);
-  });
-});
-
-process.on("SIGINT", () => {
-  console.log("Received SIGINT signal. Closing server gracefully.");
-  // Perform cleanup tasks and close server connections.
-  server.close(() => {
-    console.log("Server closed gracefully.");
-    process.exit(0);
-  });
 });

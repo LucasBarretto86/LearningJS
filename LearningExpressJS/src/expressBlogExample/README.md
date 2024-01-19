@@ -10,7 +10,8 @@ In this new practical example we are going to create a simple implementation of 
   - [Create `/posts/new` route](#create-postsnew-route)
   - [Create `posts/new.ejs` view](#create-postsnewejs-view)
   - [Adjusting and improve views with partials](#adjusting-and-improve-views-with-partials)
-  - [Adding CSS](#adding-css)
+  - [Styling our blog](#styling-our-blog)
+  - [Adding logger middleware](#adding-logger-middleware)
 
 ## Initial setup
 
@@ -85,7 +86,7 @@ app.get("/", (req, res) => {
 
 ```
 
-> Notice that we created an object and then we send it as a local variable to our view
+> **Notice:** that we created an object and then we send it as a local variable to our view
 
 ## Create `index.ejs` view
 
@@ -135,7 +136,7 @@ to access each of those posts.
 
 ```
 
-> Notice how interesting we use embedded javascript code with `<%-%>` to render the posts
+> **Notice:** how interesting we use embedded javascript code with `<%-%>` to render the posts
 
 ## Create `/posts/new` route
 
@@ -221,7 +222,7 @@ Our `posts/new.ejs` will have a form element that will trigger the post request 
 
 ```
 
-> Notice the form `action` property, that's the route that will handle the post creation itself, notice that we say on the `method` what kind of request it will be
+> **Notice:** the form `action` property, that's the route that will handle the post creation itself, notice that we say on the `method` what kind of request it will be
 
 ## Adjusting and improve views with partials
 
@@ -290,4 +291,42 @@ Now lets create and render a new partial for all existing views we got, footer w
 
 **Create `posts/new/form.ejs`:**
 
-## Adding CSS
+## Styling our blog
+
+In order to style the project first we got to setup the [public folder](../../README.md#public-files---static) where we gonna put our `style.css`
+
+**Setup public static folder:**
+
+```js
+// app.js
+
+// Public static folder
+app.use(express.static("public"));
+```
+
+**create style.css:**
+
+Now let's create a `style.css` and put it within in the public folder
+
+```css
+
+```
+
+> **Trick:** Since my head is a partial that is in a general partial folders, my partials that renders the head under sub-folders won't be able to reach the public folder unless we use a small middleware:
+>
+> ```js
+>app.use((req, res, next) => {
+>  res.locals.baseURL = req.baseUrl;
+>  next();
+> });
+> ```
+>
+> This simple middleware sets a "global" variable within our application that allow us to know exactly the baseUrl from our application
+>
+> That's how we gonna use on our `head.ejs` partial
+>
+> ```ejs
+>   <link rel="stylesheet" href="<%= baseURL %>/style.css">
+>```
+
+## Adding logger middleware

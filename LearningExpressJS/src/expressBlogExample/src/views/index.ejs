@@ -12,8 +12,12 @@
 
     <!-- CONTENT -->
     <main>
-      <% posts?.forEach(post => { %> <%- include("./index/post.ejs",
-      {...post})%> <% }) %>
+      <section class="posts">
+        <h2>Posts</h2>
+        <% posts?.forEach(post => { %> 
+          <%- include("./index/post.ejs",{...post})%> 
+        <% }) %>
+      </section>
     </main>
 
     <!-- FOOTER -->
