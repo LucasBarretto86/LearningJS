@@ -219,7 +219,7 @@ To setup nodemon we must add a new script entry into the  `package.json` of our 
   },
 ```
 
-> notice that `app.js` is the main file where our application starts
+> **Notice:** that `app.js` is the main file where our application starts
 
 ### Using nodemon
 
