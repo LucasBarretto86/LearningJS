@@ -11,6 +11,9 @@
 html {
   font-size: 18px;
   box-sizing: border-box;
+  --primary-color: #4c4c4c;
+  --secondary-color: #a9a9a9;
+  --background-color: #f1f1f1;
 }
 
 body {
@@ -19,8 +22,8 @@ body {
   padding: 2rem 6rem;
   min-height: 100vh;
   max-width: 100vw;
-  color: #4c4c4c;
-  background-color: #f1f1f1;
+  color: var(--primary-color);
+  background-color: var(--background-color);
 }
 
 h1,
@@ -72,28 +75,31 @@ main {
   flex-direction: column;
   padding: 3rem 2rem;
   margin: 0 auto;
-  max-width: 70%;
   width: 100%;
 }
 
-main {
+section {
   display: flex;
   flex-direction: column;
+  min-width: 50%;
+  margin: 0 auto;
 }
 
-main h2 {
+section h2 {
   margin-bottom: 1rem;
   margin-left: 1rem;
 }
 
-main .post-wrapper {
+/* index.ejs */
+section .post-wrapper {
   padding: 0.5rem 0;
 }
 
-main .post {
+section .post {
   display: flex;
+  flex-direction: column;
   align-items: baseline;
-  column-gap: 1ch;
+  row-gap: 0.25rem;
   color: inherit;
   text-decoration: none;
   border-left: 0 solid transparent;
@@ -101,14 +107,85 @@ main .post {
   padding: 0 1rem;
 }
 
-main .post:hover {
+section .post h4 {
+  min-width: max-content;
+}
+section .post p {
+  text-indent: 0.5ch;
+}
+
+section .post:hover {
   border-width: 8px;
   color: darkgray;
   font-style: italic;
 }
 
-main .post-wrapper + .post-wrapper {
+section .post-wrapper + .post-wrapper {
   border-top: 1px solid darkgray;
+}
+
+/* posts/new.ejs */
+section form {
+  padding: 0.5rem;
+}
+
+section form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+section form div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+section form input,
+section form textarea {
+  padding: 0.75rem 0.5rem 0.5rem;
+  border: 1px solid;
+  border-color: var(--secondary-color);
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+section form input:focus,
+section form textarea:focus {
+  border-color: var(--primary-color);
+}
+
+section form label {
+  font-weight: 700;
+}
+
+section form input {
+  min-height: 32px;
+}
+
+section form textarea {
+  resize: none;
+}
+
+section form button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 1.2rem 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--background-color);
+  background-color: var(--secondary-color);
+}
+
+section form button:hover {
+  cursor: pointer;
+  background-color: var(--primary-color);
 }
 
 nav {
@@ -119,7 +196,7 @@ nav {
 }
 
 nav h4 {
-  color: darkgrey;
+  color: var(--secondary-color);
 }
 
 nav li {
@@ -155,9 +232,16 @@ a:visited {
   text-align: center;
 }
 
-nav li a:hover {
+nav li a:hover,
+nav li a[data-selected="true"] {
   color: grey;
   font-style: italic;
+  text-decoration: line-through;
+}
+
+nav li a[data-selected="true"] {
+  pointer-events: none;
+  cursor: unset;
 }
 
 footer {

@@ -1,6 +1,6 @@
 <form action="/posts/create" method="post">
   <div>
-    <label for="post_title">Title:</label>
+    <label for="post_title">Title</label>
     <input
       type="text"
       name="post[title]"
@@ -11,10 +11,11 @@
 
   <div>
     <div>
-      <label for="post_content">Body:</label>
+      <label for="post_content">Body</label>
     </div>
 
     <textarea name="post[body]" id="post_body" cols="30" rows="10"></textarea>
   </div>
-  <input type="submit" value="Create new posts" />
+
+  <button type="submit">Create post</button>
 </form>

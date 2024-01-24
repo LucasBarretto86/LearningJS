@@ -57,6 +57,13 @@
       - [`_.get()`](#_get)
       - [`_.set()`](#_set)
   - [ExpressJS](#expressjs)
+  - [Mongoose](#mongoose)
+    - [Installing mongoose](#installing-mongoose)
+    - [Establishing database connection](#establishing-database-connection)
+    - [Mongoose Schema and Models](#mongoose-schema-and-models)
+      - [Model methods](#model-methods)
+      - [Model middlewares hooks](#model-middlewares-hooks)
+    - [Saving and Getting data](#saving-and-getting-data)
   - [GPT answers](#gpt-answers)
     - [Node - Require vs Import](#node---require-vs-import)
   - [Snippets](#snippets)
@@ -81,20 +88,20 @@
 
 **Most common codes:**
 
-| Code | Description                 |
-| :--- | :-------------------------- |
-| 200  | OK/Success                  |
-| 201  | Created                     |
-| 204  | No content                  |
-| 301  | Redirect|
-| 400  | Bad request                 |
-| 401  | Unauthorized                |
-| 403  | Forbidden                   |
-| 404  | Not Found                   |
-| 422  | Unprocessable Entity        |
-| 500  | Internal Server error       |
-| 503  | Service unavailable         |
-| 504  | Gateway Timeout             |
+| Code | Description           |
+| :--- | :-------------------- |
+| 200  | OK/Success            |
+| 201  | Created               |
+| 204  | No content            |
+| 301  | Redirect              |
+| 400  | Bad request           |
+| 401  | Unauthorized          |
+| 403  | Forbidden             |
+| 404  | Not Found             |
+| 422  | Unprocessable Entity  |
+| 500  | Internal Server error |
+| 503  | Service unavailable   |
+| 504  | Gateway Timeout       |
 
 ## YARN
 

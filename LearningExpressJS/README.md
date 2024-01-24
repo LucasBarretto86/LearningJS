@@ -20,7 +20,22 @@
     - [Middleware placement, code organization](#middleware-placement-code-organization)
     - [Creating a Logger middleware](#creating-a-logger-middleware)
   - [Public files - Static](#public-files---static)
+  - [Database and persistency](#database-and-persistency)
+  - [MongoDB](#mongodb)
+    - [Create MongoDB Account, Cluster and Collection](#create-mongodb-account-cluster-and-collection)
+    - [Install mongoDB](#install-mongodb)
+    - [Connect to MongoDB](#connect-to-mongodb)
+    - [MongoDB CRUD Operations](#mongodb-crud-operations)
+    - [Close MongoDB Connection](#close-mongodb-connection)
+  - [Mongoose](#mongoose)
+    - [Installing mongoose](#installing-mongoose)
+    - [Establishing database connection](#establishing-database-connection)
+    - [Mongoose Schema and Models](#mongoose-schema-and-models)
+      - [Model methods](#model-methods)
+      - [Model middlewares hooks](#model-middlewares-hooks)
+      - [Saving and Getting data](#saving-and-getting-data)
   - [Snippet](#snippet)
+    - [middleware to set response global variables](#middleware-to-set-response-global-variables)
   - [References](#references)
 
 ---
@@ -524,7 +539,348 @@ The argument `'public'` specify a folder where our static files will be availabl
 
 So every file within the public folder can be used on the clients browser, so we can use a builder to output processed files directly there or we could put the files we  want directly there, something like images ou css, all that would be available to the client
 
+## Database and persistency
+
+**GPT: Whats the differences between SQL and NoSQL concept?**
+
+> **SQL (Structured Query Language):**
+>
+> **Data Structure:** Tables with rows and columns.
+> **Schema:** Fixed schema, predefined structure.
+> **Scalability:** Vertical scaling.
+> **Transactions:** ACID compliant.
+> **Query Language:** Standardized SQL.
+> **Use Cases:** Complex queries, transactions, well-defined schema applications (e.g., banking systems).
+>
+> **NoSQL (Not Only SQL):**
+>
+> **Data Structure:** Flexible, supports unstructured or semi-structured data.
+> **Schema:** Dynamic schema or schema-less.
+> **Scalability:** Horizontal scaling across multiple servers or nodes.
+> **Transactions:** May sacrifice full ACID compliance for performance.
+> **Query Language:** Database-specific languages (e.g., MongoDB query language).
+> **Use Cases:** Rapidly changing data, real-time applications, horizontal scalability (e.g., social media platforms, big data applications).
+>
+> Each type has its own advantages, and the choice depends on the specific needs of the project.
+>
+> **Brief example of both:**
+>
+> **SQL Example:**
+>
+> ```sql
+> -- Creating a table in SQL
+> CREATE TABLE users (
+>     id INT PRIMARY KEY,
+>     username VARCHAR(50),
+>     email VARCHAR(100)
+> );
+>
+> -- Inserting data
+> INSERT INTO users (id, username, email) VALUES (1, 'john_doe', '<john@example.com>');
+>
+> -- Querying data
+> SELECT * FROM users WHERE username = 'john_doe';
+>
+> ```
+>
+> In this SQL example, we're creating a table `users`, inserting a record, and then querying for users with the username 'john_doe'.
+>
+> **NoSQL (MongoDB) Example:**
+>
+> ```js
+> // Creating a document in MongoDB
+> db.users.insertOne({
+>     _id: 1,
+>     username: 'john_doe',
+>     email: 'john@example.com'
+> });
+>
+> // Querying data
+> db.users.find({ username: 'john_doe' });
+> ```
+>
+> In this NoSQL (MongoDB) example, we're creating a document in the `users` collection and querying for users with the username 'john_doe'. Note the flexibility in the structure; fields can vary between documents.
+
+## MongoDB
+
+**GPT: Whats is MongoDB?***
+
+> MongoDB is a NoSQL document-oriented database that provides flexible and scalable data storage. It stores data in JSON-like BSON documents, allowing for dynamic schema and efficient querying. MongoDB is widely used for its ease of use, scalability, and ability to handle large volumes of unstructured data.
+
+### Create MongoDB Account, Cluster and Collection
+
+1. Create a MongoDB Atlas Account
+
+   - Visit the [MongoDB Atlas website](https://www.mongodb.com/cloud/atlas).
+   - Sign up or log in.
+
+2. Create a New Cluster
+
+   - Click "Build a Cluster" and choose a cloud provider and region.
+   - Configure your cluster and provide a name.
+
+3. Database Access and User Creation
+
+   - Go to "Database Access" and add a new database user.
+   - Set user privileges for read and write access.
+   - Save the user credentials.
+
+4. Connect to Your Cluster
+
+   - Back in the cluster view, click "Connect" and whitelist your IP.
+   - Choose "Connect Your Application" and copy the connection string.
+
+5. Connect to MongoDB from Your Application
+
+   - Use the copied connection string in your application.
+   - Copy the provided connection string. It should look like `mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/<dbname>`
+
+6. Create Your First Collection
+
+   - Use MongoDB Compass, Atlas Dashboard, or code to create a new database and collection.
+
+### Install mongoDB
+
+```sh
+npm install mongodb
+
+# OR
+
+yarn add mongodb
+```
+
+### Connect to MongoDB
+
+Establish a connection to the MongoDB server.
+
+ ```js
+ const { MongoClient } = require('mongodb');
+ const uri = 'mongodb://localhost:27017';
+ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+ async function connect() {
+   await client.connect();
+   console.log('Connected to MongoDB');
+ }
+ // Call the connect function to establish the connection
+ connect();
+ ```
+
+### MongoDB CRUD Operations
+
+Perform basic CRUD (Create, Read, Update, Delete) operations.
+
+**Create:**
+
+```js
+async function insertDocument(db, document) {
+  const result = await db.collection('collectionName').insertOne(document);
+  console.log(`Document inserted with ID: ${result.insertedId}`);
+}
+```
+
+**Read:**
+
+```js
+async function findDocuments(db, query) {
+  const cursor = await db.collection('collectionName').find(query);
+  const documents = await cursor.toArray();
+  console.log('Documents:', documents);
+}
+```
+
+**Update:**
+
+```js
+async function updateDocument(db, filter, update) {
+  const result = await db.collection('collectionName').updateOne(filter, update);
+  console.log(`Matched ${result.matchedCount} document(s) and modified ${result.modifiedCount} document(s)`);
+}
+```
+
+**Delete:**
+
+```js
+async function deleteDocument(db, filter) {
+  const result = await db.collection('collectionName').deleteOne(filter);
+  console.log(`Deleted ${result.deletedCount} document(s)`);
+}
+```
+
+### Close MongoDB Connection
+
+Always close the connection when done.
+
+```js
+async function close() {
+  await client.close();
+  console.log('Connection to MongoDB closed');
+}
+
+// Call the close function when finished
+ close();
+ ```
+
+## Mongoose
+
+But to make things simpler we can use Mongoose:
+
+**GPT: What is mongoose?**
+
+> Mongoose is a Node.js ODM library for MongoDB. It simplifies MongoDB interactions by providing schema-based models, middleware support, and a query API. With Mongoose, you can define data structures, create models, and perform CRUD operations in a more organized and efficient manner. It acts as a bridge between your application and MongoDB, making database interactions in Node.js applications more intuitive and structured.
+
+### Installing mongoose
+
+```sh
+npm install mongoose
+
+# OR
+
+yarn add mongoose
+```
+
+### Establishing database connection
+
+```js
+// server.js
+// Imports
+const mongoose = require('mongoose');
+
+// .env
+const DATABASE_URL = "mongodb+srv://<username>:<password>@<cluster_name>.<host_id>.mongodb.net/<collection_name>?retryWrites=true&w=majority"
+
+mongoose
+  .connect(DATABASE_URL)
+  .then(() => console.log("Connected to database!"))
+  .catch((error) => console.error(error));
+```
+
+### Mongoose Schema and Models
+
+Mongoose seems to me a bit like ActiveRecord, it has functions that wrap and enhance what we could call plain js models/objects.
+With Mongoose, everything is derived from a Schema. Let's get a reference to it and define our post.
+
+```js
+// models/post.js
+// Imports
+const {model, Schema} = require("mongoose");
+
+const postSchema = new Schema({
+  title: { type: String, required: true },
+  body: { type: String, required: true }
+}, {
+  timestamps: true
+})
+
+module.exports = model("Post", postSchema);
+```
+
+The usage of this model would be:
+
+```js
+// server.js
+// Imports
+const Post = require("./src/models/post")
+
+const newPost = new Post({ title: 'Silence makes me happy', body: "Shhhh............." });
+```
+
+#### Model methods
+
+As mention on Mongoose everything derives from the schema so to add functions to our Model we need to create methods withing the schema itself
+
+```js
+// models/post.js
+
+const { model, Schema } = require("mongoose");
+
+const postSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    snippet: { type: String, required: false },
+    body: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// Define a method to generate the snippet from the body
+postSchema.methods.generateSnippet = (maxLength = 150) => {
+  return this.body.length > maxLength
+    ? this.body.substring(0, maxLength) + "..."
+    : this.body;
+};
+
+module.exports = model("Post", postSchema);
+```
+
+#### Model middlewares hooks
+
+Mongoose models also allow us to use hooks to trigger middlewares that can work just like `ActiveRecord` callbacks, like `before_save` and etc..
+
+```js
+// models/post.js
+
+const { model, Schema } = require("mongoose");
+
+const postSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    snippet: { type: String, required: false },
+    body: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+postSchema.methods.generateSnippet = (maxLength = 150) => {
+  return this.body.length > maxLength
+    ? this.body.substring(0, maxLength) + "..."
+    : this.body;
+};
+
+// Middleware to automatically generate snippet
+postSchema.pre("save", (next) => {
+  this.snippet = this.generateSnippet();
+  next();
+});
+
+module.exports = model("Post", postSchema);
+```
+
+Notice that in this example the hook called `pre`, this allow us to run the middleware, as our model gets `save`, let's see other hooks we could use:
+
+| Middleware Hook                           | Description                                   |
+| ----------------------------------------- | --------------------------------------------- |
+| `pre('save', function(next))`             | Runs before a document gets saved.            |
+| `pre('validate', function(next))`         | Runs before the document's validation.        |
+| `pre('remove', function(next))`           | Runs before a document is removed.            |
+| `pre('updateOne', function(next))`        | Runs before the `updateOne` operation.        |
+| `post('save', function(doc, next))`       | Runs after a document is saved.               |
+| `post('remove', function(doc))`           | Runs after a document is removed.             |
+| `post('findOneAndUpdate', function(doc))` | Runs after the `findOneAndUpdate` operation.  |
+| `pre('findOneAndDelete', function(next))` | Runs before the `findOneAndDelete` operation. |
+| `pre('findOneAndUpdate', function(next))` | Runs before the `findOneAndUpdate` operation. |
+
+#### Saving and Getting data
+
 ## Snippet
+
+### middleware to set response global variables
+
+That middleware allow our views to have access to the variable without have to send it locally as we include the view
+
+```js
+//
+// Middleware to define local variables
+app.use((req, res, next) => {
+  res.locals.baseURL = req.baseUrl;
+    res.locals.path = req.path;
+  next();
+});
+```
 
 ## References
 
