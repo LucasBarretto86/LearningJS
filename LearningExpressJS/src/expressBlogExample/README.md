@@ -721,7 +721,9 @@ mongoose
   .catch((error) => console.error(error));
 ```
 
-And a model similar to that:
+> **Notice:** That our database string was moved to the `.env` file
+
+And the model should looks similar to this:
 
 ```js
 // models/post.js

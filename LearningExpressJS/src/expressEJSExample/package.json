@@ -1,0 +1,17 @@
+{
+  "name": "express-ejs-example",
+  "version": "1.0.0",
+  "description": "A simple example to study static website with EJS in ExpressJS",
+  "main": "app.js",
+  "author": "Lucas Barretto e Silva",
+  "license": "MIT",
+  "script": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "~4.18.2"
+  },
+  "devDependencies": {
+    "ejs": "~3.1.9"
+  }
+}

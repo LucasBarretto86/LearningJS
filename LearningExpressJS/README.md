@@ -1,16 +1,17 @@
 # Learning ExpressJS
 
 - [Learning ExpressJS](#learning-expressjs)
-  - [What is ExpressJS?](#what-is-expressjs)
-  - [Basic plain node Server](#basic-plain-node-server)
-  - [Getting starr with ExpressJS](#getting-starr-with-expressjs)
+  - [Primitive Node Server](#primitive-node-server)
+  - [Getting Start with ExpressJS](#getting-start-with-expressjs)
+    - [What is ExpressJS?](#what-is-expressjs)
     - [Installing ExpressJS](#installing-expressjs)
-    - [Creating first Express server](#creating-first-express-server)
-  - [Handling routes, requests and responses](#handling-routes-requests-and-responses)
-    - [Rendering HTML](#rendering-html)
+  - [First Express server](#first-express-server)
+    - [Creating first route](#creating-first-route)
+    - [Sending simple HTML response](#sending-simple-html-response)
+    - [Sending HTML file as response](#sending-html-file-as-response)
     - [Redirecting](#redirecting)
-    - [Route errors](#route-errors)
-  - [View engine EJS](#view-engine-ejs)
+    - [Unmatched routes and errors](#unmatched-routes-and-errors)
+  - [Views in EJS](#views-in-ejs)
     - [Installing EJS](#installing-ejs)
     - [Setup EJS](#setup-ejs)
     - [Creating view file for EJS](#creating-view-file-for-ejs)
@@ -40,42 +41,19 @@
 
 ---
 
-## What is ExpressJS?
-
-**GPT: What is ExpressJS?**
-
-> Express.js, commonly known as Express, is a minimal and flexible web application framework for Node.js. It provides a set of features for building web and mobile applications quickly and efficiently. Express is widely used in the Node.js community and is known for its simplicity, ease of use, and robust set of features
->
-> **Key features**:
->
-> 1. **Routing:** Simple and efficient route handling for various HTTP methods.
-> 2. **Middleware:** Modular functions to handle aspects of the request-response cycle.
-> 3. **Template Engines:** Support for various template engines like EJS, Pug, and Handlebars.
-> 4. **Static File Serving:** Built-in middleware for serving static files easily.
-> 5. **HTTP Utility Methods:** Simplifies working with HTTP requests and responses.
-> 6. **RESTful API Development:** Ideal for designing and implementing RESTful APIs.
-> 7. **Flexibility:** Minimalistic and unopinionated, allowing developers to structure applications as they prefer.
-> 8. **Widely Adopted:** Popular and widely used in the Node.js community.
-> 9. **Performance:** Lightweight and fast, suitable for building scalable applications.
-> 10. **Ecosystem:** Large and vibrant ecosystem with numerous third-party middleware and extensions.
-
-## Basic plain node Server
+## Primitive Node Server
 
 Below you can see a very basic server implementation using only Node, that will allow you to understand better how express works under the hood.
 
 ```js
-//./src/basicNodeServerExample/server.js
+// ./src/primitiveNodeServer/server.js
 
 const http = require("http");
 const fs = require("fs");
 
 const server = http.createServer((req, res) => {
-    // Request object
-    console.log(req.url, req.method);
-
     // Response object
     res.setHeader("Content-Type", "text/html");
-
 
     // Simple router implementation
     let path = "./views"
@@ -120,9 +98,28 @@ server.listen(5500, "localhost", () => {
 });
 ```
 
-> See an example project on: `./src/basicNodeServerExample/`
+> See an example project on: `./src/primitiveNodeServer/`
 
-## Getting starr with ExpressJS
+## Getting Start with ExpressJS
+
+### What is ExpressJS?
+
+**GPT: What is ExpressJS?**
+
+> Express.js, commonly known as Express, is a minimal and flexible web application framework for Node.js. It provides a set of features for building web and mobile applications quickly and efficiently. Express is widely used in the Node.js community and is known for its simplicity, ease of use, and robust set of features
+>
+> **Key features**:
+>
+> 1. **Routing:** Simple and efficient route handling for various HTTP methods.
+> 2. **Middleware:** Modular functions to handle aspects of the request-response cycle.
+> 3. **Template Engines:** Support for various template engines like EJS, Pug, and Handlebars.
+> 4. **Static File Serving:** Built-in middleware for serving static files easily.
+> 5. **HTTP Utility Methods:** Simplifies working with HTTP requests and responses.
+> 6. **RESTful API Development:** Ideal for designing and implementing RESTful APIs.
+> 7. **Flexibility:** Minimalistic and unopinionated, allowing developers to structure applications as they prefer.
+> 8. **Widely Adopted:** Popular and widely used in the Node.js community.
+> 9. **Performance:** Lightweight and fast, suitable for building scalable applications.
+> 10. **Ecosystem:** Large and vibrant ecosystem with numerous third-party middleware and extensions.
 
 ### Installing ExpressJS
 
@@ -134,126 +131,165 @@ yarn add express
 npm install express
 ```
 
-### Creating first Express server
+## First Express server
 
-Express doesn't require setup or anything, however you need to have a initial JS file that will instantiate the express on the project root folder, normally this file is called `app.js` or `server.js`, here is a simple example how to use express on this file:
+Express doesn't require setup or anything, however you need to have a initial JS file that will be the main express server script on the project's root folder, normally this file is called `app.js` or `server.js`, here is a simple example how to create and start this basic server:
 
 ```js
-// app.js
-const express = require('express')
-const PORT = 5500 // It should use .env
+// ./src/firstExpressServer/app.js
+
+const express = require("express");
 
 // Creating express app
-const app = express()
+const app = express();
 
 // Setup port to listen for requests
-// Returns an instance of the server, which would be used if use websocket
-const server = app.listen(PORT, () => {
-    console.log(`Listening for requests on port ${PORT}`)
-})
-
-// Basic routes handling
-app.get('/', (req, res) => {
-  // Same as .write and .end
-  res.send('Hello, Express!');
-})
+const server = app.listen(5501, () => console.log(`Listening port: 5501`));
 ```
 
-> I also added two functions to handle server process as we close it, look at [Closing server gracefully](../README.md#shutdown-server-gracefully)
+To run this server open terminal on it's root folder and run `yarn start`
 
-## Handling routes, requests and responses
+**Output:**
 
-The simplest way to handle multiple endpoints would be to repeat the statement `app.get` like this:
+```mono
+yarn run v1.22.19
+$ node app.js
+Listening port: 5501
+```
+
+> To avoid keeping the server processes running after quit terminal or press `ctrl+c`, you can add a small script to force the server to close all processes before it gets closed [Closing server gracefully](../README.md#shutdown-server-gracefully)
+
+### Creating first route
+
+First let's create a route. To create a route we use express http-verb-like functions, `get`, `post`, `patch`, `delete`
+
+On this simple static first server we only use `get`:
 
 ```js
-// app.js
-
-//...
-
-// Routes and endpoints handling
 app.get("/", (req, res) => {
-
-  // Same as .write and .end
-  res.send('<p>Home page<p>')
-})
-
-app.get("/about", (req, res) => {
-
-  // Same as .write and .end
-  res.send('<p>About page<p>')
-})
-
+  // Here's where we define the logics that occur using the request and response objects 
+});
 ```
 
-### Rendering HTML
+### Sending simple HTML response
 
-On the example above we are sending as response html in a string, however express allow as to send a file not only strings:
+To send a very simple response we use the function `send` from the response object:
 
 ```js
-// app.js
+app.get("/", (req, res) => {
+  res.send("<p>Simple first response</p>");
+});
+```
+
+**Output:**
+
+![Simple paragraph response image](./images/first-html-response.png)
+
+### Sending HTML file as response
+
+Express also give us a function that allow us to send html files and not only strings with html, for that we use the function `sendFile`.
+
+First let's create this `.html` file:
+
+```html
+<!-- ./src/firstExpressServer/src/views/index.html -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>First Express Server - index</title>
+    </head>
+
+    <body>
+        <main>
+            <h1>Home page example</h1>
+            <p>index.html</p>
+        </main>
+    </body>
+</html>
+```
+
+Now let's adjust our `app.js`:
+
+```js
+// ./src/firstExpressServer/app.js
 
 ...
 
-// Routes and endpoints handling
+// Routes, Requests and Responses
 app.get("/", (req, res) => {
-
-  // sending a html file directly
-  res.sendFile('./src/views/index.html', {root: __dirname})
-})
-
-app.get("/about", (req, res) => {
-
-  // sending a html file directly
-  res.sendFile('./src/views/about.html', {root: __dirname})
-})
-
+  res.sendFile("./src/views/index.html", { root: __dirname });
+});
 ```
 
-> **Notice:** that on the first argument we sent a relative path, however the function `sendFile`, uses absolute paths, so we add an options, as second argument, where we specify the root folder from our project
-> Instead of `__dirname`  we could use also the `path` module that node provides.
+> **Notice:** on the first argument of `sendFile` function is a relative path, however this function by default uses absolute paths, that's why we need to use a second options argument to enforce where effectively is our project's root folder, so that the file can be found.
+> `__dirname` returns the absolute from where it's called, instead of `__dirname` we could also use the `path` module that node provides, but let's keep it simple.
+
+**Output:**
+
+![Static html response image](./images/html-file-response.png)
 
 ### Redirecting
 
 To make a redirect using express we will use the function `redirect`:
 
 ```js
-// app.js
+// ./src/firstExpressServer/app.js
 
-// Routes and endpoints handling
+// Routes, Requests and Responses
 
 ...
 
-app.get("/about-us", (req, res) => {
-
-  // sending a html file directly
-  res.redirect('/about')
+// Redirecting
+app.get("/index", (req, res) => {
+  res.redirect('/')
 })
 ```
 
-### Route errors
+> **Notice:** In this case we don't need to worry about the response, because the redirect will only reroute the quest
 
-In this initial example we will use the `use` function just to handle the error, since our project is small there's no problem,
-but the `use` function is used for middlewares, because it's triggered every request.
+**Output:**
 
-In our scenario just to ensure it will only send our 404 view when status is 404, we will use a function `status` checking
-the status our response has chained with the `sendFile`
+![Redirecting image](./images/redirecting.png)
 
-Later we will see it done differently
+### Unmatched routes and errors
+
+To handle unmatched endpoints we are going the `use` function, to ensure our middleware will only be trigger if the route is unmatched we need to place this middleware after all our existing routes, and to ensure that our function will trigger to the correct moment we'll use the function  `status` chained with the `sendFile`
 
 ```js
-// app.js
+// ./src/firstExpressServer/app.js
 
-// Routes and endpoints handling
+// Routes, Requests and Responses
+app.get("/", (req, res) => {
+  // res.send("<p>Simple first response</p>");
+  res.sendFile("./src/views/index.html", { root: __dirname });
+});
 
-...
+// Redirecting
+app.get("/index", (req, res) => {
+  res.redirect("/");
+});
 
-// rendering error page
+// Middleware to handler unmatched routes
 app.use((req, res) => {
-    res.status(404).sendFile('./src/views/404.html', { root: __dirname })
-})
+  res.status(404).sendFile("./src/views/404.html", { root: __dirname });
+});
 ```
 
-## View engine EJS
+Since `asdafasfdg` doesn't match any of the endpoints we created the request will reach the middleware code we just created to handle 404 status, and respond with our html file:
+
+**Output:**
+
+![Page not found image](./images/404.png)
+
+## Views in EJS
+
+**GPT: What is EJS?**
+
+> JS (Embedded JavaScript) is a simple templating language that lets you generate HTML markup with JavaScript code embedded within it. It is commonly used in web development, particularly with Node.js and Express.js, to dynamically generate HTML content on the server side. EJS templates allow you to inject data into HTML files, making it easier to create dynamic and data-driven web pages.
 
 ### Installing EJS
 
@@ -263,7 +299,7 @@ yarn add -D ejs
 
 ### Setup EJS
 
-Within the `app.js` we need to instantiate EJS and put  it to usage
+Within the `app.js` we need to instantiate EJS and put it to usage
 
 ```js
 // app.js
@@ -280,7 +316,7 @@ app.set('views', './src/views')
 
 ```
 
-> **Notice:** that in our case we added a second statement because our `views` folder isn't directly on the root folder, so we need to specify the relative path where our `views` folder is
+> **Notice:** in our case we added a second statement because our `views` folder isn't directly on the root folder, so we need to specify the relative path where our `views` folder is
 
 ### Creating view file for EJS
 
@@ -317,7 +353,7 @@ or simple scripts that our server needs to handle specific aspects from our view
 </html>
 ```
 
-> **Notice:** that the only difference between HTML is really the usage of embedded Javascript `<%= content %>`
+> **Notice:** the only difference between HTML is really the usage of embedded Javascript `<%= content %>`
 
 | Embed              | Description                                                                                                                                       |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -398,7 +434,7 @@ Now lets move the head from the `contact.ejs` view to the partial `head.ejs`
 </head>
 ```
 
-> **Notice:** that i added a embed to render the variable `endpoint` to make our head more dynamic
+> **Notice:** i added a embed to render the variable `endpoint` to make our head more dynamic
 
 ```html
 <!-- partials/nav.ejs -->
@@ -411,7 +447,7 @@ Now lets move the head from the `contact.ejs` view to the partial `head.ejs`
 </nav>
 ```
 
-> **Notice:** that there's a extra link for contact here
+> **Notice:** there's a extra link for contact here
 
 **Call and partials on `contact.ejs`:**
 
@@ -510,7 +546,7 @@ app.use((req, res, next) => {
 // Routes and endpoints handling
 ```
 
-> **Notice:** that for this middleware we not only got as argument request and response, but also a `next` a function that allows the application to move on, so each can reach our routes handlers and produce a response.
+> **Notice:** for this middleware we not only got as argument request and response, but also a `next` a function that allows the application to move on, so each can reach our routes handlers and produce a response.
 
 If we want to increment our logs and use a third-party lib like [morgan](https://github.com/expressjs/morgan) for instance.
 
@@ -741,19 +777,32 @@ yarn add mongoose
 
 ### Establishing database connection
 
+In order to establish connection we are going to update our server code:
+
 ```js
-// server.js
-// Imports
-const mongoose = require('mongoose');
+require("dotenv").config();
 
-// .env
-const DATABASE_URL = "mongodb+srv://<username>:<password>@<cluster_name>.<host_id>.mongodb.net/<collection_name>?retryWrites=true&w=majority"
+const express = require("express");
+const mongoose = require("mongoose");
 
+const PORT = process.env.PORT || 3000;
+const DATABASE_URL = process.env.DATABASE_URL;
+
+// Creating express app
+const app = express();
+
+// Connected to MongoDB using mongoose and Starting listening
 mongoose
   .connect(DATABASE_URL)
-  .then(() => console.log("Connected to database!"))
+  .then(() =>
+    app.listen(PORT, () =>
+      console.log(`Connected and Listening to http://localhost:${PORT}`)
+    )
+  )
   .catch((error) => console.error(error));
 ```
+
+> **Notice:** we had to change our server, so we can connect first and then start listening to the server, we also had do add the [dotenv](../README.md#dotenv) to handler our sensitive data
 
 ### Mongoose Schema and Models
 
@@ -865,6 +914,8 @@ Notice that in this example the hook called `pre`, this allow us to run the midd
 | `pre('findOneAndUpdate', function(next))` | Runs before the `findOneAndUpdate` operation. |
 
 #### Saving and Getting data
+
+To save data using Mongoose we need to get a request
 
 ## Snippet
 

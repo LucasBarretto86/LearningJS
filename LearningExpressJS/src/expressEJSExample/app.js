@@ -1,24 +1,19 @@
 const express = require("express");
-const PORT = 5500;
+
 // Creating express app
 const app = express();
 
 // Setup port to listen for requests
-const server = app.listen(PORT, () => {
-  console.log(`Listening port: ${PORT}`);
-  console.warn(`http://localhost:${PORT}`);
-});
+const server = app.listen(5502, () => console.log(`Listening port: 5502`));
 
 // Register view engine
 app.set("view engine", "ejs");
 app.set("views", "./src/views/");
 
-// Middlewares
 // Static files
-
 app.use(express.static('public'))
 
-// Logger
+// Logger Middlewares
 app.use((req, res, next) => {
   let log = ` => ${req.method} ${req.url}, Parameters: ${JSON.stringify(req.params)}`;
 
