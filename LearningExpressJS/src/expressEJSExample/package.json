@@ -5,7 +5,7 @@
   "main": "app.js",
   "author": "Lucas Barretto e Silva",
   "license": "MIT",
-  "script": {
+  "scripts": {
     "start": "node app.js"
   },
   "dependencies": {

@@ -15,12 +15,16 @@
     - [Installing EJS](#installing-ejs)
     - [Setup EJS](#setup-ejs)
     - [Creating view file for EJS](#creating-view-file-for-ejs)
-    - [Rendering a view](#rendering-a-view)
-    - [Partials](#partials)
+    - [Rendering a EJS view](#rendering-a-ejs-view)
+    - [EJS Partials](#ejs-partials)
+      - [Create `head.ejs` partial](#create-headejs-partial)
+      - [Render partial in a view](#render-partial-in-a-view)
   - [Middleware](#middleware)
     - [Middleware placement, code organization](#middleware-placement-code-organization)
     - [Creating a Logger middleware](#creating-a-logger-middleware)
-  - [Public files - Static](#public-files---static)
+      - [`next()` callback](#next-callback)
+  - [Public files - Static files](#public-files---static-files)
+    - [TTo guarantee public folder access](#tto-guarantee-public-folder-access)
   - [Database and persistency](#database-and-persistency)
   - [MongoDB](#mongodb)
     - [Create MongoDB Account, Cluster and Collection](#create-mongodb-account-cluster-and-collection)
@@ -35,8 +39,6 @@
       - [Model methods](#model-methods)
       - [Model middlewares hooks](#model-middlewares-hooks)
       - [Saving and Getting data](#saving-and-getting-data)
-  - [Snippet](#snippet)
-    - [middleware to set response global variables](#middleware-to-set-response-global-variables)
   - [References](#references)
 
 ---
@@ -144,7 +146,7 @@ const express = require("express");
 const app = express();
 
 // Setup port to listen for requests
-const server = app.listen(5501, () => console.log(`Listening port: 5501`));
+const server = app.listen(5501, () => console.log(`Listening http://localhost:5501`));
 ```
 
 To run this server open terminal on it's root folder and run `yarn start`
@@ -302,58 +304,45 @@ yarn add -D ejs
 Within the `app.js` we need to instantiate EJS and put it to usage
 
 ```js
-// app.js
-
-// Creating express app
+// ./src/expressEJSExample/app.js
 
 ...
 
 // Register view engine
-app.set('view engine', 'ejs')
-app.set('views', './src/views')
-
-// Routes and endpoints handling
-
+app.set("view engine", "ejs");
+app.set("views", "./src/views/");
 ```
 
-> **Notice:** in our case we added a second statement because our `views` folder isn't directly on the root folder, so we need to specify the relative path where our `views` folder is
+> **Notice:** In our case we added a second statement because our `views` folder isn't directly on the root folder, so we need to specify the relative path where our `views` folder is.
 
 ### Creating view file for EJS
 
 To create EJS views, we will use 90% HTML syntax, however the file name will have the extension `ejs`,
-the difference is that express will parse the file and if we use `<% %>` it will allow us run javascript
-on the server side, which means we can make our view more dynamic, most parte of the we just want use it for variables
-or simple scripts that our server needs to handle specific aspects from our view,
+the difference is that express will parse the file and if we use `<% %>` it will allow us to embed javascript
+on the server side, which means we can make our view more dynamic
 
 ```html
-<!-- views/index.ejs -->
+<!-- ./src/expressEJSExample/src/views/index.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ExpressJS example - contact</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express EJS example - contact</title>
   </head>
 
   <body>
-      <main>
-          <h1>Contact page example</h1>
-          <p>contact.ejs</p>
-          <p><%= content %></p>
-      </main>
-
-      <nav>
-          <ul>
-              <li><a href="/index">Home</a></li>
-              <li><a href="/about">About</a></li>
-          </ul>
-      </nav>
+    <main>
+      <h1>Contact page example</h1>
+      <p>contact.ejs</p>
+      <p><%= content %></p>
+    </main>
   </body>
 </html>
 ```
 
-> **Notice:** the only difference between HTML is really the usage of embedded Javascript `<%= content %>`
+> **Notice:** The only difference between HTML is really the usage of embedded Javascript `<%= content %>`
 
 | Embed              | Description                                                                                                                                       |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -362,16 +351,12 @@ or simple scripts that our server needs to handle specific aspects from our view
 | `<%- code_here %>` | Executes JavaScript code and renders its output on the final HTML. Does not HTML-escape the output. Use when you trust the source of the content. |
 | `<%# code_here %>` | Comments that won't render in the final HTML. Useful for adding comments within your EJS template.                                                |
 
-### Rendering a view
+### Rendering a EJS view
 
-To render a view with express we are going to use within the `get` a function called `render` from the response object we have:
+To render a view with express we are going to use the response object function `render` within a route:
 
 ```js
-// app.js
-
-...
-
-// Routes and endpoints handling
+// ./src/expressEJSExample/app.js
 
 ...
 
@@ -380,36 +365,17 @@ app.get("/contact", (req, res) => {
 })
 ```
 
-As use the function `render` has two arguments, 'contact' and an object {}, this object is where we send the variables
-that our ejs view will use, so the output will  be like this:
+The function `render` has two arguments, first the view name - on the folder we specified on our engine configuration -, and an object {}, this object is where we send variables that the EJS view will embed, so the output will be like this:
 
 **Output:**
 
-![contact-ejs print](./src/expressAppExample/src/assets/images/contact-ejs.png)
+![contact-ejs print](./images/contact-ejs.png)
 
-### Partials
+### EJS Partials
 
-Since EJS are used to create multiple views it generate too much repeating code, to avoid that exist partials, that is small portions of code that can be included within a main EJS file so we don't have to keep rewriting code too much:
+EJS also have away to create and render  partials  within a view, for instance, when we create new plain EJS views constantly we need to repeat the `head` element, so without the usage of partial we would have to keep copying and pasting this code a lot, its possible make it become a partial:
 
-For instance, view you look or views, you will notice that it is constantly repeating the `head` and the `nav` elements, so without the usage of partial we would have to keep copying and pasting this code a lot, so we can make it become a partial, like this:
-
-**Create partials folder:**
-
-First lets create `/partials` folder
-
-```tree
-.
-└── views
-    ├── 404.html
-    ├── about.html
-    ├── contact.ejs
-    ├── index.html
-    └── partials
-```
-
-**Create partials and move code from `contact.ejs`:**
-
-Within this folder let's create two `ejs` views, on for the `head` and the other for our `nav`
+#### Create `head.ejs` partial
 
 ```tree
 └── views
@@ -419,62 +385,44 @@ Within this folder let's create two `ejs` views, on for the `head` and the other
     ├── index.html
     └── partials
        └── partials
-           ├── head.ejs
-           └── nav.ejs
+           └── head.ejs
 ```
 
-Now lets move the head from the `contact.ejs` view to the partial `head.ejs`
+Now lets move the head code from the views to the file `head.ejs`
 
 ```html
-<!-- partials/head.ejs -->
+<!-- ./src/expressEJSExample/src/views/partials/head.ejs -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExpressJS example - <%= endpoint %></title>
+    <title>Express EJS example</title>
 </head>
 ```
 
-> **Notice:** i added a embed to render the variable `endpoint` to make our head more dynamic
+#### Render partial in a view
+
+To include a partial we are going to used escaped embed javascript using `<%- %>` that will run and render the partial using the function `include`, like this:
 
 ```html
-<!-- partials/nav.ejs -->
-<nav>
-    <ul>
-        <li><a href="/index">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
-    </ul>
-</nav>
-```
-
-> **Notice:** there's a extra link for contact here
-
-**Call and partials on `contact.ejs`:**
-
-To include a partial we are going to used escaped javascript using `<%- %>` that will run and render the partial using the function `include`, like this:
-
-```html
-<!-- contact.ejs -->
+<!-- ./src/expressEJSExample/src/views/contact.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head.ejs', {endpoint: 'contact' }) %>
+  <%- include('./partials/head.ejs') %>
 
   <body>
     <main>
-      <h1>Contact page example</h1>
-      <p>contact.ejs</p>
-      <p><%= content %></p>
+      <h1>Home page example</h1>
+      <p>index.html</p>
     </main>
-
-    <%- include('./partials/nav.ejs') %>
   </body>
 </html>
 ```
 
 **Output:**
 
-![contact-ejs with partials print](./src/expressAppExample/src/assets/images//contact-ejs-with-partials.png)
+![contact-ejs with partials print](./images/contact-ejs-with-partials.png)
 
 ## Middleware
 
@@ -483,97 +431,133 @@ To include a partial we are going to used escaped javascript using `<%- %>` that
 > Middleware is a software component that sits between a web application's request and response. It can execute code before and after the main processing of a request, modify requests and responses, and enhance or modify the application's behavior by performing specific tasks during the request-response cycle. It has
 access to the request and response objects, allowing it to perform various functions such as checking user authentication, logging information, or handling errors.
 
-![Middleware](./src/expressAppExample/src/assets/images/middleware.png)
+![Middleware](./images/middleware.png)
 
-On express to build a middleware we use the function `use`, technically our `get` function it's also a middleware since it works with and between request and response, however `get` only triggers if it's made get request, same as `post` function that triggers only for post requests, while `use` function is triggered for every request is made.
+On express to build a middleware we use the function `use`, technically our `get` function it's also a middleware since it works with and between request and response, however `get` only triggers if it's made get request, same as `post` function that triggers only for post requests, while `use` function is triggered for every request made.
 
 ### Middleware placement, code organization
 
-A very important point to emphasize is that middleware only works between request and response, therefore if we send a response back to the client before a middleware is trigger, the middleware left out will never be called, look an example:
+It's very important that the middleware is placed correctly because if we send a response back to the client before a middleware gets called, it will not be called:
 
-![Middleware with early response](./src/expressAppExample/src/assets/images/middleware-placement.png)
+![Middleware with early response](./images/middleware-placement.png)
 
-Which means we must organize our code in such a way that our routes do not responds before a middleware if the middleware response should be trigger before such response.
+So the code must be organized in such a way that routes do not responds before all it's related middleware has been called.
 
-In or example we are handling error view after all our gets, that's because our middleware should only return if no endpoint gets a response, meaning that that page doesn't exists:
+On the example, we are using a middleware to handle unmatched endpoints, so we placed it after all routes, that's because our middleware should only rbe called if no endpoint matches and responds the request.
 
 ```js
-// app.js
+// ./src/expressEJSExample/app.js
 
 ...
 
-// Routes and endpoints handling
+// Routes, Requests and Responses
 app.get("/", (req, res) => {
-    res.sendFile('./src/views/index.html', { root: __dirname })
-})
+  res.render("index");
+});
 
 app.get("/about", (req, res) => {
-    res.sendFile('./src/views/about.html', { root: __dirname })
-})
+  res.render("about");
+});
 
-app.get("/about-us", (req, res) => {
-    res.redirect('/about')
-})
+// Redirecting
+app.get("/index", (req, res) => {
+  res.redirect("/");
+});
 
 app.get("/contact", (req, res) => {
-    res.render('contact', { content: "This content got in as EJS got parsed by express" })
-})
+  res.render("contact", {
+    content: "This content got in as EJS got parsed by express",
+  });
+});
 
-// Only will be reached if no response has been sent
+// Middleware to handler unmatched routes
 app.use((req, res) => {
-    res.status(404).sendFile('./src/views/404.html', { root: __dirname })
-})
+  res.status(404).render("404");
+});
 ```
 
 ### Creating a Logger middleware
 
-Create a middleware is pretty simple with express, we just need find the right placement and add call the `use` function, on this example we need to log data from request before it gets any response, so the right place for it will be before our routes handlers:
+Create a middleware is pretty simple with express, we just need find the right place and add call the `use` function. On this example we need to log data from every request, so the right place it will be before our routes matches and responds the request:
 
 ```js
-// Register view engine
+// ./src/expressEJSExample/app.js
 
 ...
 
-// Middlewares
-// Logger
+// Logger Middleware
 app.use((req, res, next) => {
-  let log = ` => ${req.method} ${req.url}, Parameters: ${JSON.stringify(req.params)}`;
+  let log = ` => ${req.method} ${req.url}, Parameters: ${JSON.stringify(
+    req.params
+  )}`;
 
   console.log(log);
   next();
 });
 
-// Routes and endpoints handling
+// Routes, Requests and Responses
 ```
 
-> **Notice:** for this middleware we not only got as argument request and response, but also a `next` a function that allows the application to move on, so each can reach our routes handlers and produce a response.
+#### `next()` callback
 
-If we want to increment our logs and use a third-party lib like [morgan](https://github.com/expressjs/morgan) for instance.
+On this middleware we need to apply our logic prior to the routes, but since it's just a logger we won't have any kind of response or return, we need to use the callback `next` from the http object, this function allows us to force the application to move on, although we do not have a response.
 
-## Public files - Static
+> If you want to increment your logs you can use a third-party lib like [morgan](https://github.com/expressjs/morgan).
 
-To be able to allow out client to access files static files like assets or images, we need to setup our server like this:
+## Public files - Static files
+
+To allow client access to certain files like like css, assets, and images, we need to setup our server to enable a public folder that will enable the client access these files regardless od CORS:
 
 ```js
-// Middlewares
-// Static files
+// ./src/expressEJSExample/app.js
 
-app.use(express.static('public'))
+...
+
+// Static files
+app.use(express.static("public"));
 ```
 
-The argument `'public'` specify a folder where our static files will be available publicly to the client
+> The parameter send as "public" specify the folder name within our project root folder where the static files will be available publicly to the client.
 
 ```tree
 .
 ├── public
+│   // static files
 └── src
-    ├── assets
-    │   └── images
     └── views
         └── partials
 ```
 
-So every file within the public folder can be used on the clients browser, so we can use a builder to output processed files directly there or we could put the files we  want directly there, something like images ou css, all that would be available to the client
+### TTo guarantee public folder access
+
+To ensure that our public folder will be available throughout our application, we can define the application root path using a middleware to define global variable
+
+```js
+// ./src/expressEJSExample/app.js
+
+// Global variables
+app.use((req, res, next) => {
+  res.locals.baseURL = req.baseUrl;
+  next();
+})
+```
+
+So now within any view or partial we will provide a variable called `baseURL`, so let's say we have a public style.css, we would add it on the head partial like this:
+
+```ejs
+<!-- ./src/expressEJSExample/src/views/partials/head.ejs -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="<%= baseURL %>/style.css">
+  <title>Express EJS example</title>
+</head>
+```
+
+> `baseURL` variable in this example returns `http://localhost:5502`, which means that our `style.css` on the client side of the application is located on `http://localhost:5502/style.css`
+
+![Public style css file](./images/public-style.png)
 
 ## Database and persistency
 
@@ -916,22 +900,6 @@ Notice that in this example the hook called `pre`, this allow us to run the midd
 #### Saving and Getting data
 
 To save data using Mongoose we need to get a request
-
-## Snippet
-
-### middleware to set response global variables
-
-That middleware allow our views to have access to the variable without have to send it locally as we include the view
-
-```js
-//
-// Middleware to define local variables
-app.use((req, res, next) => {
-  res.locals.baseURL = req.baseUrl;
-    res.locals.path = req.path;
-  next();
-});
-```
 
 ## References
 

@@ -4,34 +4,43 @@ const express = require("express");
 const app = express();
 
 // Setup port to listen for requests
-const server = app.listen(5502, () => console.log(`Listening port: 5502`));
+const server = app.listen(5502, () => console.log(`Listening http://localhost:5502`));
 
 // Register view engine
 app.set("view engine", "ejs");
 app.set("views", "./src/views/");
 
 // Static files
-app.use(express.static('public'))
+app.use(express.static("public"));
 
-// Logger Middlewares
+// Global variables
 app.use((req, res, next) => {
-  let log = ` => ${req.method} ${req.url}, Parameters: ${JSON.stringify(req.params)}`;
+  res.locals.baseURL = req.baseUrl;
+  next();
+})
+
+// Logger Middleware
+app.use((req, res, next) => {
+  let log = ` => ${req.method} ${req.url}, Parameters: ${JSON.stringify(
+    req.params
+  )}`;
 
   console.log(log);
   next();
 });
 
-// Routes and endpoints handling
+// Routes, Requests and Responses
 app.get("/", (req, res) => {
-  res.sendFile("./src/views/index.html", { root: __dirname });
+  res.render("index");
 });
 
 app.get("/about", (req, res) => {
-  res.sendFile("./src/views/about.html", { root: __dirname });
+  res.render("about");
 });
 
-app.get("/about-us", (req, res) => {
-  res.redirect("/about");
+// Redirecting
+app.get("/index", (req, res) => {
+  res.redirect("/");
 });
 
 app.get("/contact", (req, res) => {
@@ -40,12 +49,12 @@ app.get("/contact", (req, res) => {
   });
 });
 
-// Only will be reached if no response has been sent
+// Middleware to handler unmatched routes
 app.use((req, res) => {
-  res.status(404).sendFile("./src/views/404.html", { root: __dirname });
+  res.status(404).render("404");
 });
 
-// Util commands to be able to shutdown server gracefully
+// Gracefully shutdown
 process.on("SIGTERM", () => {
   console.log("Received SIGTERM signal. Closing server gracefully.");
   // Perform cleanup tasks and close server connections.

@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 // Setup port to listen for requests
-const server = app.listen(5501, () => console.log(`Listening port: 5501`));
+const server = app.listen(5501, () => console.log(`Listening http://localhost:5501`));
 
 // Routes, Requests and Responses
 app.get("/", (req, res) => {
