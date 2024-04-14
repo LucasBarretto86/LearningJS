@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- HTML HEAD -->
+  <%- include('./partials/head.ejs') %>
+
+  <body>
+    <!-- HEADER -->
+    <%- include('./partials/header.ejs') %>
+
+    <!-- NAV -->
+    <%- include('./partials/nav.ejs') %>
+
+    <!-- CONTENT -->
+    <main>
+      <div>
+        <h1>500 - Halt!</h1>
+        <p>It seems like a server problem!</p>
+        <p><%= error %></p>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('./partials/footer.ejs') %>
+  </body>
+</html>

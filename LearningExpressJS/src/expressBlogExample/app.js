@@ -7,15 +7,23 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE_URL;
 
+// Models
+const Post = require("./src/models/post");
+
+// Server Middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 //
 // Mongoose database connection first, only then starts listening to the server
 mongoose
   .connect(DATABASE_URL)
   .then(() =>
-    app.listen(PORT, () => {
-      console.log("Connected to database!");
-      console.log(`Listening on http://localhost:${PORT}`);
-    })
+    app.listen(PORT, () =>
+      console.log(
+        `Connected on database and listening on:\nhttp://localhost:${PORT}`
+      )
+    )
   )
   .catch((error) => console.error(error));
 
@@ -62,6 +70,28 @@ app.get("/", (req, res) => {
 
 app.get("/posts/new", (req, res) => {
   res.render("posts/new");
+});
+
+app.post("/posts/new", async (req, res) => {
+  try {
+    // Extract data from the form
+    const { title, body } = req.body.post;
+
+    // Create a new Post using the Mongoose model
+    const newPost = new Post({
+      title,
+      body,
+    });
+
+    // Save the new post to the database
+    await newPost.save();
+
+    // Redirect or send a response as needed
+    res.redirect("/"); // Redirect to home page, for example
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.use((req, res) => {

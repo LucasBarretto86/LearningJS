@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- HTML HEAD -->
+  <%- include('./partials/head.ejs') %>
+
+  <body>
+    <!-- HEADER -->
+    <%- include('./partials/header.ejs') %>
+
+    <!-- NAV -->
+    <%- include('./partials/nav.ejs') %>
+
+    <!-- CONTENT -->
+    <main>
+      <section class="posts">
+        <h2>Posts</h2>
+        <% posts?.forEach(post => { %> 
+          <%- include("./index/post.ejs",{...post})%> 
+        <% }) %>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('./partials/footer.ejs') %>
+  </body>
+</html>

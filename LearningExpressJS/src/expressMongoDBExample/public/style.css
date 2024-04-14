@@ -1,0 +1,252 @@
+@import url("https://fonts.googleapis.com/css2?family=Manjari&family=Roboto+Slab:wght@100;700&display=swap");
+
+*,
+*::after,
+*:before {
+  box-sizing: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 18px;
+  box-sizing: border-box;
+  --primary-color: #4c4c4c;
+  --secondary-color: #a9a9a9;
+  --background-color: #f1f1f1;
+}
+
+body {
+  display: grid;
+  grid-template-rows: max-content max-content auto max-content;
+  padding: 2rem 6rem;
+  min-height: 100vh;
+  max-width: 100vw;
+  color: var(--primary-color);
+  background-color: var(--background-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Roboto Slab", serif;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2.25rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.75rem;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+h6 {
+  font-size: 1.25rem;
+}
+
+:not(h1, h2, h3, h4, h5, h6) {
+  font-family: "Manjari", sans-serif;
+  font-weight: normal;
+  text-decoration: none;
+}
+
+header h1 {
+  font-size: 5rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem 2rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  min-width: 50%;
+  margin: 0 auto;
+}
+
+section h2 {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+/* index.ejs */
+section .post-wrapper {
+  padding: 0.5rem 0;
+}
+
+section .post {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  row-gap: 0.25rem;
+  color: inherit;
+  text-decoration: none;
+  border-left: 0 solid transparent;
+  transition: border-width 0.2s ease;
+  padding: 0 1rem;
+}
+
+section .post h4 {
+  min-width: max-content;
+}
+section .post p {
+  text-indent: 0.5ch;
+}
+
+section .post:hover {
+  border-width: 8px;
+  color: darkgray;
+  font-style: italic;
+}
+
+section .post-wrapper + .post-wrapper {
+  border-top: 1px solid darkgray;
+}
+
+/* posts/new.ejs */
+section form {
+  padding: 0.5rem;
+}
+
+section form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+section form div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+section form input,
+section form textarea {
+  padding: 0.75rem 0.5rem 0.5rem;
+  border: 1px solid;
+  border-color: var(--secondary-color);
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+section form input:focus,
+section form textarea:focus {
+  border-color: var(--primary-color);
+}
+
+section form label {
+  font-weight: 700;
+}
+
+section form input {
+  min-height: 32px;
+}
+
+section form textarea {
+  resize: none;
+}
+
+section form button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 1.2rem 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--background-color);
+  background-color: var(--secondary-color);
+}
+
+section form button:hover {
+  cursor: pointer;
+  background-color: var(--primary-color);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid darkgray;
+  padding: 0.5rem;
+}
+
+nav h4 {
+  color: var(--secondary-color);
+}
+
+nav li {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 2rem;
+}
+
+nav ul {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  list-style: none;
+  column-gap: 0.5rem;
+}
+
+nav li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  min-width: 10ch;
+}
+
+nav li a,
+a:visited {
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  font-size: 1.25rem;
+  letter-spacing: 0.2rem;
+  text-align: center;
+}
+
+nav li a:hover,
+nav li a[data-selected="true"] {
+  color: grey;
+  font-style: italic;
+  text-decoration: line-through;
+}
+
+nav li a[data-selected="true"] {
+  pointer-events: none;
+  cursor: unset;
+}
+
+footer {
+  display: flex;
+  align-self: flex-end;
+  justify-content: center;
+  width: 100%;
+}

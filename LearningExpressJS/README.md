@@ -24,21 +24,28 @@
     - [Creating a Logger middleware](#creating-a-logger-middleware)
       - [`next()` callback](#next-callback)
   - [Public files - Static files](#public-files---static-files)
-    - [TTo guarantee public folder access](#tto-guarantee-public-folder-access)
+    - [To guarantee public folder access](#to-guarantee-public-folder-access)
   - [Database and persistency](#database-and-persistency)
-  - [MongoDB](#mongodb)
-    - [Create MongoDB Account, Cluster and Collection](#create-mongodb-account-cluster-and-collection)
-    - [Install mongoDB](#install-mongodb)
-    - [Connect to MongoDB](#connect-to-mongodb)
-    - [MongoDB CRUD Operations](#mongodb-crud-operations)
-    - [Close MongoDB Connection](#close-mongodb-connection)
-  - [Mongoose](#mongoose)
-    - [Installing mongoose](#installing-mongoose)
-    - [Establishing database connection](#establishing-database-connection)
-    - [Mongoose Schema and Models](#mongoose-schema-and-models)
-      - [Model methods](#model-methods)
-      - [Model middlewares hooks](#model-middlewares-hooks)
-      - [Saving and Getting data](#saving-and-getting-data)
+    - [MongoDB](#mongodb)
+      - [Create MongoDB Account, Cluster and Collection](#create-mongodb-account-cluster-and-collection)
+      - [Install mongoDB](#install-mongodb)
+      - [Connect to MongoDB](#connect-to-mongodb)
+      - [MongoDB data types](#mongodb-data-types)
+      - [MongoDB CRUD Operations](#mongodb-crud-operations)
+      - [Close MongoDB Connection](#close-mongodb-connection)
+    - [Mongoose](#mongoose)
+      - [Installing mongoose](#installing-mongoose)
+      - [Establishing database connection](#establishing-database-connection)
+      - [Schema and Models](#schema-and-models)
+        - [Create Schema](#create-schema)
+        - [Define and Export Model](#define-and-export-model)
+        - [Create custom functions](#create-custom-functions)
+        - [Instantiating Models](#instantiating-models)
+        - [Instance functions](#instance-functions)
+        - [Schema hooks](#schema-hooks)
+        - [Saving data](#saving-data)
+  - [Snippet](#snippet)
+    - [Simple logger](#simple-logger)
   - [References](#references)
 
 ---
@@ -487,9 +494,7 @@ Create a middleware is pretty simple with express, we just need find the right p
 
 // Logger Middleware
 app.use((req, res, next) => {
-  let log = ` => ${req.method} ${req.url}, Parameters: ${JSON.stringify(
-    req.params
-  )}`;
+  let log = ` => ${req.method} ${req.url}, Parameters: ${JSON.stringify(req.body)}`;
 
   console.log(log);
   next();
@@ -528,7 +533,7 @@ app.use(express.static("public"));
         └── partials
 ```
 
-### TTo guarantee public folder access
+### To guarantee public folder access
 
 To ensure that our public folder will be available throughout our application, we can define the application root path using a middleware to define global variable
 
@@ -621,13 +626,13 @@ So now within any view or partial we will provide a variable called `baseURL`, s
 >
 > In this NoSQL (MongoDB) example, we're creating a document in the `users` collection and querying for users with the username 'john_doe'. Note the flexibility in the structure; fields can vary between documents.
 
-## MongoDB
+### MongoDB
 
 **GPT: Whats is MongoDB?***
 
-> MongoDB is a NoSQL document-oriented database that provides flexible and scalable data storage. It stores data in JSON-like BSON documents, allowing for dynamic schema and efficient querying. MongoDB is widely used for its ease of use, scalability, and ability to handle large volumes of unstructured data.
+> MongoDB is a NoSQL document-oriented database that provides flexible and scalable data storage. It stores data in JSON-like BSON documents, allowing for dynamic schema and efficient querying. MongoDB is widely used for its ease of use, scalability, and ability to handle large volumes of unstructured data
 
-### Create MongoDB Account, Cluster and Collection
+#### Create MongoDB Account, Cluster and Collection
 
 1. Create a MongoDB Atlas Account
 
@@ -659,7 +664,7 @@ So now within any view or partial we will provide a variable called `baseURL`, s
 
    - Use MongoDB Compass, Atlas Dashboard, or code to create a new database and collection.
 
-### Install mongoDB
+#### Install mongoDB
 
 ```sh
 npm install mongodb
@@ -669,7 +674,7 @@ npm install mongodb
 yarn add mongodb
 ```
 
-### Connect to MongoDB
+#### Connect to MongoDB
 
 Establish a connection to the MongoDB server.
 
@@ -686,7 +691,20 @@ Establish a connection to the MongoDB server.
  connect();
  ```
 
-### MongoDB CRUD Operations
+#### MongoDB data types
+
+| Mongoose Data Type | MongoDB Native Data Type |
+| ------------------ | ------------------------ |
+| String             | String                   |
+| Number             | Number                   |
+| Date               | Date                     |
+| Buffer             | Binary Data              |
+| Boolean            | Boolean                  |
+| Mixed              | Dynamic                  |
+| ObjectId           | ObjectId                 |
+| Array              | Array                    |
+
+#### MongoDB CRUD Operations
 
 Perform basic CRUD (Create, Read, Update, Delete) operations.
 
@@ -727,7 +745,7 @@ async function deleteDocument(db, filter) {
 }
 ```
 
-### Close MongoDB Connection
+#### Close MongoDB Connection
 
 Always close the connection when done.
 
@@ -741,7 +759,7 @@ async function close() {
  close();
  ```
 
-## Mongoose
+### Mongoose
 
 But to make things simpler we can use Mongoose:
 
@@ -749,7 +767,7 @@ But to make things simpler we can use Mongoose:
 
 > Mongoose is a Node.js ODM library for MongoDB. It simplifies MongoDB interactions by providing schema-based models, middleware support, and a query API. With Mongoose, you can define data structures, create models, and perform CRUD operations in a more organized and efficient manner. It acts as a bridge between your application and MongoDB, making database interactions in Node.js applications more intuitive and structured.
 
-### Installing mongoose
+#### Installing mongoose
 
 ```sh
 npm install mongoose
@@ -759,11 +777,13 @@ npm install mongoose
 yarn add mongoose
 ```
 
-### Establishing database connection
+#### Establishing database connection
 
-In order to establish connection we are going to update our server code:
+Since our application is highly dependent of database connection, we are going to use mongoose `connect` async function to make the required connection and only than start to listen for requests on the respective port, notice that if something goes wrong with the connect the application won't work, and it will log an error message.
 
 ```js
+// ./src/expressBlogExample/app.js
+
 require("dotenv").config();
 
 const express = require("express");
@@ -775,117 +795,148 @@ const DATABASE_URL = process.env.DATABASE_URL;
 // Creating express app
 const app = express();
 
-// Connected to MongoDB using mongoose and Starting listening
+//
+// Mongoose database connection first, only then starts listening to the server
 mongoose
   .connect(DATABASE_URL)
   .then(() =>
     app.listen(PORT, () =>
-      console.log(`Connected and Listening to http://localhost:${PORT}`)
+      console.log(
+        `Connected on database and listening on:\nhttp://localhost:${PORT}`
+      )
     )
   )
   .catch((error) => console.error(error));
 ```
 
-> **Notice:** we had to change our server, so we can connect first and then start listening to the server, we also had do add the [dotenv](../README.md#dotenv) to handler our sensitive data
+> **Notice:** We added [dotenv](../README.md#dotenv) to the application so it can handle credentials and sensitive data
 
-### Mongoose Schema and Models
+#### Schema and Models
 
-Mongoose seems to me a bit like ActiveRecord, it has functions that wrap and enhance what we could call plain js models/objects.
-With Mongoose, everything is derived from a Schema. Let's get a reference to it and define our post.
+Mongoose seems a bit like `ActiveRecord`, it has functions that wrap and enhance what we could call plain js models/objects.
+
+With Mongoose, everything is derived from a Schema. So to create a model we need first define it's schema:
+
+##### Create Schema
+
+To create schema we need to import the `Schema` class from `mongoose`, the schema will receive two objects as argument, the first is the structure of the schema where you define what field or attributes from your model. The second argument is an option object.
+
+This are the schema data types and properties:
+
+| Mongoose Data Type | Description                              | Schema Properties                                       |
+| ------------------ | ---------------------------------------- | ------------------------------------------------------- |
+| String             | Text data (e.g., name, description)      | `{ type: String, required: true }`                      |
+| Number             | Numeric data (e.g., age, quantity)       | `{ type: Number, min: 0, max: 100 }`                    |
+| Date               | Represents a date and time               | `{ type: Date, default: Date.now }`                     |
+| Buffer             | Binary data (e.g., images)               | `{ type: Buffer }`                                      |
+| Boolean            | Represents true/false values             | `{ type: Boolean, default: true }`                      |
+| Mixed              | Dynamic schema for unstructured data     | `{ type: Mixed }`                                       |
+| ObjectId           | MongoDB ObjectID, used for relationships | `{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }` |
+| Array              | Array of values (e.g., tags)             | `{ type: [String], default: ['tag1', 'tag2'] }`         |
+
+**Schema example:**
 
 ```js
-// models/post.js
-// Imports
-const {model, Schema} = require("mongoose");
+const mongoose = require('mongoose');
 
-const postSchema = new Schema({
-  title: { type: String, required: true },
-  body: { type: String, required: true }
-}, {
-  timestamps: true
-})
 
-module.exports = model("Post", postSchema);
+const userSchema = new mongoose.Schema({
+  firstName: { type: String, required: true }, 
+  lastName: { type: String, required: true },
+  age: { type: Number, min: 18 },
+  email: { type: String, required: true, unique: true },
+}, { timestamps: true });
 ```
 
-The usage of this model would be:
+> The option parameter `timestamps` automatically adds `createdAt` and `updatedAt` fields.
+
+##### Define and Export Model
+
+To define models with Mongoose we need to import the `model` function, this function receives only two arguments, `model_name` and `model_schema`, so basically the model implements the schema and when we use the model object it will only wrap the schema and delegate the fields and etc to the schema itself
 
 ```js
-// server.js
-// Imports
-const Post = require("./src/models/post")
+const {model, Schema} = require('mongoose');
 
-const newPost = new Post({ title: 'Silence makes me happy', body: "Shhhh............." });
+// Creates the schema
+const userSchema = new Schema({
+  firstName: { type: String, required: true }, 
+  lastName: { type: String, required: true },
+  age: { type: Number, min: 18 },
+  email: { type: String, required: true, unique: true },
+}, { timestamps: true });
+
+// Define model and exports
+module.exports = model('User', userSchema);
 ```
 
-#### Model methods
+##### Create custom functions
 
-As mention on Mongoose everything derives from the schema so to add functions to our Model we need to create methods withing the schema itself
+Like mentioned the model delegate it's behavior to it's schema, because in Mongoose everything is based on the schema, so to add a custom function we need to implement it directly into the schema object:
 
 ```js
-// models/post.js
+const {model, Schema} = require('mongoose');
 
-const { model, Schema } = require("mongoose");
+// Creates the schema
+const userSchema = new Schema({
+  firstName: { type: String, required: true }, 
+  lastName: { type: String, required: true },
+  age: { type: Number, min: 18 },
+  email: { type: String, required: true, unique: true },
+}, { timestamps: true });
 
-const postSchema = new Schema(
-  {
-    title: { type: String, required: true },
-    snippet: { type: String, required: false },
-    body: { type: String, required: true },
-  },
-  {
-    timestamps: true,
-  }
-);
+// Custom function
+userSchema.methods.fullName = () => [this.firstName, this.lastName].join(" ")
 
-// Define a method to generate the snippet from the body
-postSchema.methods.generateSnippet = (maxLength = 150) => {
-  return this.body.length > maxLength
-    ? this.body.substring(0, maxLength) + "..."
-    : this.body;
-};
-
-module.exports = model("Post", postSchema);
+// Define model and exports
+module.exports = model('User', userSchema);
 ```
 
-#### Model middlewares hooks
+##### Instantiating Models
 
-Mongoose models also allow us to use hooks to trigger middlewares that can work just like `ActiveRecord` callbacks, like `before_save` and etc..
+To instantiate a model first we need to import the created model like this:
 
 ```js
-// models/post.js
+// import
+const User = require('./models/user')
 
-const { model, Schema } = require("mongoose");
-
-const postSchema = new Schema(
-  {
-    title: { type: String, required: true },
-    snippet: { type: String, required: false },
-    body: { type: String, required: true },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-postSchema.methods.generateSnippet = (maxLength = 150) => {
-  return this.body.length > maxLength
-    ? this.body.substring(0, maxLength) + "..."
-    : this.body;
-};
-
-// Middleware to automatically generate snippet
-postSchema.pre("save", (next) => {
-  this.snippet = this.generateSnippet();
-  next();
+// Instantiating mode object
+const newUser = new User({
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 25,
+  email: 'john@example.com',
 });
 
-module.exports = model("Post", postSchema);
 ```
 
-Notice that in this example the hook called `pre`, this allow us to run the middleware, as our model gets `save`, let's see other hooks we could use:
+ >**Notice:** Object functions that triggers database communication are all async, so be sure to handle it accordingly
 
-| Middleware Hook                           | Description                                   |
+##### Instance functions
+
+Soon as we instantiate a model we are going have access to various functions to handle it's persistency and retrieval:
+
+| Method                | Description                                           |
+| --------------------- | ----------------------------------------------------- |
+| `create()`            | Create a new document(s) in the database              |
+| `save()`              | Save a document to the database (instance method)     |
+| `insertMany()`        | Insert multiple documents into the collection         |
+| `find()`              | Find documents that match the specified criteria      |
+| `findOne()`           | Find one document that matches the specified criteria |
+| `findById()`          | Find a document by its ID                             |
+| `findByIdAndUpdate()` | Find a document by its ID and update it               |
+| `findByIdAndDelete()` | Find a document by its ID and delete it               |
+| `updateOne()`         | Update the first document that matches the criteria   |
+| `updateMany()`        | Update all documents that match the criteria          |
+| `deleteOne()`         | Delete the first document that matches the criteria   |
+| `deleteMany()`        | Delete all documents that match the criteria          |
+| `countDocuments()`    | Count documents that match the specified criteria     |
+| `aggregate()`         | Perform aggregation operations on the collection      |
+
+##### Schema hooks
+
+Mongoose models and schema also give us `hooks` to trigger middlewares that can work depending on the data action or state very similar to what we got on Rails `ActiveRecord` callbacks like `before_save`, `after_save` and etc..
+
+| Hook                                      | Description                                   |
 | ----------------------------------------- | --------------------------------------------- |
 | `pre('save', function(next))`             | Runs before a document gets saved.            |
 | `pre('validate', function(next))`         | Runs before the document's validation.        |
@@ -897,12 +948,101 @@ Notice that in this example the hook called `pre`, this allow us to run the midd
 | `pre('findOneAndDelete', function(next))` | Runs before the `findOneAndDelete` operation. |
 | `pre('findOneAndUpdate', function(next))` | Runs before the `findOneAndUpdate` operation. |
 
-#### Saving and Getting data
+> **Notice:** In Mongoose middleware functions (like the `pre` hook), it's important not to use arrow functions `(() => {})`. Arrow functions don't have their own `this` context, and using `this` inside an arrow function will not refer to the document being processed.
 
-To save data using Mongoose we need to get a request
+**Schema hook example:**
+
+```js
+// ./src/expressBlogExample/src/models/post.js
+
+const { model, Schema } = require("mongoose");
+
+// Create the schema
+const postSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    snippet: { type: String, required: false },
+    body: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
+// Middleware to automatically generate snippet
+postSchema.pre("validate", function (next) {
+  const maxLength = 25;
+
+  this.snippet =
+    this.body.length > maxLength
+      ? this.body.substring(0, maxLength) + "..."
+      : this.body;
+  next();
+});
+
+// Define model and exports
+module.exports = model("Post", postSchema);
+```
+
+##### Saving data
+
+On Mongoose our model has already specific functions to operate the data persistance, like `save()`
+
+```js
+// import
+const User = require('./models/user')
+
+// Instantiating mode object
+const newUser = new User({
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 25,
+  email: 'john@example.com',
+});
+
+// Performing model data save
+newUser.save()
+  .then(savedUser => {
+    console.log('User saved:', savedUser);
+  })
+  .catch(error => {
+    console.error('Error saving user:', error);
+  });
+```
+
+Having a model saved on database will produce:
+
+![Model recorded on MongoDB print](./images/model-recorded.png)
+
+## Snippet
+
+### Simple logger
+
+```js
+// Module
+// ./src/utils/logger.js
+module.exports = (req, res, next) => {
+  let queries = JSON.stringify(req.query);
+  let params = JSON.stringify(req.body);
+
+  let log = ` => ${req.method} ${req.url}, Queries: ${queries}, Parameters: ${params}`;
+
+  console.log(log);
+
+  next();
+};
+
+// Usage:
+
+// app.js
+app.use(logger);
+```
 
 ## References
 
 [Express](https://expressjs.com/)
 [EJS view engine](https://ejs.co/)
+[Dotenv](https://www.npmjs.com/package/dotenv)
+[Nodemon](https://www.npmjs.com/package/nodemon)
+[Mongan](https://www.npmjs.com/package/morgan)
+[MongoDB](https://www.mongodb.com/)
+[Moongose](https://mongoosejs.com/docs/)
 [Express node Crash Course](https://www.youtube.com/playlist?list=PL4cUxeGkcC9jsz4LDYc6kv3ymONOKxwBU)

@@ -1,27 +1,25 @@
 const { model, Schema } = require("mongoose");
 
+// Create the schema
 const postSchema = new Schema(
   {
     title: { type: String, required: true },
-    snippet: { type: String, required: false },
+    snippet: { type: String, required: true },
     body: { type: String, required: true },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-// Define a method to generate the snippet from the body
-postSchema.methods.generateSnippet = (maxLength = 150) => {
-  return this.body.length > maxLength
-    ? this.body.substring(0, maxLength) + "..."
-    : this.body;
-};
-
 // Middleware to automatically generate snippet
-postSchema.pre("save", (next) => {
-  this.snippet = this.generateSnippet();
+postSchema.pre("validate", function (next) {
+  const maxLength = 25;
+
+  this.snippet =
+    this.body.length > maxLength
+      ? this.body.substring(0, maxLength) + "..."
+      : this.body;
   next();
 });
 
+// Define model and exports
 module.exports = model("Post", postSchema);
