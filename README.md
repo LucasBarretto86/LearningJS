@@ -6,6 +6,7 @@
       - [Status code](#status-code)
   - [YARN](#yarn)
     - [Install yarn](#install-yarn)
+    - [Update yarn](#update-yarn)
     - [Add new dependency](#add-new-dependency)
       - [add only in dev](#add-only-in-dev)
     - [Reinstall all dependencies](#reinstall-all-dependencies)
@@ -17,6 +18,7 @@
   - [nodemon](#nodemon)
     - [Installing nodemon](#installing-nodemon)
     - [Setup nodemon](#setup-nodemon)
+      - [When using Docker](#when-using-docker)
     - [Using nodemon](#using-nodemon)
   - [ESBuild](#esbuild)
     - [Install ESBuild](#install-esbuild)
@@ -57,13 +59,6 @@
       - [`_.get()`](#_get)
       - [`_.set()`](#_set)
   - [ExpressJS](#expressjs)
-  - [Mongoose](#mongoose)
-    - [Installing mongoose](#installing-mongoose)
-    - [Establishing database connection](#establishing-database-connection)
-    - [Mongoose Schema and Models](#mongoose-schema-and-models)
-      - [Model methods](#model-methods)
-      - [Model middlewares hooks](#model-middlewares-hooks)
-    - [Saving and Getting data](#saving-and-getting-data)
   - [GPT answers](#gpt-answers)
     - [Node - Require vs Import](#node---require-vs-import)
   - [Snippets](#snippets)
@@ -111,6 +106,18 @@
 
 ```shell
 npm install -g yarn
+```
+
+### Update yarn
+
+To update yearn we use basically same command as installation
+
+```shell
+npm install -g yarn
+
+# OR
+
+npm install --global yarn
 ```
 
 ### Add new dependency
@@ -227,6 +234,16 @@ To setup nodemon we must add a new script entry into the  `package.json` of our 
 ```
 
 > **Notice:** that `app.js` is the main file where our application starts
+
+#### When using Docker
+
+```js
+  "scripts": {
+    "start": "nodemon -L app.js"
+  },
+```
+
+> The `-L` (or `--legacy-watch`) flag in **nodemon** enables legacy file-watching, which is essential when running in Docker containers because it uses an alternate polling method. Containers often have issues with file system change detection due to limitations in file-notification systems inside virtualized environments, leading to missed changes. The `-L` flag tells **nodemon** to use a polling-based approach instead, which reliably detects changes in files even within containerized setups, ensuring that your app restarts as expected when you modify files.
 
 ### Using nodemon
 
