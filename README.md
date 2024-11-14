@@ -2,78 +2,52 @@
 
 - [Learning Javascript](#learning-javascript)
   - [Core Knowledge](#core-knowledge)
+    - [Legacy Learning project](#legacy-learning-project)
     - [HTTP](#http)
-      - [Status code](#status-code)
-  - [YARN](#yarn)
-    - [Install yarn](#install-yarn)
-    - [Update yarn](#update-yarn)
-    - [Add new dependency](#add-new-dependency)
-      - [add only in dev](#add-only-in-dev)
-    - [Reinstall all dependencies](#reinstall-all-dependencies)
-    - [Adding multiple dependencies version](#adding-multiple-dependencies-version)
-  - [dotenv](#dotenv)
-    - [Installing dotenv](#installing-dotenv)
-    - [Create `.env` file](#create-env-file)
-    - [dotenv setup](#dotenv-setup)
-  - [nodemon](#nodemon)
-    - [Installing nodemon](#installing-nodemon)
-    - [Setup nodemon](#setup-nodemon)
-      - [When using Docker](#when-using-docker)
-    - [Using nodemon](#using-nodemon)
-  - [ESBuild](#esbuild)
-    - [Install ESBuild](#install-esbuild)
-    - [Implementing building script](#implementing-building-script)
-    - [Sophisticate build conditions](#sophisticate-build-conditions)
-  - [ESLint](#eslint)
-    - [Adding ESlint to the project](#adding-eslint-to-the-project)
-      - [With Yarn](#with-yarn)
-        - [Interactive configuration](#interactive-configuration)
-      - [With NPM](#with-npm)
-    - [ESlint basic config](#eslint-basic-config)
-      - [To add new rules](#to-add-new-rules)
-    - [Run ESLint](#run-eslint)
-  - [Stimulus on Vanilla JS with ESBuild](#stimulus-on-vanilla-js-with-esbuild)
-    - [Install Stimulus](#install-stimulus)
-    - [Config `build.js` file](#config-buildjs-file)
-    - [Config application js](#config-application-js)
-    - [Stimulus controller](#stimulus-controller)
-    - [Stimulus Targets](#stimulus-targets)
-    - [Stimulus Actions](#stimulus-actions)
-    - [Stimulus Outlets](#stimulus-outlets)
-  - [DART SASS](#dart-sass)
-    - [Install DART SASS](#install-dart-sass)
-    - [Configure SASS processor on ESBuild](#configure-sass-processor-on-esbuild)
-      - [Install ESBuild sass plugin](#install-esbuild-sass-plugin)
-      - [Setup sass plugin on `build.js`](#setup-sass-plugin-on-buildjs)
-  - [Lodash](#lodash)
-    - [Configuring with a project](#configuring-with-a-project)
-    - [Interesting utilities methods](#interesting-utilities-methods)
-      - [`_.assign()`](#_assign)
-      - [`_.times()`](#_times)
-      - [`_.debounce()`](#_debounce)
-      - [`_.find()`](#_find)
-      - [`_.filter()`](#_filter)
-      - [`_.first()`](#_first)
-      - [`_.last()`](#_last)
-      - [`_.chunk()`](#_chunk)
-      - [`_.get()`](#_get)
-      - [`_.set()`](#_set)
-  - [ExpressJS](#expressjs)
+  - [Package Managers](#package-managers)
+    - [YARN](#yarn)
+  - [Bundlers](#bundlers)
+    - [ESBuild](#esbuild)
+  - [Linters](#linters)
+    - [ESLint](#eslint)
+  - [Dependencies](#dependencies)
+    - [JQuery](#jquery)
+    - [Babel](#babel)
+      - [For Bundlers](#for-bundlers)
+      - [For Vanilla JS](#for-vanilla-js)
+    - [dotenv](#dotenv)
+    - [nodemon](#nodemon)
+    - [Axios](#axios)
+      - [Axios vs Fetch](#axios-vs-fetch)
+      - [Axios downside](#axios-downside)
+    - [DART SASS](#dart-sass)
+    - [Lodash](#lodash)
+  - [Frameworks](#frameworks)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+  - [Tests](#tests)
+    - [Mocha Chai](#mocha-chai)
+    - [JEST](#jest)
+      - [Issues](#issues)
   - [GPT answers](#gpt-answers)
     - [Node - Require vs Import](#node---require-vs-import)
   - [Snippets](#snippets)
     - [Shutdown server gracefully](#shutdown-server-gracefully)
-      - [Close PORT forcefully](#close-port-forcefully)
     - [Using ES6 modules in Node](#using-es6-modules-in-node)
+    - [Stimulus on Vanilla JS with ESBuild](#stimulus-on-vanilla-js-with-esbuild)
   - [References](#references)
 
 ## Core Knowledge
+
+### Legacy Learning project
+
+[Legacy XTI Course](./src/projects/deprecated/xti/JS/README.md)
 
 ### HTTP
 
 [Mozilla HTTP Guide](https://developer.mozilla.org/en-US/docs/Web/HTTP)
 
-#### Status code
+**Status code:**
 
 - Informational responses (100 to 199)
 - Successful responses (200 to 299)
@@ -98,9 +72,11 @@
 | 503  | Service unavailable   |
 | 504  | Gateway Timeout       |
 
-## YARN
+## Package Managers
 
-### Install yarn
+### YARN
+
+**Install yarn:**
 
 > To install yarn you need to have a nodejs installed since we gonna use `NPM` to install
 
@@ -108,7 +84,9 @@
 npm install -g yarn
 ```
 
-### Update yarn
+> flag `-g` means that it will install Yarn globally
+
+**Update yarn:**
 
 To update yearn we use basically same command as installation
 
@@ -120,28 +98,25 @@ npm install -g yarn
 npm install --global yarn
 ```
 
-### Add new dependency
+**Add dependencies:**
 
 ```shell
 yarn add dependency_name
 ```
 
-#### add only in dev
+To add the dependency only for dev, use flag `-D`
 
 ```shell
 yarn add dependency_name -D
 ```
 
-### Reinstall all dependencies
+**Reinstall all dependencies:**
 
 ```shell
 yarn install --check-files
 ```
 
-### Adding multiple dependencies version
-
-new dependency syntax -> "`dependency-alias`": "npm:`dependency-name@version`"
-older dependency syntax -> "`dependency-name`": "`version`"
+**Adding multiple dependencies version:**
 
 ```json
 // package.json
@@ -149,119 +124,17 @@ older dependency syntax -> "`dependency-name`": "`version`"
   "dependencies": {
     "@analytics": "npm:analytics@^0.6.2",
     "@analytics/google-analytics": "^0.5.2",
-    "@apollo/client/updated": "npm:apollo/client@^3.6.2",
-    "@apollo/client": "3.5.8"
+    "@apollo/client/updated": "npm:apollo/client@^3.6.2", // < New dependency syntax>
+    "@apollo/client": "3.5.8" // < Older dependency syntax>
   }
 }
 ```
 
-## dotenv
+## Bundlers
 
-`dotenv` is a dependency to allow us to load ambient environment variables  within our project
-as it get started, after installing this dependency we use `.env` file on the root folder of our project.
+### ESBuild
 
-### Installing dotenv
-
-```sh
-yarn add dotenv
-
-# OR
-
-npm install dotenv
-```
-
-### Create `.env` file
-
-create the file `.env` on the project root folder
-
-```tree
-.
-├── .env
-├── app.js
-├── package.json
-├── src/
-└── yarn.lock
-```
-
-The `.env` file will hold each like `KEY = VALUE`, like this:
-
-```mono
-<!-- .env -->
-
-PORT = 5500
-```
-
-### dotenv setup
-
-Add this few lines on the main js file of your project:
-
-```js
-// app.js
-
-require('dotenv').config();
-
-const PORT = process.env.PORT || 3000;
-
-// ...
-```
-
-> This code sets the PORT variable to the value defined in the .env file or defaults to 3000 if not specified.
-
-## nodemon
-
-**GPT: What is nodemon?**
-
-> nodemon is a development tool for Node.js applications that automatically restarts the server whenever code changes are detected. It simplifies the development process by eliminating the need to manually restart the server after each modification. With its command-line interface and integration with npm scripts, nodemon streamlines the development workflow and enhances the developer experience.
-
-### Installing nodemon
-
-```sh
-yarn add nodemon -D
-
-# OR
-
-npm install --save-dev nodemon
-```
-
-### Setup nodemon
-
-To setup nodemon we must add a new script entry into the  `package.json` of our project:
-
-```js
-  "scripts": {
-    "start": "nodemon app.js"
-  },
-```
-
-> **Notice:** that `app.js` is the main file where our application starts
-
-#### When using Docker
-
-```js
-  "scripts": {
-    "start": "nodemon -L app.js"
-  },
-```
-
-> The `-L` (or `--legacy-watch`) flag in **nodemon** enables legacy file-watching, which is essential when running in Docker containers because it uses an alternate polling method. Containers often have issues with file system change detection due to limitations in file-notification systems inside virtualized environments, leading to missed changes. The `-L` flag tells **nodemon** to use a polling-based approach instead, which reliably detects changes in files even within containerized setups, ensuring that your app restarts as expected when you modify files.
-
-### Using nodemon
-
-Basically we just need to run our start script
-
-```sh
-yarn run start
-
-# OR
-
-npm run start
-```
-
-After that we don't need to keep shutting down our application and restarting again every time we change `.js` files
-
-## ESBuild
-
-### Install ESBuild
+**Install ESBuild:**
 
 ```shell
 yarn add esbuild
@@ -271,7 +144,7 @@ or
 npm install --save-exact esbuild
 ```
 
-### Implementing building script
+**Implementing building script:**
 
 ```json
 // package.json
@@ -283,7 +156,7 @@ npm install --save-exact esbuild
 }
 ```
 
-### Sophisticate build conditions
+**Sophisticate build conditions:**
 
 As the scrips to build you project might gets specific or more sophisticated it's suggested segregate the script in external config file using esbuild's JavaScript API
 
@@ -312,19 +185,27 @@ build({
 
 > note that on the script we use `node` to allow ES6 modules to work properly.
 
-## ESLint
+## Linters
 
-### Adding ESlint to the project
+### ESLint
 
-#### With Yarn
+**Adding ESlint to the project:**
 
 ```shell
 yarn add -D eslint
+
+# OR
+
+npm init @eslint/config
 ```
 
-##### Interactive configuration
+**Interactive configuration:**
 
 ```shell
+npx eslint --init
+
+# OR
+
 eslint --init
 ```
 
@@ -346,15 +227,7 @@ eslint-plugin-react@latest
 ✔ Which package manager do you want to use? · yarn
 ```
 
-#### With NPM
-
-With you have node installed just initialize eslint using NPM
-
-```shell
-npm init @eslint/config
-```
-
-### ESlint basic config
+**ESlint basic config:**
 
 ```js
 // .eslintrc.js
@@ -364,132 +237,432 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: "standard",
-  overrides: [],
+  extends: [
+    'plugin:react/recommended',
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+  ],
   parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
+    ecmaVersion: 12,
+    sourceType: 'module',
   },
-  rules: {
-    "array-bracket-spacing": ["error", "never"],
-    "brace-style": ["error", "1tbs"],
-    "comma-dangle": [
-      "error",
-      {
-        arrays: "multiline",
-        objects: "multiline",
-        imports: "multiline",
-        exports: "multiline",
-        functions: "ignore",
-      },
-    ],
-    "keyword-spacing": ["error"],
-    "linebreak-style": ["error", "unix"],
-    "no-console": "warn",
-    "object-curly-spacing": ["error", "always"],
-    semi: ["error", "never"],
-    "space-in-parens": ["error", "never"],
-  },
+  plugins: ['react'],
+  rules: {},
 };
 ```
 
-#### To add new rules
+[For Eslint Rules](https://eslint.org/docs/rules/)
 
-<https://eslint.org/docs/rules/>
+[Eslint config example](./src/projects/eslint/.eslintrc.js)
 
-### Run ESLint
+**Run ESLint:**
 
 ```shell
 yarn run eslint
-```
 
-to for fixes we simple add `--fix` flag
+# OR
 
-```shell
 yarn run eslint --fix
 ```
 
-## Stimulus on Vanilla JS with ESBuild
+> `--fix` to enforce automatic fixes
 
-### Install Stimulus
+## Dependencies
 
-```shell
-yarn add -D stimulus
+### JQuery
+
+jQuery is a fast, small, and feature-rich JavaScript library. It simplifies tasks like HTML document traversal and manipulation, event handling, animation, and Ajax interactions for rapid web development.
+
+```sh
+npm install jquery
+
+# OR
+
+yarn add jquery
 ```
 
-To allow stimulus to work on esbuild we need to add also a plugin
-
-```shell
-yarn add -D esbuild-plugin-stimulus
-```
-
-### Config `build.js` file
+**Example:**
 
 ```js
-// ./build.js
+import $ from 'jquery';
 
-import { build } from "esbuild";
-import { stimulusPlugin } from "esbuild-plugin-stimulus";
-
-build({
-  entryPoints: ["./src/index.js"],
-  plugins: [stimulusPlugin()],
-  bundle: true,
-  outfile: "./public/out.js",
-}).catch(() => process.exit(1));
+$(document).ready(function() {
+  $('#button').click(function() {
+    alert('Button clicked!');
+  });
+});
 ```
 
-### Config application js
+**Legacy Study Project:**
 
-> In this example application js is `index.js`
+[XTI course](./src/projects//deprecated/xti/JQuery/README.md)
 
-```js
-// ./src/libs/index.js
+---
 
-import { Application } from "stimulus";
-import DialogController from "./stimulus/controllers/dialog_controller";
+### Babel
 
-const app = Application.start();
-app.register("dialog", DialogController);
+Babel is a tool that converts modern JavaScript code (like ES6 and newer features) into older code that works in all browsers, even the ones that don't support the latest features.
+
+#### For Bundlers
+
+**Babel installation:**
+
+```sh
+npm install --save-dev @babel/core @babel/preset-env
+
+# OR
+
+yarn add -D @babel/core @babel/preset-env
 ```
 
-### Stimulus controller
+> - **Esbuild:** Does not need babel-loader; it has built-in support for transpiling `JS`, `JSX`, and more.
+> - **Webpack:** Needs babel-loader to transpile `JS` and `JSX`.
+>   - Add also `"@babel/preset-react"` if you intend to you `JSX`
 
-```js
-// ./src/libs/stimulus/controllers
+**Babel configuration:**
 
-import { Controller } from "stimulus";
+For every project with babel, regardless of it's a vanilla project or not we need to create `.babelrc` file on the root of the project:
 
-export default class extends Controller {
-  connect() {
-    console.log("connected");
-  }
+```json
+// .babelrc
+{
+  "presets": 
+  [
+    "@babel/preset-env",
+    "@babel/preset-react" // If you intent to use `JSX` files (Except of ESBuild)
+  ]
 }
 ```
 
-### Stimulus Targets
+**for `ESBuild`:**
 
-### Stimulus Actions
+```js
+// esbuild.config.js
 
-### Stimulus Outlets
+const esbuild = require('esbuild');
+const babel = require('@esbuild/plugin-babel');
 
-## DART SASS
+esbuild.build({
+  entryPoints: ['src/index.js'],
+  bundle: true,
+  plugins: [
+    babel({
+      filter: /\.js$/,          // Apply Babel to JS files
+      configFile: './.babelrc', // Your Babel config
+    }),
+  ],
+  outfile: 'dist/bundle.js',
+}).catch(() => process.exit(1));
+```
 
-### Install DART SASS
+**for `Webpack`:**
+
+```js
+// webpack.config.js
+
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js', // Your entry file
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/, // Process JavaScript files
+        exclude: /node_modules/, // Exclude node_modules
+        use: {
+          loader: 'babel-loader', // Use Babel loader
+        },
+      },
+      {
+        test: /\.jsx$/, // If you're using JSX, add this
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'], // Resolve .js and .jsx files
+  },
+};
+
+```
+
+> This is not necessary on React because it uses `CRA`, which already setup the `webpack.config.js` under the hood.
+
+#### For Vanilla JS
+
+**Babel installation:**
+
+```sh
+npm install --save-dev @babel/core @babel/cli @babel/preset-env
+
+# OR
+
+yarn add -D @babel/core @babel/cli @babel/preset-env
+```
+
+**Babel configuration:**
+
+For every project with babel, regardless of it's a vanilla project or not we need to create `.babelrc` file on the root of the project:
+
+```json
+// .babelrc
+{
+  "presets":  ["@babel/preset-env"]
+  }
+```
+
+**Add script to run babel on `package.json`:**
+
+Then we need to add a script to use babel to transpile the code:
+
+```json
+// package.json
+{
+  // ...
+"scripts": {
+  "build": "babel src --out-dir dist"
+}
+ // ...
+}
+
+```
+
+---
+
+### dotenv
+
+`dotenv` is a dependency to allow us to load ambient environment variables  within our project
+as it get started, after installing this dependency we use `.env` file on the root folder of our project.
+
+**Installing dotenv:**
+
+```sh
+yarn add dotenv
+
+# OR
+
+npm install dotenv
+```
+
+**Create `:**.env` file
+
+create the file `.env` on the project root folder
+
+```tree
+.
+├── .env
+├── app.js
+├── package.json
+├── src/
+└── yarn.lock
+```
+
+The `.env` file will hold each like `KEY = VALUE`, like this:
+
+```mono
+<!-- .env -->
+
+PORT = 5500
+```
+
+**dotenv setup:**
+
+Add this few lines on the main js file of your project:
+
+```js
+// app.js
+
+require('dotenv').config();
+
+const PORT = process.env.PORT || 3000;
+
+// ...
+```
+
+> This code sets the PORT variable to the value defined in the .env file or defaults to 3000 if not specified.
+
+---
+
+### nodemon
+
+**GPT: What is nodemon?**
+
+> nodemon is a development tool for Node.js applications that automatically restarts the server whenever code changes are detected. It simplifies the development process by eliminating the need to manually restart the server after each modification. With its command-line interface and integration with npm scripts, nodemon streamlines the development workflow and enhances the developer experience.
+
+**Installing nodemon:**
+
+```sh
+yarn add nodemon -D
+
+# OR
+
+npm install --save-dev nodemon
+```
+
+**Setup nodemon:**
+
+To setup nodemon we must add a new script entry into the  `package.json` of our project:
+
+```js
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+```
+
+> **Notice:** that `app.js` is the main file where our application starts
+
+**When using Docker:**
+
+```js
+  "scripts": {
+    "start": "nodemon -L app.js"
+  },
+```
+
+> The `-L` (or `--legacy-watch`) flag in **nodemon** enables legacy file-watching, which is essential when running in Docker containers because it uses an alternate polling method. Containers often have issues with file system change detection due to limitations in file-notification systems inside virtualized environments, leading to missed changes. The `-L` flag tells **nodemon** to use a polling-based approach instead, which reliably detects changes in files even within containerized setups, ensuring that your app restarts as expected when you modify files.
+
+**Using nodemon:**
+
+Basically we just need to run our start script
+
+```sh
+yarn run start
+
+# OR
+
+npm run start
+```
+
+After that we don't need to keep shutting down our application and restarting again every time we change `.js` files
+
+---
+
+### Axios
+
+Axios is a promise-based HTTP client for making requests to APIs.
+
+In brief, Axios provides many features like built-in transformations, request and response interceptors, and better error handling which are often more convenient than using the native Fetch API.
+
+**Axios installation:**
+
+```sh
+npm install axios
+
+# OR
+
+yarn add axios
+```
+
+**Usage example:**
+
+```js
+import axios from 'axios';
+
+// Example GET request
+axios.get('https://api.example.com/data')
+  .then(response => console.log(response))
+  .catch(error => console.error(error));
+
+```
+
+#### Axios vs Fetch
+
+- **Syntax:**  
+  - **Axios:** Simpler, returns a promise that resolves with the response data directly.  
+
+    ```js
+    axios.get('/api/data').then(response => console.log(response.data));
+    ```
+
+  - **Fetch:** Returns a promise with the entire response object, so you need to call `.json()` to get the data.  
+
+    ```js
+    fetch('/api/data').then(response => response.json()).then(data => console.log(data));
+    ```
+
+- **Error Handling:**  
+  - **Axios:** Automatically throws an error for HTTP status codes outside the 2xx range (e.g., 404, 500).  
+  - **Fetch:** Only throws errors for network issues or invalid requests, not HTTP errors. You need to check `response.ok` or handle status manually.
+
+- **Response Parsing:**  
+  - **Axios:** Automatically parses JSON responses.  
+  - **Fetch:** You have to manually parse the JSON with `.json()`.
+
+- **Features:**
+  - **Axios:** Supports request and response interceptors, automatic JSON parsing, cancellation of requests, and timeout handling.
+  - **Fetch:** More lightweight, but lacks built-in features like interceptors and request cancellation.
+
+- **Browser Support:**  
+  - **Axios:** Works in all major browsers and older ones (e.g., IE11).  
+  - **Fetch:** Supported by modern browsers but requires a polyfill for older browsers.
+
+#### Axios downside
+
+In a nutshell, `Axios` offers a more comprehensive error object, which can be a bit cumbersome to navigate, while `fetch` keeps things simpler but doesn't handle all error cases as automatically.
+
+**Axios Error Structure:**
+
+When an error occurs in an Axios request, the error object includes various properties like:
+
+- `response`: Contains the response data from the server, including status code and headers.
+- `request`: Contains the request that was sent.
+- `message`: The error message.
+- `code`: A specific error code.
+
+For example, an Axios error might look like this:
+
+```javascript
+axios.get('https://api.example.com/data')
+  .then(response => console.log(response))
+  .catch(error => {
+    console.error(error.message);        // The error message
+    console.error(error.response?.data); // The actual response data
+    console.error(error.response?.status); // The HTTP status code
+  });
+```
+
+**Fetch Error Handling:**
+
+In contrast, `fetch` only rejects on network errors or failures (like no internet connection) but does **not reject on HTTP errors** (like 404 or 500). You'd need to manually check the status code:
+
+```js
+fetch('https://api.example.com/data')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => console.log(data))
+  .catch(error => console.error(error.message));
+```
+
+---
+
+### DART SASS
+
+**Install DART SASS:**
 
 ```shell
 yarn add sass
 ```
 
-### Configure SASS processor on ESBuild
+**Configure SASS processor on ESBuild:**
 
-#### Install ESBuild sass plugin
+**Install ESBuild sass plugin:**
 
 ```shell
 yarn add -D esbuild-sass-plugin
 ```
 
-#### Setup sass plugin on `build.js`
+**Setup sass plugin on `build:**.js`
 
 ```js
 // ./build.js
@@ -517,11 +690,15 @@ await build({
 import "../assets/stylesheet/index.scss";
 ```
 
-## Lodash
+---
+
+### Lodash
 
 Lodash is a library that enhance basic JS, giving it methods to handle data in a ruby like style
 
-### Configuring with a project
+[Example project](./src/projects/lodash/index.js)
+
+**Configuring with a project:**
 
 ```shell
 yarn add lodash
@@ -549,9 +726,9 @@ it's also possible to import specific methods within an package.json
 }
 ```
 
-### Interesting utilities methods
+**Interesting utilities methods:**
 
-#### `_.assign()`
+**`_:**.assign()`
 
 Allows you to add new values to return new object with new assigned properties, it doesn't change the original object
 
@@ -569,7 +746,7 @@ console.log(updatedUser);
 
 > Note that id doesn't change a property that already has a value, it just adds the new property
 
-#### `_.times()`
+**`_:**.times()`
 
 it just repeats and map the result of an instruction for `n` times
 
@@ -603,7 +780,7 @@ console.log(
  [4, 4, 4]
 ```
 
-#### `_.debounce()`
+**`_:**.debounce()`
 
 Basically it just a timeout that resets if an input is trigger before the timeout runs out, for instance if you will make a Ajax request it avoids to make requests every time an user tipping something on an input, if you set a debounce of 5 seconds it will only make that Ajax request after 5 seconds timeout
 
@@ -624,7 +801,7 @@ Basically it just a timeout that resets if an input is trigger before the timeou
 </script>
 ```
 
-#### `_.find()`
+**`_:**.find()`
 
 It's basically and enhancement for normal find from JS
 
@@ -651,7 +828,7 @@ console.log(result);
 const result = users.find(e => {e.name === "Lucas"})
 ```
 
-#### `_.filter()`
+**`_:**.filter()`
 
 It's basically and enhancement for normal filter from JS
 
@@ -679,7 +856,7 @@ console.log(result);
 const result = users.filter(e => {e.gender === "male"})
 ```
 
-#### `_.first()`
+**`_:**.first()`
 
 ```js
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -692,7 +869,7 @@ console.log(_.first(numbers));
 1
 ```
 
-#### `_.last()`
+**`_:**.last()`
 
 ```js
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -705,7 +882,7 @@ console.log(_.last(numbers));
 8
 ```
 
-#### `_.chunk()`
+**`_:**.chunk()`
 
 Break and array or an object into chunks
 
@@ -734,7 +911,7 @@ Array
 [{name: "Camila", age: 40, gender: "female"}, {name: "Daniel", age: 37, gender: "male"}]]
 ```
 
-#### `_.get()`
+**`_:**.get()`
 
 Mostly use to handle API responses due to the possibility to data inconsistency or variability, mostly what get method does is to try getting the day from a unknown source if the date isn't found or there's an inconsistency it will return a default value instead of throw an exception stopping the application.
 
@@ -812,7 +989,7 @@ console.log(usingLanguages);
 Error due to data inconsistency
 ```
 
-#### `_.set()`
+**`_:**.set()`
 
 Set is basically to add data to an object that might or might not have a property, it might seems ordinary for simple data, simple objects, however it shines if you will create deeper properties
 
@@ -910,9 +1087,37 @@ console.log(devs);
  ]
 ```
 
-## ExpressJS
+---
 
-Go to [Learning ExpressJS](./LearningExpressJS//README.md)
+## Frameworks
+
+### Frontend
+
+[Learning ReactJS](./LearningReactJS/README.md)
+
+### Backend
+
+[Learning ExpressJS](./LearningExpressJS//README.md)
+
+## Tests
+
+### Mocha Chai
+
+[Example project](./src/projects/testing_with_mocha_chai/package.json)
+
+### JEST
+
+#### Issues
+
+JEST from React has trouble using axios, so we need to add this configuration on `package.json`
+
+```json
+"jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)"
+    ]
+  },
+```
 
 ## GPT answers
 
@@ -991,7 +1196,7 @@ process.on('SIGTERM', () => {
   })
 ```
 
-#### Close PORT forcefully
+**Close PORT forcefully:**
 
 ```sh
 
@@ -1016,6 +1221,70 @@ To be able to use `import`, `export` statements and other ES6 stuff in Node we j
   }
 }
 ```
+
+### Stimulus on Vanilla JS with ESBuild
+
+**Install Stimulus:**
+
+```shell
+yarn add -D stimulus
+```
+
+To allow stimulus to work on esbuild we need to add also a plugin
+
+```shell
+yarn add -D esbuild-plugin-stimulus
+```
+
+**Config `build:**.js` file
+
+```js
+// ./build.js
+
+import { build } from "esbuild";
+import { stimulusPlugin } from "esbuild-plugin-stimulus";
+
+build({
+  entryPoints: ["./src/index.js"],
+  plugins: [stimulusPlugin()],
+  bundle: true,
+  outfile: "./public/out.js",
+}).catch(() => process.exit(1));
+```
+
+**Config application js:**
+
+> In this example application js is `index.js`
+
+```js
+// ./src/libs/index.js
+
+import { Application } from "stimulus";
+import DialogController from "./stimulus/controllers/dialog_controller";
+
+const app = Application.start();
+app.register("dialog", DialogController);
+```
+
+**Stimulus controller:**
+
+```js
+// ./src/libs/stimulus/controllers
+
+import { Controller } from "stimulus";
+
+export default class extends Controller {
+  connect() {
+    console.log("connected");
+  }
+}
+```
+
+**Stimulus Targets:**
+
+**Stimulus Actions:**
+
+**Stimulus Outlets:**
 
 ## References
 

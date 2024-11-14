@@ -1,28 +1,26 @@
 # Learning ReactJS
-  
+
 - [Learning ReactJS](#learning-reactjs)
   - [Create new project](#create-new-project)
-    - [Project tree](#project-tree)
   - [Create main app `app.js` or `index.js`](#create-main-app-appjs-or-indexjs)
   - [Create component](#create-component)
-    - [Import component](#import-component)
-  - [Dealing with routes](#dealing-with-routes)
   - [React Router](#react-router)
-    - [Above version 6](#above-version-6)
   - [Hooks](#hooks)
+    - [useState](#usestate)
+    - [useEffect](#useeffect)
+    - [useContext](#usecontext)
+    - [useReducer](#usereducer)
+    - [useMemo](#usememo)
+    - [useRef](#useref)
+    - [useLocation](#uselocation)
+    - [useNavigate](#usenavigate)
+    - [useImperativeHandle](#useimperativehandle)
   - [Apollo](#apollo)
-    - [Apollo dependencies](#apollo-dependencies)
-    - [Using query component to keep code more JSX like](#using-query-component-to-keep-code-more-jsx-like)
-    - [Using userQuery Hook](#using-userquery-hook)
-    - [Query loaders for Webpack](#query-loaders-for-webpack)
-  - [ESLint](#eslint)
-    - [Adding ESlint to the project](#adding-eslint-to-the-project)
-    - [Interactive configuration](#interactive-configuration)
-    - [ESlint basic config](#eslint-basic-config)
-    - [Some additional rules](#some-additional-rules)
-      - [To add new rules](#to-add-new-rules)
-  - [Testing frameworks](#testing-frameworks)
-    - [JEST](#jest)
+    - [Testing frameworks](#testing-frameworks)
+  - [CRACO](#craco)
+  - [Rails Action Cable](#rails-action-cable)
+
+---
 
 ## Create new project
 
@@ -30,64 +28,139 @@
 npx create-react-app my-app
 ```
 
-### Project tree
+**Project tree:**
+
+---
 
 ## Create main app `app.js` or `index.js`
 
+**Before React 17:**
+
 ```js
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 // Simple example component
-const Hello = props => { <h1>Hello {name}</h1>}
-
-Hello.defaultProps {
-  name: 'Lucas'
-}
+const Hello = ({ name = 'Lucas' }) => <h1>Hello {name}</h1>;
 
 // Required method to render components
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Hello />,
-    document.body.appendChild(document.createElement('div')))
-})
+    document.body.appendChild(document.createElement('div'))
+  );
+});
 ```
+
+**From 18 and beyond:**
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Hello = ({ name }) => <h1>Hello {name}</h1>;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const root = ReactDOM.createRoot(document.querySelector('#root'));
+  root.render(
+    <React.StrictMode>
+      <Hello name='Lucas' />
+    </React.StrictMode>
+  );
+});
+```
+
+---
 
 ## Create component
 
 ```jsx
 import React from 'react'
 
-const Airlines = props => (
-    <h1> My Flights App - version: {props.version}</h1>
+const MyComponent = ({ title = "My title", description }) => (
+    <>
+      <h1> {title}</h1>
+      <p>{description}</p>
+    </>
 )
 
-Airlines.defaultProps = {
-  version: 0.1
-}
-
-export default Airlines
+export default MyComponent
 ```
 
-### Import component
+**Import component:**
 
-```js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Airlines from './my_flights_app/views/Airlines'
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import MyComponent from './my-app/MyComponent'
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <Airlines/>,
-    document.body.appendchild(document.createElement('div')))
-})
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+
+  root.render(
+    <React.StrictMode>
+      <MyComponent title='Here goes Johnny!' description ='Lorem ...' />
+    </React.StrictMode>
+  );
+});
 ```
 
-## Dealing with routes
+> `getElementById` is more efficient because `querySelector` has to parse the selector and check for any potential matches
+
+---
 
 ## React Router
 
-### Above version 6
+To manage routes from react we use an additional dependency `react-router-dom@latest`
+
+```sh
+yarn add react-router-dom@latest
+```
+
+After adding the router we can create a Router component like this:
+
+```js
+// ./src/routes/MainRoutes/index.js
+
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from '../../pages/Home'
+
+const MainRoutes = () => {
+  return (
+    <Router>
+        <Routes>
+          <Route path="/" exact component={Home} />
+        </Routes>
+    </Router>
+  );
+};
+
+export default MainRoutes;
+```
+
+And to add this to the app we just encapsulate our application with this router component
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import MainRoutes from './routes/MainRoutes'
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+root.render(
+  <React.StrictMode>
+    <MainRoutes>
+      <App/>
+    </MainRoutes>
+  </React.StrictMode>
+)
+```
+
+---
+
+**Above version 6:**
 
 ```js
 import React from 'react'
@@ -119,7 +192,27 @@ const App = () => {
 export default App;
 ```
 
+---
+
 ## Hooks
+
+### useState
+
+### useEffect
+
+### useContext
+
+### useReducer
+
+### useMemo
+
+### useRef
+
+### useLocation
+
+### useNavigate
+
+### useImperativeHandle
 
 **Example:**
 
@@ -138,211 +231,142 @@ export const useGetDoctors = () => {
 }
 ```
 
+---
+
 ## Apollo
 
-### Apollo dependencies
+**Apollo dependencies:**
 
-```shell
-yarn add react-apollo @apollo/client graphql
+```sh
+yarn add @apollo/client graphql
 ```
 
-### Using query component to keep code more JSX like
+**Using query component to keep code more JSX like:**
 
 ```jsx
-<Query query={GET_AIRLINES}>
-  {({ loading, error, data }) => {
-    if (loading) return "loading..."
-    if (error) return `ERROR: ${error.message}`
-    return <AirlinesList airlines={data.airlines}/>
-  }}
-</Query>
+import { Query } from '@apollo/client/react/components'
+import getDoctors from '@/v2/graphql/queries/Doctors.gql'
+
+const DoctorsComponent = () => {
+  return (
+    <Query query={getDoctors}>
+      {({ data, loading, error }) => {
+        if (loading) return <p>Loading...</p>
+        if (error) return <p>Error: {error.message}</p>
+        return <div>{data?.doctors?.map(doctor => <p key={doctor.id}>{doctor.name}</p>)}</div>
+      }}
+    </Query>
+  )
+}
 ```
 
-### Using userQuery Hook
+**Using userQuery Hook:**
 
 ```jsx
-import React from 'react'
-import { useTheme } from '@mui/material/styles';
-import { useQuery } from '@apollo/client/react/hooks/useQuery'
-import { parseISO, startOfMonth, addDays, format } from 'date-fns'
-import DayCard from './components/DayCard'
-import Filterbar from "./components/Filterbar";
-import { DATE_QUERY_FORMAT, WEEK_DAYS } from "@/v2/constants";
-import { Canvas, MonthlyView } from './styles'
-import WeekBar from './components/WeekBar'
-import getMonthSchedule from '@/v2/graphql/queries/MonthSchedules.gql'
+import { useQuery } from '@apollo/client'
+import getDoctors from '@/v2/graphql/queries/Doctors.gql'
 
-const Monthly = ({ date }) => {
-  const firstDate = startOfMonth(parseISO(date))
-  const lastDate = addDays(firstDate, ((6 * 7) - 1))
+export const useGetDoctors = () => {
+  const { data, loading, error } = useQuery(getDoctors)
 
-  const theme = useTheme()
-  const { loading, error, data } = useQuery(getMonthSchedule, {
-    variables: {
-      from: format(firstDate, DATE_QUERY_FORMAT),
-      to: format(lastDate, DATE_QUERY_FORMAT)
-    }
-  });
+  return { loading, error, data: data?.doctors || [] }
+}
+```
 
-  if (loading) return 'Loading...';
-  if (error) return `Error! ${error}`;
+---
+
+### Testing frameworks
+
+**JEST Setup for React:**
+
+```sh
+yarn add --dev jest babel-jest @testing-library/react @testing-library/jest-dom
+```
+
+---
+
+## CRACO
+
+CRACO (Create React App Configuration Override) is a tool that allows you to customize the configuration of Create React App (CRA) without ejecting. It provides an easy way to override webpack, Babel, Jest, ESLint, and other CRA settings by modifying a single configuration file `craco.config.js`. It simplifies the process of adjusting CRA settings while keeping the project structure intact.
+
+**Craco Installation:**
+
+```sh
+yarn add -D @craco/craco
+```
+
+All craco configuration goes to `craco.config.js` in the root dir from the project
+
+```sh
+touch craco.config.js
+```
+
+## Rails Action Cable
+
+When we have a backend on Rails and we want to consume an action cable channel we need to setup this:
+
+**Dependency Installation:**
+
+```sh
+npm install -S react-actioncable-provider
+
+# OR
+
+yarn add -D react-actioncable-provider
+```
+
+**Setup consumer:**
+
+We will need at at least three components, a ActionCableProvider, ActionCableConsumer, and a Hook to get the notifications, in this simple example I used a Context to handle the Websocket
+
+```js
+// ./src/contexts/NotificationContext/index.js
+
+import React, { createContext, useState, useContext, useMemo, useCallback } from 'react'
+import { ActionCableProvider, ActionCableConsumer } from 'react-actioncable-provider'
+import { wsURL } from '../../utils/request'
+
+const NotificationContext = createContext()
+
+export const NotificationProvider = ({ children }) => {
+  const [notifications, setNotifications] = useState([])
+
+  const handleReceivedNotification = useCallback((message) => {
+    setNotifications((prevNotifications) => [...prevNotifications, message])
+  }, [])
+
+  const value = useMemo(() => ({ notifications, handleReceivedNotification }), [notifications, handleReceivedNotification])
 
   return (
-    <Canvas>
-      <Filterbar date={date} />
-      <MonthlyView>
-        <WeekBar theme={theme.palette} />
-        {data.daySchedules.map(day =>
-          <DayCard
-            key={day.id}
-            theme={theme.palette}
-            dateAsString={day.dateAsString}
-            fulfillmentRate={day.fulfillmentRate}
-            appointmentsCount={day.appointmentsCount}
-            confirmedAppointmentsCount={day.confirmedAppointmentsCount}
-            closed={!day.hours.isOpen}
-          />
-        )}
-      </MonthlyView>
-    </Canvas>
+    <ActionCableProvider url={wsURL}>
+      <NotificationContext.Provider value={value}>
+        {children}
+      </NotificationContext.Provider>
+    </ActionCableProvider>
   )
 }
 
-export default Monthly
+export const NotificationConsumer = () => {
+  const { notifications, handleReceivedNotification } = useNotifications()
 
-```
-
-### Query loaders for Webpack
-
-To be able to make webpack understand imports from `.gql` and `.graphql` files we need to add a config:
-
-```js
-  module: {
-      rules: [
+  return (<ActionCableConsumer channel={{ channel: 'NotificationChannel' }}>
+    {({ received }) => {
+      if (received) {
+        handleReceivedNotification(received.notification)
+      }
+    }}
+    <div>
       {
-        test: /\.(graphql|gql)$/,
-        exclude: /node_modules/,
-        loader: 'graphql-tag/loader',
-      },
-    ],
-  }
-
-```
-
-## ESLint
-
-### Adding ESlint to the project
-
-```shell
-yarn add -D eslint
-```
-
-### Interactive configuration
-
-```shell
-eslint --init
-```
-
-**Output:**
-
-```mono
-You can also run this command directly using 'npm init @eslint/config'.
-npx: installed 40 in 8.683s
-✔ How would you like to use ESLint? · problems
-✔ What type of modules does your project use? · esm
-✔ Which framework does your project use? · react
-✔ Does your project use TypeScript? · No / Yes
-✔ Where does your code run? · browser
-✔ What format do you want your config file to be in? · JavaScript
-The config that you\'ve selected requires the following dependencies:eslint-plugin-react@latest
-✔ Would you like to install them now? · No / Yes
-✔ Which package manager do you want to use? · yarn
-```
-
-### ESlint basic config
-
-```js
-// .eslintrc.js
-
-module.exports = {
-  'env': {
-    'browser': true,
-    'es2021': true
-  },
-  'extends': [
-    'eslint:recommended',
-    'plugin:react/recommended'
-  ],
-  'parserOptions': {
-    'ecmaFeatures': {
-      'jsx': true
-    },
-    'ecmaVersion': 'latest',
-    'sourceType': 'module'
-  },
-  'plugins': [
-    'react'
-  ],
-  'rules': {
-    'array-bracket-spacing': ['error', 'never'],
-    'brace-style': ['error', '1tbs'],
-    'comma-dangle': ['error', {
-      'arrays': 'never',
-      'objects': 'never',
-      'imports': 'never',
-      'exports': 'never',
-      'functions': 'ignore'
-    }],
-    'jsx-quotes': ['error', 'prefer-single'],
-    'keyword-spacing': ['error'],
-    'linebreak-style': ['error', 'unix'],
-    'no-console': 'warn',
-    'object-curly-spacing': ['error', 'always'],
-    'quotes': ['error', 'single', { 'avoidEscape': true }],
-    'quote-props': ['error', 'consistent'],
-    'react/prop-types': ['off'],
-    'semi': ['error', 'never'],
-    'space-in-parens': ['error', 'never']
-  }
+        notifications.map((notification) => {
+          return (<div>
+            <p>{notification.title}</p>
+            <p>{notification.content}</p>
+          </div>)
+        })
+      }
+    </div>
+  </ActionCableConsumer>)
 }
 
+export const useNotifications = () => useContext(NotificationContext)
 ```
-
-### Some additional rules
-
-```js
-  'rules': {
-    'array-bracket-spacing': ['error', 'never'],
-    'brace-style': ['error', '1tbs'],
-    'comma-dangle': ['error', {
-      'arrays': 'never',
-      'objects': 'never',
-      'imports': 'never',
-      'exports': 'never',
-      'functions': 'ignore'
-    }],
-    'jsx-quotes': ['error', 'prefer-single'],
-    'keyword-spacing': ['error'],
-    'linebreak-style': ['error', 'unix'],
-    'no-console': 'warn',
-    'object-curly-spacing': ['error', 'always'],
-    'quotes': ['error', 'single', { 'avoidEscape': true }],
-    'quote-props': ['error', 'consistent'],
-    'react/prop-types': ['off'],
-    'semi': ['error', 'never'],
-    'space-in-parens': ['error', 'never']
-  }
-
-```
-
-#### To add new rules
-
-<https://eslint.org/docs/rules/>
-
-## Testing frameworks
-
-<https://www.campuscode.com.br/conteudos/algumas-impressoes-sobre-mocha-e-jest>
-
-### JEST
-
-<https://jestjs.io/>
