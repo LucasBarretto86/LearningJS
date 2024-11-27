@@ -315,8 +315,8 @@ npm install --save-dev @babel/core @babel/preset-env
 yarn add -D @babel/core @babel/preset-env
 ```
 
-> - **Esbuild:** Does not need babel-loader; it has built-in support for transpiling `JS`, `JSX`, and more.
-> - **Webpack:** Needs babel-loader to transpile `JS` and `JSX`.
+> - **Esbuild:** Does not need babel-loader; it has built-in support for transpiling `JS`, `JSX`, and more. But you add also `esbuild-plugin-babel`
+> - **Webpack:** Needs `babel-loader` to transpile `JS` and `JSX`.
 >   - Add also `"@babel/preset-react"` if you intend to you `JSX`
 
 **Babel configuration:**

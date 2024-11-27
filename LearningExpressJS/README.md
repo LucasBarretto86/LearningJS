@@ -236,6 +236,13 @@ app.get("/", (req, res) => {
 
 > **Notice:** on the first argument of `sendFile` function is a relative path, however this function by default uses absolute paths, that's why we need to use a second options argument to enforce where effectively is our project's root folder, so that the file can be found.
 > `__dirname` returns the absolute from where it's called, instead of `__dirname` we could also use the `path` module that node provides, but let's keep it simple.
+>
+> **Notice 2:** if we import `path` or `express` as ES6 module, meaning, using `import` the `__dirname` is not defined so we need to do it manually:
+>
+>```js
+> // when we use import instead of require, __dirname is not defined, so we need to do it manually
+> const __dirname = path.dirname(new URL(import.meta.url).pathname);
+>```
 
 **Output:**
 

@@ -16,7 +16,8 @@
     - [useNavigate](#usenavigate)
     - [useImperativeHandle](#useimperativehandle)
   - [Apollo](#apollo)
-    - [Testing frameworks](#testing-frameworks)
+  - [Testing frameworks](#testing-frameworks)
+    - [JEST](#jest)
   - [CRACO](#craco)
   - [Rails Action Cable](#rails-action-cable)
 
@@ -275,13 +276,84 @@ export const useGetDoctors = () => {
 
 ---
 
-### Testing frameworks
+## Testing frameworks
 
-**JEST Setup for React:**
+### JEST
+
+**CRA:**
+
+On a regular React app (CRA  - Create React App ) we have already built in JEST as the test framework, so we don't need to configure anything, you will also notice the existence of configuration file `SetupTests.js`
+
+This file we use to create general instruction to setup the test environment, for instance to guarantee that the DOM elements are present and correct:
+
+```js
+// SetupTests.js
+
+// This runs before each test
+beforeEach(() => {
+  // Ensure the root div is available for the portal
+  const rootDiv = document.createElement('div');
+  rootDiv.id = 'root';
+  document.body.appendChild(rootDiv);
+
+  // Add the notifications div for portals
+  const notificationsDiv = document.createElement('div');
+  notificationsDiv.id = 'notifications';
+  document.body.appendChild(notificationsDiv);
+
+  // Add the modals div for portals
+  const modalsDiv = document.createElement('div');
+  modalsDiv.id = 'modals';
+  document.body.appendChild(modalsDiv);
+});
+
+// Optionally, clean up the DOM after each test
+afterEach(() => {
+  document.body.innerHTML = ''; // Clears out the entire DOM after each test
+});
+
+```
+
+In this case i want to guarantee the structure from my public index.html, because I use `createPortal` to handle modal and notifications:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My React App</title>
+  </head>
+  <body>
+    <div id="notifications"></div>
+    <div id="modal"></div>
+    <div id="root"></div>
+  </body>
+</html>
+
+```
+
+**Non-CRA:**
+
+**Setup for React:**
 
 ```sh
 yarn add --dev jest babel-jest @testing-library/react @testing-library/jest-dom
 ```
+
+**Axios mocking:**
+
+in some cases JEST might request specific configs even on CRA application, these configures we can adjust using package.json, since configurations from CRA is inject:
+
+```js
+"jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)"
+    ]
+  },
+```
+
+> Case we want change other specific configurations we would need to `eject` configurations from CRA, or we could use `CRACO`
 
 ---
 
