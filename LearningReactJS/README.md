@@ -16,6 +16,8 @@
     - [useNavigate](#usenavigate)
     - [useImperativeHandle](#useimperativehandle)
   - [Apollo](#apollo)
+  - [Styled Components](#styled-components)
+  - [Tailwind CSS](#tailwind-css)
   - [Testing frameworks](#testing-frameworks)
     - [JEST](#jest)
   - [CRACO](#craco)
@@ -275,6 +277,60 @@ export const useGetDoctors = () => {
 ```
 
 ---
+
+## Styled Components
+
+## Tailwind CSS
+
+**Installing Tailwind:**
+
+```sh
+yarn add -D tailwindcss
+
+# OR
+npm install -D tailwindcss
+```
+
+**Setup tailwind:**
+
+**1. Create Tailwind config file:**
+
+To start the step we need to run to create tailwindcss config file
+
+```sh
+npx tailwindcss init
+```
+
+**2. Update config file:**
+
+It will generate `tailwind.config.js`
+
+Then we add the specifics for JSX and JS files:
+
+```js
+// tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+**3. Import tailwind CSS:**
+
+To be able to use tailwind css we also need to import the files into our main reset file:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
 
 ## Testing frameworks
 
