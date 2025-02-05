@@ -6,8 +6,10 @@
     - [HTTP](#http)
   - [Package Managers](#package-managers)
     - [YARN](#yarn)
+    - [BUN](#bun)
   - [Bundlers](#bundlers)
     - [ESBuild](#esbuild)
+    - [Vite](#vite)
   - [Linters](#linters)
     - [ESLint](#eslint)
   - [Dependencies](#dependencies)
@@ -130,6 +132,97 @@ yarn install --check-files
 }
 ```
 
+### BUN
+
+Bundle is almost all in one bundler for JS
+
+**Install Bun:**
+
+```shell
+curl -fsSL https://bun.sh/install | bash
+# OR
+curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.2"
+
+# Resourcing bash
+source /home/barretto86/.bashrc
+```
+
+**Checking Bun version:**
+
+```shell
+bun --version
+```
+
+**Setup scripts:**
+
+```json
+{
+  // ... other fields
+  "scripts": {
+    "clean": "rm -rf dist && echo 'Done.'",
+    "dev": "bun server.ts"
+  }
+}
+```
+
+**Add dependencies:**
+
+```shell
+# To add a package as a dev dependency ("devDependencies"):
+bun add --dev @types/react
+bun add -d @types/react
+
+# To add a package as an optional dependency ("optionalDependencies"):
+bun add --optional lodash
+
+# This will resolve the version of the package and add it to your package.json with an exact version number instead of a version range.
+bun add react --exact
+bun add react -E
+
+# To install a package globally, use the -g/--global flag. 
+#This will not modify the package.json of your current project. Typically this is used for installing command-line tools.
+bun add --global cowsay 
+bun add -g cowsay
+
+```
+
+**building app:***
+
+```shell
+# Simple build
+bun build ./index.js --outdir ./out
+
+# Watch mode: Like the runtime and test runner, the bundler supports watch mode natively.
+bun build ./index.tsx --outdir ./out --watch
+```
+
+**Bun configure files:**
+
+Build can also configured using `.toml` or `bun.config.js` file within the root of the project
+
+With toml
+
+```toml
+# bunfig.toml
+
+[build]
+entrypoints = ["./index.js"]
+outdir = "./out"
+```
+
+With js
+
+```js
+// bun.config.js
+
+module.exports = {
+  build: {
+    entrypoints: ['./index.js'],  // Specify your entry points
+    outdir: './out',              // Specify your output directory
+  },
+};
+```
+
 ## Bundlers
 
 ### ESBuild
@@ -184,6 +277,97 @@ build({
 ```
 
 > note that on the script we use `node` to allow ES6 modules to work properly.
+
+### Vite
+
+**Vite vs Esbuild:**
+
+- Use `esbuild` if you want a fast, lightweight bundler for simple projects or when you need to integrate bundling into custom build pipelines.
+- Use `Vite` if you want an all-in-one solution with fast development server capabilities, modern framework support, and optimized production builds.
+
+**Install Vite:**
+
+Vite requires Node.js version 18+ or 20+. However, some templates require a higher Node.js version to work, please upgrade if your package manager warns about it.
+
+```shell
+yarn add -D vite
+# OR
+npm install -D vite
+# OR
+bun add -D vite
+```
+
+**Scaffolding Project:**
+
+```shell
+yarn create vite
+# OR
+npm create vite@latest
+# OR
+bun create vite
+```
+
+**Scaffolding Templates:**
+
+Vite has building in templates for: vanilla, vanilla-ts, vue, vue-ts, react, react-ts, react-swc, react-swc-ts, preact, preact-ts, lit, lit-ts, svelte, svelte-ts, solid, solid-ts, qwik, qwik-ts.
+
+```shell
+yarn create vite my-vue-app --template vue
+# OR
+npm create vite@latest my-vue-app --template vue
+# OR
+bun create vite my-vue-app --template vue
+```
+
+**Implementing building script:**
+
+```json
+{
+  "scripts": {
+    "dev": "vite", // start dev server, aliases: `vite dev`, `vite serve`
+    "build": "vite build", // build for production
+    "preview": "vite preview" // locally preview production build
+  }
+}
+```
+
+**Advanced vite configuration example:**
+
+```js
+// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()], // Add React support
+  server: {
+    port: 3000, // Customize dev server port
+    open: true, // Open the browser automatically on start
+  },
+  build: {
+    outDir: 'dist', // Specify the output directory for production builds
+    minify: 'esbuild', // Use esbuild for minification
+    sourcemap: true, // Enable source maps for debugging
+  },
+  resolve: {
+    alias: {
+      '@': '/src', // Set up path aliases
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/styles/global.scss";`, // Auto-import global styles
+      },
+    },
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'], // Pre-bundle dependencies
+  },
+});
+
+```
 
 ## Linters
 
