@@ -32,6 +32,9 @@ These components are compiled into small, efficient JavaScript modules that elim
       - [Component Binds](#component-binds)
     - [Svelte components LifeCycle](#svelte-components-lifecycle)
     - [Svelte Stores](#svelte-stores)
+      - [Writable store](#writable-store)
+      - [Readable stores](#readable-stores)
+    - [Routes](#routes)
 
 ## Installation and setup
 
@@ -1088,6 +1091,27 @@ Svelte stores and React Context serve similar purposes (state management and sha
 | Performance    | Efficient (only updates subscribers) | Can cause unnecessary re-renders                     |
 | Setup          | Built-in (`svelte/store`)            | Requires Context API & Provider                      |
 
+**Real-world stores on Project tree:**
+
+```tree
+/src
+ ├── /stores            # Stores folder (for global state)
+ │   ├── index.js       # Centralized export file (optional)
+ │   ├── userStore.js   # User-related store
+ │   ├── themeStore.js  # Theme-related store
+ │   ├── cartStore.js   # Shopping cart store
+ │   ├── ...            # More stores as needed
+ ├── /routes
+ ├── /components
+ ├── /lib
+ ├── /app.svelte
+ ├── /main.js
+ ├── /package.json
+
+```
+
+#### Writable store
+
 ```svelte
 <!-- // store.js -->
 import { writable } from 'svelte/store';
@@ -1096,14 +1120,77 @@ export const count = writable(0); // Global state
 
 <!-- App.svelte -->
 <script>
-  import { count } from './store.js';
+  import { count } from '../stores/counter';
+  import Incrementor from './components/Incrementor'
+  import Decrementor from './components/Decrementor'
+  import Resetter from './components/Resetter'
+
 </script>
 
-<p>Count: {$count}</p> <!-- Auto-reactive binding -->
+<p>Count: {$count}</p>
 
-<button on:click={() => count.update(n => n + 1)}>
-  Increment
-</button>
+<Incrementor />
+<Decrementor />
+<Resetter />
+
+<!-- Incrementor.svelte -->
+ <script>
+ import { count } from './stores.js';
+</script>
+
+<button on:click={() => count.update((n) => n + 1)}> Increment </button>
+
+
+<!-- Decrementor.svelte -->
+<script>
+ import { count } from './stores.js';
+</script>
+
+<button on:click={() => count.update((n) => n - 1)}> Decrement </button>
+
+<!-- Resetter.svelte -->
+<script>
+ import { count } from './stores.js';
+</script>
+
+<button on:click={() => count.set(0)}>Reset</button>
 ```
 
-> You can access and update the store inside any component using $storeName:
+> To avoid memory leak use `$` as prefix to store name, like `$count` to avoiding to keeping subscribing or unsubscribing a new variable to manage state.
+
+#### Readable stores
+
+```svelte
+<!-- timeStore.js -->
+import { readable } from 'svelte/store';
+
+export const time = readable(new Date(), function start(set) {
+ const interval = setInterval(() => {
+  set(new Date())
+ }, 1000)
+
+ return function stop() {
+  clearInterval(inteval)
+ };
+});
+
+<!-- App.svelte -->
+<script>
+ import { time } from './stores.js';
+
+ const formatter = new Intl.DateTimeFormat('en', {
+  hour12: true,
+  hour: 'numeric',
+  minute: '2-digit',
+  second: '2-digit'
+ });
+</script>
+
+<h1>The time is {formatter.format($time)}</h1>
+```
+
+
+
+### Routes
+
+<!-- TODO -->

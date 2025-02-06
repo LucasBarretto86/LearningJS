@@ -27,6 +27,7 @@
   - [Frameworks](#frameworks)
     - [Frontend](#frontend)
     - [Backend](#backend)
+  - [Intl.DateTimeFormat](#intldatetimeformat)
   - [Tests](#tests)
     - [Mocha Chai](#mocha-chai)
     - [JEST](#jest)
@@ -1282,6 +1283,37 @@ console.log(devs);
 ### Backend
 
 [Learning ExpressJS](./LearningExpressJS//README.md)
+
+## Intl.DateTimeFormat
+
+Yes, `Intl.DateTimeFormat` is part of vanilla JavaScript—no need for external libraries like `moment.js` or `date-fns` for simple formatting tasks.
+
+```js
+const formatter = new Intl.DateTimeFormat('en', {
+  hour12: true,
+  hour: 'numeric',
+  minute: '2-digit',
+  second: '2-digit'
+ });
+
+console.log(formatter.format(new Date())); 
+// Output would be like: 4:34:33 PM
+```
+
+- no libraries required.  
+- Supports localization (`en-US`, `fr-FR`, etc.).  
+
+**Other examples:**  
+
+```js
+// Format date in different locales
+console.log(new Intl.DateTimeFormat('de-DE').format(new Date())); // German
+console.log(new Intl.DateTimeFormat('ja-JP').format(new Date())); // Japanese
+
+// Custom formats
+console.log(new Intl.DateTimeFormat('en-GB', { weekday: 'long' }).format(new Date())); 
+// Output: Thursday (if today is Thursday)
+```
 
 ## Tests
 
