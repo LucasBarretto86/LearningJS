@@ -1,17 +1,11 @@
 <script>
-  export let name = "World";
+  import { count } from './stores/customCounterStore';
+
+  const { increment, decrement, reset } = count;
 </script>
 
-<main>
-  <h1>Hello, {name}!</h1>
-</main>
+<h1>The count is {$count}</h1>
 
-<style>
-  main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: sans-serif;
-  }
-</style>
+<button on:click={increment}>+</button>
+<button on:click={decrement}>-</button>
+<button on:click={reset}>reset</button>

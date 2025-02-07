@@ -30,11 +30,20 @@ These components are compiled into small, efficient JavaScript modules that elim
       - [Binding element dimensions](#binding-element-dimensions)
       - [Binding `this`](#binding-this)
       - [Component Binds](#component-binds)
-    - [Svelte components LifeCycle](#svelte-components-lifecycle)
+    - [LifeCycle](#lifecycle)
     - [Svelte Stores](#svelte-stores)
       - [Writable store](#writable-store)
       - [Readable stores](#readable-stores)
-    - [Routes](#routes)
+      - [Derived stores](#derived-stores)
+      - [Custom stores](#custom-stores)
+    - [Motion](#motion)
+    - [Transition](#transition)
+    - [Animation](#animation)
+    - [Actions](#actions)
+    - [Component composition](#component-composition)
+    - [Context API](#context-api)
+    - [Special elements](#special-elements)
+    - [Special tags](#special-tags)
 
 ## Installation and setup
 
@@ -163,7 +172,7 @@ Just like in svelte, you can add a `<style>` tag to your component. Let’s add 
 
 ### Basic component nesting
 
-```jsx
+```svelte
 <script>
  import Nested from './Nested.svelte'
 </script>
@@ -179,8 +188,6 @@ Just like in svelte, you can add a `<style>` tag to your component. Let’s add 
  }
 </style>
 ```
-
-> Svelte uses JSX by default?!
 
 ### svelte intrusive injection
 
@@ -987,7 +994,7 @@ Just as you can bind to properties of DOM elements, you can bind to component pr
 <button on:click={() => field.focus()}>Focus field</button>
 ```
 
-### Svelte components LifeCycle
+### LifeCycle
 
 lifecycle functions allow you to hook into a component's lifecycle. Here are the main ones:  
 
@@ -1161,7 +1168,7 @@ export const count = writable(0); // Global state
 #### Readable stores
 
 ```svelte
-<!-- timeStore.js -->
+<!-- us.js -->
 import { readable } from 'svelte/store';
 
 export const time = readable(new Date(), function start(set) {
@@ -1170,7 +1177,7 @@ export const time = readable(new Date(), function start(set) {
  }, 1000)
 
  return function stop() {
-  clearInterval(inteval)
+  clearInterval(interval)
  };
 });
 
@@ -1189,8 +1196,113 @@ export const time = readable(new Date(), function start(set) {
 <h1>The time is {formatter.format($time)}</h1>
 ```
 
+#### Derived stores
+
+Using same store examples as before, we are going to use a derived store to build a elapsed time counter
+
+```svelte
+<!-- useTime.js -->
+import { readable, derived } from 'svelte/store';
+
+export const time = readable(new Date(), function start(set) {
+ const interval = setInterval(() => {
+  set(new Date());
+ }, 1000);
+
+ return function stop() {
+  clearInterval(interval);
+ };
+});
+
+const start = new Date();
+
+export const elapsed = derived(time, ($time) => Math.round(($time - start) / 1000));  
+
+<!-- Clock.svelte -->
+<script>
+  import { time, elapsed } from '../stores/timeStore';
+
+  const formatter = new Intl.DateTimeFormat('en', {
+    hour12: true,
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+</script>
+
+<h1>The time is {formatter.format($time)}</h1>
+
+<p>
+  This page has been open for
+  {$elapsed}
+  {$elapsed === 1 ? 'second' : 'seconds'}
+</p>
+```
+
+#### Custom stores
+
+It's very simple to implement custom stores, all we need is to implement `subscribe` function:
+
+```svelte
+<!-- customCountStore.js -->
+import { writable } from 'svelte/store';
+
+function createCount() {
+ const { subscribe, set, update } = writable(0);
+
+ return {
+  subscribe,
+  increment: () => update((n) => n + 1),
+  decrement: () => update((n) => n - 1),
+  reset: () => set(0)
+ };
+}
+
+export const count = createCount();
 
 
-### Routes
+<!-- App.svelte -->
+<script>
+  import { count } from './stores/customCounterStore';
+
+  const { increment, decrement, reset } = count;
+</script>
+
+<h1>The count is {$count}</h1>
+
+<button on:click={increment}>+</button>
+<button on:click={decrement}>-</button>
+<button on:click={reset}>reset</button>
+```
+
+### Motion
+
+<!-- TODO -->
+
+### Transition
+
+<!-- TODO -->
+
+### Animation
+
+<!-- TODO -->
+
+### Actions
+
+<!-- TODO -->
+
+### Component composition
+
+<!-- TODO -->
+
+### Context API
+
+<!-- TODO -->
+
+### Special elements
+
+<!-- TODO -->
+
+### Special tags
 
 <!-- TODO -->
